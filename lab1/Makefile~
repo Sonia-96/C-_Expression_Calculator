@@ -1,0 +1,22 @@
+# Targets:
+# clean deletes program and all .o files
+# runProg runs the executable program
+# printM prints the values of all macros
+
+CXX=c++
+CFLAGS= -std=c++11
+CXXSOURCE=$(wildcard *.cpp)
+HEADERS=$(wildcard *.h)
+OBJS=$(patsubst %.cpp, %.o, $(CXXSOURCE))
+
+.PHONY: clean runProg printM
+program: $(OBJS)
+	$(CXX) $(CFLAGS) $(OBJS) -o $@
+runProg: program
+	./$^
+%.o: %.cpp
+	$(CXX) $(CFLAGS) -c $<
+clean:
+	rm -rf *.o program
+printM:
+	@echo $(CXX) $(CFLAGS) $(CXXSOURCE) $(HEADERS) $(OBJS)
