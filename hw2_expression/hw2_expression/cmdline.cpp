@@ -9,6 +9,7 @@
 #include <iostream>
 #include "catch.h"
 #include "cmdline.h"
+#include "expr.hpp"
 
 using namespace std;
 
@@ -20,7 +21,9 @@ void use_arguments(int argc, const char* argv[]) {
             exit(0);
         } else if (strcmp(argv[i], "--test") == 0) {
             if (!tested) {
-                Catch::Session().run(argc - 1, argv);
+                if (Catch::Session().run(1, argv) != 0) {
+                    exit(1);
+                }
                 tested = true;
             } else {
                 cerr << "Duplicated --test!\n";
