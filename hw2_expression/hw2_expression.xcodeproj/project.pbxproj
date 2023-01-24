@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		E3F231092979BC2A00C1E0C8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3F231082979BC2A00C1E0C8 /* main.cpp */; };
 		E3F231132979BC6B00C1E0C8 /* expr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3F231112979BC6B00C1E0C8 /* expr.cpp */; };
-		E3F231142979BC6B00C1E0C8 /* cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3F231122979BC6B00C1E0C8 /* cmdline.cpp */; };
 		E3F231182979BC7400C1E0C8 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3F231152979BC7400C1E0C8 /* tests.cpp */; };
 		E3F231192979BC7400C1E0C8 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = E3F231162979BC7400C1E0C8 /* Makefile */; };
+		E3F2311B297BC2E300C1E0C8 /* cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3F231122979BC6B00C1E0C8 /* cmdline.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -139,9 +139,9 @@
 			files = (
 				E3F231192979BC7400C1E0C8 /* Makefile in Sources */,
 				E3F231132979BC6B00C1E0C8 /* expr.cpp in Sources */,
+				E3F2311B297BC2E300C1E0C8 /* cmdline.cpp in Sources */,
 				E3F231182979BC7400C1E0C8 /* tests.cpp in Sources */,
 				E3F231092979BC2A00C1E0C8 /* main.cpp in Sources */,
-				E3F231142979BC6B00C1E0C8 /* cmdline.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
