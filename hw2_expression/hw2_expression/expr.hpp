@@ -49,16 +49,4 @@ public:
     bool equals(Expr* expr);
 };
 
-// 为什么不行？？
-//class Sub : public Expr {
-//private:
-//    Expr& lhs;
-//    Expr& rhs;
-//public:
-//    Sub(Expr &l, Expr &r) {
-//        lhs = l;
-//        rhs = r;
-//    }
-//};
-
 #endif /* expr_hpp */

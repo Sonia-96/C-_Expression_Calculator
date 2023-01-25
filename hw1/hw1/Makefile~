@@ -1,6 +1,0 @@
-.PHONY: clean
-msdscript: main.o
-	c++ $< -o msdsciprt $@
-cmdline.o: cmdline.h
-clean:
-	rm -rf *.o msdcript
