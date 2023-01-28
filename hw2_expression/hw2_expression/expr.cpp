@@ -47,16 +47,16 @@ AddExpr::AddExpr(int left, int right) {
     rhs = new NumExpr(right);
 }
 
-int AddExpr::interp() {
-    return lhs->interp() + rhs->interp();
-}
-
 bool AddExpr::equals(Expr* expr) {
     AddExpr *a = dynamic_cast<AddExpr*>(expr);
     if (a == NULL) {
         return false;
     }
     return lhs->equals(a->lhs) && rhs->equals(a->rhs);
+}
+
+int AddExpr::interp() {
+    return lhs->interp() + rhs->interp();
 }
 
 bool AddExpr::has_variable() {
@@ -96,7 +96,7 @@ bool MultExpr::has_variable() {
 }
 
 Expr* MultExpr::subst(std::string s, Expr *expr) {
-    return new AddExpr(lhs->subst(s, expr), rhs->subst(s, expr));
+    return new MultExpr(lhs->subst(s, expr), rhs->subst(s, expr));
 }
 
 // Variable Expression

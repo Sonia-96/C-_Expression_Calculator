@@ -12,7 +12,7 @@
 
 class Expr {
 public:
-    virtual bool equals(Expr* expr) = 0;
+    virtual bool equals(Expr* expr)=0;
     virtual int interp() = 0;
     virtual bool has_variable() = 0;
     virtual Expr* subst(std::string s, Expr* expr) = 0;
