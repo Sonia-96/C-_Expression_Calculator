@@ -12,41 +12,62 @@
 
 class Expr {
 public:
-    virtual bool equals(Expr* expr) = 0;
+    virtual bool equals(Expr* expr)=0;
+    virtual int interp() = 0;
+    virtual bool has_variable() = 0;
+    virtual Expr* subst(std::string s, Expr* expr) = 0;
 };
 
-class Num : public Expr {
+class NumExpr : public Expr {
 private:
     int val;
 public:
-    Num(int v);
+    NumExpr(int v);
     bool equals(Expr* expr);
+    int interp();
+    bool has_variable();
+    Expr* subst(std::string s, Expr* expr);
 };
 
-class Add : public Expr {
+class AddExpr : public Expr {
 private:
     Expr* lhs;
     Expr* rhs;
 public:
-    Add(Expr *left, Expr *right);
+    AddExpr(Expr *left, Expr *right);
+    AddExpr(int left, int right);
+    AddExpr(std::string left, int right);
+    AddExpr(int left, std::string right);
     bool equals(Expr* expr);
+    int interp();
+    bool has_variable();
+    Expr* subst(std::string s, Expr* expr);
 };
 
-class Mult : public Expr {
+class MultExpr : public Expr {
 public:
     Expr* lhs;
     Expr* rhs;
 public:
-    Mult(Expr *left, Expr *right);
+    MultExpr(Expr *left, Expr *right);
+    MultExpr(int left, int right);
+    MultExpr(std::string left, int right);
+    MultExpr(int left, std::string right);
     bool equals(Expr* expr);
+    int interp();
+    bool has_variable();
+    Expr* subst(std::string s, Expr* expr);
 };
 
-class Variable : public Expr {
+class VarExpr : public Expr {
 private:
     std::string val;
 public:
-    Variable(std::string s);
+    VarExpr(std::string s);
     bool equals(Expr* expr);
+    int interp();
+    bool has_variable();
+    Expr* subst(std::string s, Expr* expr);
 };
 
 #endif /* expr_hpp */
