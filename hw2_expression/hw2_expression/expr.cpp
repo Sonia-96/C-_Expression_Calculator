@@ -47,6 +47,16 @@ AddExpr::AddExpr(int left, int right) {
     rhs = new NumExpr(right);
 }
 
+AddExpr::AddExpr(std::string left, int right) {
+    lhs = new VarExpr(left);
+    rhs = new NumExpr(right);
+}
+
+AddExpr::AddExpr(int left, std::string right) {
+    lhs = new NumExpr(left);
+    rhs = new VarExpr(right);
+}
+
 bool AddExpr::equals(Expr* expr) {
     AddExpr *a = dynamic_cast<AddExpr*>(expr);
     if (a == NULL) {
@@ -77,6 +87,16 @@ MultExpr::MultExpr(Expr *left, Expr *right) {
 MultExpr::MultExpr(int left, int right) {
     lhs = new NumExpr(left);
     rhs = new NumExpr(right);
+}
+
+MultExpr::MultExpr(std::string left, int right) {
+    lhs = new VarExpr(left);
+    rhs = new NumExpr(right);
+}
+
+MultExpr::MultExpr(int left, std::string right) {
+    lhs = new NumExpr(left);
+    rhs = new VarExpr(right);
 }
 
 bool MultExpr::equals(Expr* expr) {

@@ -36,6 +36,8 @@ private:
 public:
     AddExpr(Expr *left, Expr *right);
     AddExpr(int left, int right);
+    AddExpr(std::string left, int right);
+    AddExpr(int left, std::string right);
     bool equals(Expr* expr);
     int interp();
     bool has_variable();
@@ -49,6 +51,8 @@ public:
 public:
     MultExpr(Expr *left, Expr *right);
     MultExpr(int left, int right);
+    MultExpr(std::string left, int right);
+    MultExpr(int left, std::string right);
     bool equals(Expr* expr);
     int interp();
     bool has_variable();
