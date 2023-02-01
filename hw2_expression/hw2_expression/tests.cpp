@@ -7,6 +7,7 @@
 
 #include "catch.h"
 #include "expr.hpp"
+#include <iostream>
 
 TEST_CASE("Equals") {
     SECTION("Num") {
@@ -262,3 +263,38 @@ TEST_CASE("to_string + print") {
         CHECK((new VarExpr("xyz")) -> to_string() == "xyz");
     }
 };
+
+TEST_CASE("pretty_print") {
+    SECTION("num") {
+        CHECK((new NumExpr(1)) -> to_pretty_string() == "1");
+    }
+    
+    SECTION("add") {
+        AddExpr add1(new AddExpr(1, 2), new NumExpr(3));
+        CHECK(add1.to_pretty_string() == "(1 + 2) + 3");
+        AddExpr add2(new NumExpr(1), new AddExpr(2, 3));
+        CHECK(add2.to_pretty_string() == "1 + 2 + 3");
+        AddExpr add3(new AddExpr(1, 2), new AddExpr(new NumExpr(3), new AddExpr(4, 5)));
+        add3.to_pretty_string();
+        NumExpr num(3);
+        std::cout << num.get_precedence();
+        num.to_string();
+//        CHECK(add3.to_pretty_string() == "(1 + 2) + 3 + 4 + 5");
+    }
+    
+    SECTION("mult") {
+        MultExpr mult1(new MultExpr(1, 2), new NumExpr(3));
+        CHECK(mult1.to_pretty_string() == "(1 * 2) * 3");
+        MultExpr mult2(new NumExpr(1), new MultExpr(2, 3));
+        CHECK(mult2.to_pretty_string() == "1 * 2 * 3");
+    }
+    
+    SECTION("add + mult") {
+        
+    }
+    
+    SECTION("Variable") {
+        CHECK((new VarExpr("xyz")) -> to_string() == "xyz");
+    }
+    
+}

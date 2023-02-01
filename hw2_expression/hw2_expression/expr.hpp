@@ -11,24 +11,32 @@
 #include <sstream>
 #include <string>
 
-typedef enum {
-    prec_non, // 0
+enum precedence_t {
+    prec_none, // 0
     prec_add, // 1
     prec_mult, // 2
-} precedence_t;
+};
 
 class Expr {
 public:
+    precedence_t prec = prec_none;
     virtual bool equals(Expr* expr)=0;
     virtual int interp() = 0;
     virtual bool has_variable() = 0;
     virtual Expr* subst(std::string s, Expr* expr) = 0;
     virtual void print(std::ostream& out) = 0;
+    virtual void pretty_print(std::ostream& out) = 0;
+    std::string to_string();
+    precedence_t get_precedence() {
+        return prec;
+    }
+    std::string to_pretty_string();
 };
 
 class NumExpr : public Expr {
 private:
     int val;
+    precedence_t prec = prec_none;
 public:
     NumExpr(int v);
     bool equals(Expr* expr);
@@ -36,7 +44,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    std::string to_string();
+    void pretty_print(std::ostream& out);
 };
 
 class AddExpr : public Expr {
@@ -54,7 +62,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    std::string to_string();
+    void pretty_print(std::ostream& out);
 };
 
 class MultExpr : public Expr {
@@ -72,7 +80,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    std::string to_string();
+    void pretty_print(std::ostream& out);
 };
 
 class VarExpr : public Expr {
@@ -85,7 +93,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    std::string to_string();
+    void pretty_print(std::ostream& out);
 };
 
 #endif /* expr_hpp */
