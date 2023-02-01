@@ -5,8 +5,10 @@
 //  Created by Yue Sun on 1/12/23.
 //
 
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include <iostream>
 #include "expr.hpp"
 
 // Num Expression
@@ -35,6 +37,16 @@ Expr* NumExpr::subst(std::string s, Expr *expr) {
     return new NumExpr(val);
 }
 
+void NumExpr::print(std::ostream& out) {
+    out << val;
+}
+
+std::string NumExpr::to_string() {
+    std::stringstream st("");
+    print(st);
+    return st.str();
+}
+
 // Add Expression
 
 AddExpr::AddExpr(Expr *left, Expr *right) {
@@ -57,6 +69,11 @@ AddExpr::AddExpr(int left, std::string right) {
     rhs = new VarExpr(right);
 }
 
+AddExpr::AddExpr(std::string left, std::string right) {
+    lhs = new VarExpr(left);
+    rhs = new VarExpr(right);
+}
+
 bool AddExpr::equals(Expr* expr) {
     AddExpr *a = dynamic_cast<AddExpr*>(expr);
     if (a == NULL) {
@@ -75,6 +92,20 @@ bool AddExpr::has_variable() {
 
 Expr* AddExpr::subst(std::string s, Expr *expr) {
     return new AddExpr(lhs->subst(s, expr), rhs->subst(s, expr));
+}
+
+void AddExpr::print(std::ostream& out) {
+    out << "(";
+    lhs -> print(out);
+    out << "+";
+    rhs -> print(out);
+    out << ")";
+}
+
+std::string AddExpr::to_string() {
+    std::stringstream st("");
+    print(st);
+    return st.str();
 }
 
 // Mult Expression
@@ -99,6 +130,11 @@ MultExpr::MultExpr(int left, std::string right) {
     rhs = new VarExpr(right);
 }
 
+MultExpr::MultExpr(std::string left, std::string right) {
+    lhs = new VarExpr(left);
+    rhs = new VarExpr(right);
+}
+
 bool MultExpr::equals(Expr* expr) {
     MultExpr *m = dynamic_cast<MultExpr*>(expr);
     if (m == NULL) {
@@ -117,6 +153,20 @@ bool MultExpr::has_variable() {
 
 Expr* MultExpr::subst(std::string s, Expr *expr) {
     return new MultExpr(lhs->subst(s, expr), rhs->subst(s, expr));
+}
+
+void MultExpr::print(std::ostream& out) {
+    out << "(";
+    lhs -> print(out);
+    out << "*";
+    rhs -> print(out);
+    out << ")";
+}
+
+std::string MultExpr::to_string() {
+    std::stringstream st("");
+    print(st);
+    return st.str();
 }
 
 // Variable Expression
@@ -146,4 +196,14 @@ Expr* VarExpr::subst(std::string s, Expr* expr) {
         return expr; // TODO just return expr?
     }
     return new VarExpr(val);
+}
+
+void VarExpr::print(std::ostream& out) {
+    out << val;
+}
+
+std::string VarExpr::to_string() {
+    std::stringstream st("");
+    print(st);
+    return st.str();
 }
