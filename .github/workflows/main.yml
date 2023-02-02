@@ -8,6 +8,6 @@ jobs:
       - name: Checkout v1
         uses: actions/checkout@v1
       - name: make executable
-        run: c++ -std=c++11 hw2_expression/hw2_expression/*.cpp -o prog
+        run: cd hw2_expression/hw2_expression && make program
       - name: run test 
-        run: ./prog --test
+        run: cd hw2_expression/hw2_expression && make test
