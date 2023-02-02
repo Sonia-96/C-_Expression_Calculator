@@ -7,6 +7,7 @@
 
 #include "catch.h"
 #include "expr.hpp"
+#include <iostream>
 
 TEST_CASE("Equals") {
     SECTION("Num") {
@@ -168,7 +169,7 @@ TEST_CASE("subst") {
     }
     
     SECTION("Add_simple") {
-        CHECK( AddExpr("x", 7).subst("x", new VarExpr("y"))->equals(new AddExpr("y", 7)));
+        CHECK(AddExpr("x", 7).subst("x", new VarExpr("y"))->equals(new AddExpr("y", 7)));
         CHECK(AddExpr(2, 3).subst("x", new NumExpr(1))->equals(new AddExpr(2, 3)));
     }
     
@@ -220,3 +221,83 @@ TEST_CASE("Interpt + Subst") {
     CHECK(mult1.subst("a", new NumExpr(100)) -> interp() == 654);
         
 };
+
+TEST_CASE("to_string + print") {
+    SECTION("Num") {
+        CHECK(NumExpr(10).to_string() == "10");
+        CHECK(NumExpr(-10).to_string() == "-10");
+    }
+    
+    SECTION("Add_simple") {
+        CHECK(AddExpr(1, 2).to_string() == "(1+2)");
+        CHECK(AddExpr("x", 2).to_string() == "(x+2)");
+        CHECK(AddExpr(-3, "speed").to_string() == "(-3+speed)");
+        CHECK(AddExpr(-10, -5).to_string() == "(-10+-5)");
+    }
+    
+    SECTION("Add_nested") {
+        AddExpr add1(new NumExpr(1), new AddExpr(-10, 2));
+        CHECK(add1.to_string() == "(1+(-10+2))");
+        AddExpr add2(new AddExpr(1, 2), new AddExpr(3, 4));
+        CHECK(add2.to_string() == "((1+2)+(3+4))");
+        AddExpr add3(new AddExpr(1001, 50), new VarExpr("p"));
+        CHECK(add3.to_string() == "((1001+50)+p)");
+    }
+    
+    SECTION("Mult_simple") {
+        CHECK(MultExpr(-1, 2).to_string() == "(-1*2)");
+        CHECK(MultExpr("x", "y").to_string() == "(x*y)");
+        CHECK(MultExpr("z", 2).to_string() == "(z*2)");
+    }
+    
+    SECTION("Mult_nested") {
+        MultExpr mult1(new NumExpr(1), new MultExpr(-10, 2));
+        CHECK(mult1.to_string() == "(1*(-10*2))");
+        MultExpr mult2(new AddExpr(2, 7), new MultExpr(5, -20));
+        CHECK(mult2.to_string() == "((2+7)*(5*-20))");
+        MultExpr mult3(new MultExpr(1001, 50), new VarExpr("p"));
+        CHECK(mult3.to_string() == "((1001*50)*p)");
+    }
+    
+    SECTION("Variable") {
+        CHECK(VarExpr("xyz").to_string() == "xyz");
+    }
+};
+
+TEST_CASE("pretty_print") {
+    SECTION("num") {
+        CHECK(NumExpr(1).to_pretty_string() == "1");
+    }
+    
+    SECTION("add") {
+        AddExpr add1(new AddExpr(1, 2), new NumExpr(3));
+        CHECK(add1.to_pretty_string() == "(1 + 2) + 3");
+        AddExpr add2(new NumExpr(1), new AddExpr(2, 3));
+        CHECK(add2.to_pretty_string() == "1 + 2 + 3");
+        AddExpr add3(new AddExpr(1, 2), new AddExpr(new NumExpr(3), new AddExpr(4, 5)));
+        CHECK(add3.to_pretty_string() == "(1 + 2) + 3 + 4 + 5");
+        AddExpr add4(new AddExpr(1, 2), new AddExpr(new AddExpr(3, 4), new NumExpr(5)));
+        CHECK(add4.to_pretty_string() == "(1 + 2) + (3 + 4) + 5");
+    }
+    
+    SECTION("mult") {
+        MultExpr mult1(new MultExpr(1, 2), new NumExpr(3));
+        CHECK(mult1.to_pretty_string() == "(1 * 2) * 3");
+        MultExpr mult2(new NumExpr(1), new MultExpr(2, 3));
+        CHECK(mult2.to_pretty_string() == "1 * 2 * 3");
+        MultExpr mult3(new MultExpr(1, 2), new MultExpr(new NumExpr(3), new MultExpr(4, 5)));
+        CHECK(mult3.to_pretty_string() == "(1 * 2) * 3 * 4 * 5");
+        MultExpr mult4(new MultExpr(1, 2), new MultExpr(new MultExpr(3, 4), new NumExpr(5)));
+        CHECK(mult4.to_pretty_string() == "(1 * 2) * (3 * 4) * 5");
+    }
+    
+    SECTION("add + mult") {
+        CHECK(AddExpr(new NumExpr(1), new MultExpr(2, 3)).to_pretty_string() == "1 + 2 * 3");
+        CHECK(MultExpr(new NumExpr(1), new AddExpr(2, 3)).to_pretty_string() == "1 * (2 + 3)");
+    }
+    
+    SECTION("Variable") {
+        CHECK(VarExpr("xyz").to_string() == "xyz");
+    }
+    
+}
