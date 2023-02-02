@@ -127,7 +127,7 @@ void AddExpr::pretty_print(std::ostream &out) {
         lhs -> pretty_print(out);
     }
     out << " + ";
-    if (rhs -> get_precedence() != 0 && rhs -> get_precedence() > this -> get_precedence()) {
+    if (rhs -> get_precedence() != 0 && rhs -> get_precedence() < this -> get_precedence()) {
         out << "(";
         rhs -> pretty_print(out);
         out << ")";

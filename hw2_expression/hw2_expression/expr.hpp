@@ -19,7 +19,7 @@ enum precedence_t {
 
 class Expr {
 public:
-    precedence_t prec = prec_none;
+    precedence_t prec;
     virtual bool equals(Expr* expr)=0;
     virtual int interp() = 0;
     virtual bool has_variable() = 0;
@@ -36,7 +36,6 @@ public:
 class NumExpr : public Expr {
 private:
     int val;
-    precedence_t prec = prec_none;
 public:
     NumExpr(int v);
     bool equals(Expr* expr);

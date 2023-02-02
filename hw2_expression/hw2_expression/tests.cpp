@@ -224,15 +224,15 @@ TEST_CASE("Interpt + Subst") {
 
 TEST_CASE("to_string + print") {
     SECTION("Num") {
-        CHECK((new NumExpr(10)) -> to_string() == "10");
-        CHECK((new NumExpr(-10)) -> to_string() == "-10");
+        CHECK(NumExpr(10).to_string() == "10");
+        CHECK(NumExpr(-10).to_string() == "-10");
     }
     
     SECTION("Add_simple") {
-        CHECK((new AddExpr(1, 2)) -> to_string() == "(1+2)");
-        CHECK((new AddExpr("x", 2)) -> to_string() == "(x+2)");
-        CHECK((new AddExpr(-3, "speed")) -> to_string() == "(-3+speed)");
-        CHECK((new AddExpr(-10, -5)) -> to_string() == "(-10+-5)"); // TODO
+        CHECK(AddExpr(1, 2).to_string() == "(1+2)");
+        CHECK(AddExpr("x", 2).to_string() == "(x+2)");
+        CHECK(AddExpr(-3, "speed").to_string() == "(-3+speed)");
+        CHECK(AddExpr(-10, -5).to_string() == "(-10+-5)");
     }
     
     SECTION("Add_nested") {
@@ -245,9 +245,9 @@ TEST_CASE("to_string + print") {
     }
     
     SECTION("Mult_simple") {
-        CHECK((new MultExpr(-1, 2)) -> to_string() == "(-1*2)");
-        CHECK((new MultExpr("x", "y")) -> to_string() == "(x*y)");
-        CHECK((new MultExpr("z", 2)) -> to_string() == "(z*2)");
+        CHECK(MultExpr(-1, 2).to_string() == "(-1*2)");
+        CHECK(MultExpr("x", "y").to_string() == "(x*y)");
+        CHECK(MultExpr("z", 2).to_string() == "(z*2)");
     }
     
     SECTION("Mult_nested") {
@@ -260,13 +260,13 @@ TEST_CASE("to_string + print") {
     }
     
     SECTION("Variable") {
-        CHECK((new VarExpr("xyz")) -> to_string() == "xyz");
+        CHECK(VarExpr("xyz").to_string() == "xyz");
     }
 };
 
 TEST_CASE("pretty_print") {
     SECTION("num") {
-        CHECK((new NumExpr(1)) -> to_pretty_string() == "1");
+        CHECK(NumExpr(1).to_pretty_string() == "1");
     }
     
     SECTION("add") {
@@ -275,11 +275,9 @@ TEST_CASE("pretty_print") {
         AddExpr add2(new NumExpr(1), new AddExpr(2, 3));
         CHECK(add2.to_pretty_string() == "1 + 2 + 3");
         AddExpr add3(new AddExpr(1, 2), new AddExpr(new NumExpr(3), new AddExpr(4, 5)));
-        add3.to_pretty_string();
-        NumExpr num(3);
-        std::cout << num.get_precedence();
-        num.to_string();
-//        CHECK(add3.to_pretty_string() == "(1 + 2) + 3 + 4 + 5");
+        CHECK(add3.to_pretty_string() == "(1 + 2) + 3 + 4 + 5");
+        AddExpr add4(new AddExpr(1, 2), new AddExpr(new AddExpr(3, 4), new NumExpr(5)));
+        CHECK(add4.to_pretty_string() == "(1 + 2) + (3 + 4) + 5");
     }
     
     SECTION("mult") {
@@ -287,14 +285,19 @@ TEST_CASE("pretty_print") {
         CHECK(mult1.to_pretty_string() == "(1 * 2) * 3");
         MultExpr mult2(new NumExpr(1), new MultExpr(2, 3));
         CHECK(mult2.to_pretty_string() == "1 * 2 * 3");
+        MultExpr mult3(new MultExpr(1, 2), new MultExpr(new NumExpr(3), new MultExpr(4, 5)));
+        CHECK(mult3.to_pretty_string() == "(1 * 2) * 3 * 4 * 5");
+        MultExpr mult4(new MultExpr(1, 2), new MultExpr(new MultExpr(3, 4), new NumExpr(5)));
+        CHECK(mult4.to_pretty_string() == "(1 * 2) * (3 * 4) * 5");
     }
     
     SECTION("add + mult") {
-        
+        CHECK(AddExpr(new NumExpr(1), new MultExpr(2, 3)).to_pretty_string() == "1 + 2 * 3");
+        CHECK(MultExpr(new NumExpr(1), new AddExpr(2, 3)).to_pretty_string() == "1 * (2 + 3)");
     }
     
     SECTION("Variable") {
-        CHECK((new VarExpr("xyz")) -> to_string() == "xyz");
+        CHECK(VarExpr("xyz").to_string() == "xyz");
     }
     
 }
