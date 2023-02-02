@@ -8,7 +8,7 @@ jobs:
       - name: Checkout v1
         uses: actions/checkout@v1
       - name: cd project file
-        run: cd ../hw2_expression/hw2_expression/
+        run: cd hw2_expression/hw2_expression/
       - name: make project
         run: make
       - name: Run test 
