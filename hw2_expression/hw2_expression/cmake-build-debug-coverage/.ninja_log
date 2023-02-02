@@ -1,6 +1,0 @@
-# ninja log v5
-1	372	1675362140428119814	CMakeFiles/hw2_expression.dir/expr.cpp.o	e3fe1d9c23c8033d
-0	441	1675362140496968408	CMakeFiles/hw2_expression.dir/main.cpp.o	f3a42c6026251311
-1	554	1675362140608949673	CMakeFiles/hw2_expression.dir/tests.cpp.o	a23812ce724dfbab
-1	2810	1675362142856959889	CMakeFiles/hw2_expression.dir/cmdline.cpp.o	9cd557bbe50db797
-2810	2919	1675362142976116506	hw2_expression	4fbac8aa63bfcac6

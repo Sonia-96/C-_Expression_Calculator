@@ -1,3 +1,0 @@
-/Users/annmariehoppel/MSD/MSDscript/MSDscript/Lab3/hw2_expression/hw2_expression/cmake-build-debug-coverage/CMakeFiles/hw2_expression.dir
-/Users/annmariehoppel/MSD/MSDscript/MSDscript/Lab3/hw2_expression/hw2_expression/cmake-build-debug-coverage/CMakeFiles/edit_cache.dir
-/Users/annmariehoppel/MSD/MSDscript/MSDscript/Lab3/hw2_expression/hw2_expression/cmake-build-debug-coverage/CMakeFiles/rebuild_cache.dir
