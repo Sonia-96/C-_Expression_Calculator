@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v1
       - name: cd project file
         run: cd hw2_expression/hw2_expression/
-      - name: make project
+      - name: make executable
         run: make program
       - name: Run test 
         run: make test
