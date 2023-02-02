@@ -10,6 +10,6 @@ jobs:
       - name: cd project file
         run: cd hw2_expression/hw2_expression/
       - name: make executable
-        run: make
+        run: make program
       - name: Run test 
         run: make test
