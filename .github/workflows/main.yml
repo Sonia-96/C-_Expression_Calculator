@@ -7,9 +7,7 @@ jobs:
     steps:
       - name: Checkout v1
         uses: actions/checkout@v1
-      - name: cd project file
-        run: cd hw2_expression/hw2_expression/
-      - name: make project
-        run: make program
-      - name: Run test 
-        run: make test
+      - name: make executable
+        run: cd hw2_expression/hw2_expression && make program
+      - name: run test 
+        run: cd hw2_expression/hw2_expression && make test
