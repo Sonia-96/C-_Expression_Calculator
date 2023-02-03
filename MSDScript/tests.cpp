@@ -22,6 +22,7 @@ TEST_CASE("Equals") {
         CHECK_FALSE(num2.equals(&num3));
         CHECK_FALSE(num3.equals(&num2));
         CHECK(!num1.equals(&num4));
+        CHECK(!num1.equals(new VarExpr("x")));
     }
     
     SECTION("Add_simple") {
@@ -34,6 +35,7 @@ TEST_CASE("Equals") {
         CHECK(add3.equals(&add1));
         CHECK(!add2.equals(&add3));
         CHECK(!add3.equals(&add2));
+        CHECK(!add1.equals(new MultExpr(1, 2)));
     }
     
     SECTION("Add_nested") {
@@ -46,6 +48,7 @@ TEST_CASE("Equals") {
         CHECK(add3.equals(&add1));
         CHECK(!add2.equals(&add3));
         CHECK(!add3.equals(&add2));
+        CHECK(!add1.equals(new NumExpr(5)));
     }
 
     SECTION("Mult_simple") {
@@ -58,6 +61,7 @@ TEST_CASE("Equals") {
         CHECK(mult3.equals(&mult1));
         CHECK(!mult2.equals(&mult3));
         CHECK(!mult3.equals(&mult2));
+        CHECK(!mult1.equals(new VarExpr("x")));
     }
     
     SECTION("Mult_nested") {
@@ -79,6 +83,7 @@ TEST_CASE("Equals") {
         CHECK_FALSE(var1.equals(&var2));
         CHECK(var1.equals(&var3));
         CHECK(!var2.equals(&var3));
+        CHECK(!var1.equals(new NumExpr(1)));
     }
 };
 
