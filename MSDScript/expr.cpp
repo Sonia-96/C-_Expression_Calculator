@@ -6,9 +6,6 @@
 //
 
 #include <sstream>
-#include <stdexcept>
-#include <string>
-#include <iostream>
 #include "expr.hpp"
 
 // Expr
