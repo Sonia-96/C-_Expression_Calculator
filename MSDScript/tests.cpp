@@ -283,6 +283,10 @@ TEST_CASE("pretty_print") {
         CHECK(add3.to_pretty_string() == "(1 + 2) + 3 + 4 + 5");
         AddExpr add4(new AddExpr(1, 2), new AddExpr(new AddExpr(3, 4), new NumExpr(5)));
         CHECK(add4.to_pretty_string() == "(1 + 2) + (3 + 4) + 5");
+        AddExpr add5(new MultExpr(1, 2), new MultExpr(3, 4));
+        CHECK(add5.to_pretty_string() == "1 * 2 + 3 * 4");
+        AddExpr add6(new AddExpr(1, 2), new MultExpr(3, 4));
+        CHECK(add6.to_pretty_string() == "(1 + 2) + 3 * 4");
     }
     
     SECTION("mult") {
@@ -294,6 +298,10 @@ TEST_CASE("pretty_print") {
         CHECK(mult3.to_pretty_string() == "(1 * 2) * 3 * 4 * 5");
         MultExpr mult4(new MultExpr(1, 2), new MultExpr(new MultExpr(3, 4), new NumExpr(5)));
         CHECK(mult4.to_pretty_string() == "(1 * 2) * (3 * 4) * 5");
+        MultExpr mult5(new MultExpr(1, 2), new AddExpr(3, 4));
+        CHECK(mult5.to_pretty_string() == "(1 * 2) * (3 + 4)");
+        MultExpr mult6(new MultExpr(1, 2), new VarExpr("x"));
+        CHECK(mult6.to_pretty_string() == "(1 * 2) * x");
     }
     
     SECTION("add + mult") {
