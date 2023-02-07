@@ -17,9 +17,12 @@ enum precedence_t {
     prec_mult, // 2
 };
 
+/** \brief
+ * Expr class - the base class for all expressions
+ */
 class Expr {
 public:
-    precedence_t prec;
+    precedence_t prec; // !< the precedence of an expression
     virtual bool equals(Expr* expr)=0;
     virtual int interp() = 0;
     virtual bool has_variable() = 0;
@@ -33,6 +36,9 @@ public:
     std::string to_pretty_string();
 };
 
+/** \brief
+ * NumExpr class - for number expressions
+ */
 class NumExpr : public Expr {
 private:
     int val;
@@ -46,6 +52,9 @@ public:
     void pretty_print(std::ostream& out);
 };
 
+/** \brief
+ * AddExpr class - for add expressions
+ */
 class AddExpr : public Expr {
 private:
     Expr* lhs;
@@ -64,6 +73,9 @@ public:
     void pretty_print(std::ostream& out);
 };
 
+/** \brief
+ * MultExpr class - for multiplication expressions
+ */
 class MultExpr : public Expr {
 public:
     Expr* lhs;
@@ -82,6 +94,9 @@ public:
     void pretty_print(std::ostream& out);
 };
 
+/** \brief
+ * VarExpr class - for variable expressions
+ */
 class VarExpr : public Expr {
 private:
     std::string val;

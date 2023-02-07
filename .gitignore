@@ -38,3 +38,6 @@ starting Xcode 4)
 out/
 .idea/
 
+## doxygen
+html/
+latex/
