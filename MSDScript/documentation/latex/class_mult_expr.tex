@@ -1,0 +1,253 @@
+\hypertarget{class_mult_expr}{}\doxysection{Mult\+Expr Class Reference}
+\label{class_mult_expr}\index{MultExpr@{MultExpr}}
+
+
+\mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} class -\/ for multiplication expressions.  
+
+
+
+
+{\ttfamily \#include $<$expr.\+hpp$>$}
+
+Inheritance diagram for Mult\+Expr\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_mult_expr}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_mult_expr_af5134197a156fcd5a252ca54c0f6b13c}{Mult\+Expr}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$left, \mbox{\hyperlink{class_expr}{Expr}} $\ast$right)
+\item 
+\mbox{\hyperlink{class_mult_expr_aea8e22fd21e0184d07d06efacec3fe2c}{Mult\+Expr}} (int left, int right)
+\item 
+\mbox{\hyperlink{class_mult_expr_ae42c5345f18c014aa7507d5f9387d210}{Mult\+Expr}} (std\+::string left, int right)
+\item 
+\mbox{\hyperlink{class_mult_expr_a7368bc4fe4420ab7f2268b7d1a976f5d}{Mult\+Expr}} (int left, std\+::string right)
+\item 
+\mbox{\hyperlink{class_mult_expr_a536f067b7ff63f5d84b8d5576343f20f}{Mult\+Expr}} (std\+::string left, std\+::string right)
+\item 
+bool \mbox{\hyperlink{class_mult_expr_a4717aa38bef4200514dcf0f54d27ae72}{equals}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)
+\item 
+int \mbox{\hyperlink{class_mult_expr_abfc094e6141c3c78633e27bcd3539f7b}{interp}} ()
+\item 
+bool \mbox{\hyperlink{class_mult_expr_a5ecf878efa2a106dbac38a3a83b01309}{has\+\_\+variable}} ()
+\item 
+\mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_mult_expr_a6d62a8e3c0974a4e97aa68bfa9ef6350}{subst}} (std\+::string s, \mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)
+\item 
+void \mbox{\hyperlink{class_mult_expr_a936a368307072ec50770dd783b55f2f1}{print}} (std\+::ostream \&out)
+\item 
+void \mbox{\hyperlink{class_mult_expr_a99a8861ca4382931bb5c772476660575}{pretty\+\_\+print}} (std\+::ostream \&out)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{class_expr_ab5d65cde79dd78c2e06b2d5a0f19c602}{equals}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)=0
+\item 
+virtual int \mbox{\hyperlink{class_expr_aeba8585d8225419d49166371306542c1}{interp}} ()=0
+\item 
+virtual bool \mbox{\hyperlink{class_expr_a92dc26078993a4b9721ea732274a435c}{has\+\_\+variable}} ()=0
+\item 
+virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a70934630e6142f285c46846b54335598}{subst}} (std\+::string s, \mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)=0
+\item 
+virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
+\item 
+virtual void \mbox{\hyperlink{class_expr_ab777e5c814a5d154a6bdf0a1543a6e93}{pretty\+\_\+print}} (std\+::ostream \&out)=0
+\item 
+std\+::string \mbox{\hyperlink{class_expr_abe130f37bd185ec13c5113de16fc7bf7}{to\+\_\+string}} ()
+\item 
+\mbox{\Hypertarget{class_expr_a6577e9276c36556a02c8878c483a2c20}\label{class_expr_a6577e9276c36556a02c8878c483a2c20}} 
+precedence\+\_\+t {\bfseries get\+\_\+precedence} ()
+\item 
+std\+::string \mbox{\hyperlink{class_expr_a6ad7c18234f22d96d6917089b5bd7caa}{to\+\_\+pretty\+\_\+string}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_mult_expr_a0b49284e5c90d2f9e55df85c37ace717}\label{class_mult_expr_a0b49284e5c90d2f9e55df85c37ace717}} 
+\mbox{\hyperlink{class_expr}{Expr}} $\ast$ {\bfseries lhs}
+\item 
+\mbox{\Hypertarget{class_mult_expr_ae70fd4159bdde5ae4beaade8510d9103}\label{class_mult_expr_ae70fd4159bdde5ae4beaade8510d9103}} 
+\mbox{\hyperlink{class_expr}{Expr}} $\ast$ {\bfseries rhs}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes inherited from \mbox{\hyperlink{class_expr}{Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}\label{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}} 
+precedence\+\_\+t {\bfseries prec}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} class -\/ for multiplication expressions. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_mult_expr_af5134197a156fcd5a252ca54c0f6b13c}\label{class_mult_expr_af5134197a156fcd5a252ca54c0f6b13c}} 
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{MultExpr()}{MultExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily Mult\+Expr\+::\+Mult\+Expr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{left,  }\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} object with the specified left and right expressions. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified left expression \\
+\hline
+{\em right} & the specified right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_mult_expr_aea8e22fd21e0184d07d06efacec3fe2c}\label{class_mult_expr_aea8e22fd21e0184d07d06efacec3fe2c}} 
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{MultExpr()}{MultExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily Mult\+Expr\+::\+Mult\+Expr (\begin{DoxyParamCaption}\item[{int}]{left,  }\item[{int}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} object with the specified int values. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified int value in the left expression \\
+\hline
+{\em right} & the specified int value in the right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_mult_expr_ae42c5345f18c014aa7507d5f9387d210}\label{class_mult_expr_ae42c5345f18c014aa7507d5f9387d210}} 
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{MultExpr()}{MultExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily Mult\+Expr\+::\+Mult\+Expr (\begin{DoxyParamCaption}\item[{std\+::string}]{left,  }\item[{int}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} object with a specified string as the left expression and a specified int value as the right expression. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified string in the left expression \\
+\hline
+{\em right} & the specified int value in the right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_mult_expr_a7368bc4fe4420ab7f2268b7d1a976f5d}\label{class_mult_expr_a7368bc4fe4420ab7f2268b7d1a976f5d}} 
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{MultExpr()}{MultExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily Mult\+Expr\+::\+Mult\+Expr (\begin{DoxyParamCaption}\item[{int}]{left,  }\item[{std\+::string}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} object with a specified int as the left expression and a specified string value as the right expression. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified int value in the left expression \\
+\hline
+{\em right} & the specified string in the right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_mult_expr_a536f067b7ff63f5d84b8d5576343f20f}\label{class_mult_expr_a536f067b7ff63f5d84b8d5576343f20f}} 
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\index{MultExpr@{MultExpr}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{MultExpr()}{MultExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily Mult\+Expr\+::\+Mult\+Expr (\begin{DoxyParamCaption}\item[{std\+::string}]{left,  }\item[{std\+::string}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} object with the specified strings. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified string in the left \mbox{\hyperlink{class_var_expr}{Var\+Expr}} expression \\
+\hline
+{\em right} & the specified string in the right \mbox{\hyperlink{class_var_expr}{Var\+Expr}} expression \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_mult_expr_a4717aa38bef4200514dcf0f54d27ae72}\label{class_mult_expr_a4717aa38bef4200514dcf0f54d27ae72}} 
+\index{MultExpr@{MultExpr}!equals@{equals}}
+\index{equals@{equals}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{equals()}{equals()}}
+{\footnotesize\ttfamily bool Mult\+Expr\+::equals (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{expr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Compared the specified expression with this object for equality. 
+\begin{DoxyParams}{Parameters}
+{\em expr} & the expression to be compared for equality with this object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the specified expression is a \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} object and it has the same value with this object. Otherwise returns false. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_mult_expr_a5ecf878efa2a106dbac38a3a83b01309}\label{class_mult_expr_a5ecf878efa2a106dbac38a3a83b01309}} 
+\index{MultExpr@{MultExpr}!has\_variable@{has\_variable}}
+\index{has\_variable@{has\_variable}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{has\_variable()}{has\_variable()}}
+{\footnotesize\ttfamily bool Mult\+Expr\+::has\+\_\+variable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Check if this \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} expression object contains a \mbox{\hyperlink{class_var_expr}{Var\+Expr}} object. \begin{DoxyReturn}{Returns}
+true if either its left or right expression contains a \mbox{\hyperlink{class_var_expr}{Var\+Expr}} object 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_mult_expr_abfc094e6141c3c78633e27bcd3539f7b}\label{class_mult_expr_abfc094e6141c3c78633e27bcd3539f7b}} 
+\index{MultExpr@{MultExpr}!interp@{interp}}
+\index{interp@{interp}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{interp()}{interp()}}
+{\footnotesize\ttfamily int Mult\+Expr\+::interp (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Multiply the left and right expressions and returns the int value of the result. \begin{DoxyReturn}{Returns}
+the int value of the multiplication of the left and right expressions 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_mult_expr_a99a8861ca4382931bb5c772476660575}\label{class_mult_expr_a99a8861ca4382931bb5c772476660575}} 
+\index{MultExpr@{MultExpr}!pretty\_print@{pretty\_print}}
+\index{pretty\_print@{pretty\_print}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{pretty\_print()}{pretty\_print()}}
+{\footnotesize\ttfamily void Mult\+Expr\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Print this object in a prettier way. To specify, we\textquotesingle{}ll omit redundant parentheses and add a space around operators. 
+\begin{DoxyParams}{Parameters}
+{\em out} & the output stream used to print this object \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_mult_expr_a936a368307072ec50770dd783b55f2f1}\label{class_mult_expr_a936a368307072ec50770dd783b55f2f1}} 
+\index{MultExpr@{MultExpr}!print@{print}}
+\index{print@{print}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily void Mult\+Expr\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Print this object with parentheses and a add sign. 
+\begin{DoxyParams}{Parameters}
+{\em out} & the output stream used to print this object \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_mult_expr_a6d62a8e3c0974a4e97aa68bfa9ef6350}\label{class_mult_expr_a6d62a8e3c0974a4e97aa68bfa9ef6350}} 
+\index{MultExpr@{MultExpr}!subst@{subst}}
+\index{subst@{subst}!MultExpr@{MultExpr}}
+\doxysubsubsection{\texorpdfstring{subst()}{subst()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_expr}{Expr}} $\ast$ Mult\+Expr\+::subst (\begin{DoxyParamCaption}\item[{std\+::string}]{s,  }\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{expr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Substitute the specified string in this object with a specified expression 
+\begin{DoxyParams}{Parameters}
+{\em s} & the specified string to be substituted \\
+\hline
+{\em expr} & the specified expression used to substitute the string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a new \mbox{\hyperlink{class_mult_expr}{Mult\+Expr}} object with the specified strings in its left and right expressions have been substituted 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+hpp\item 
+/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+cpp\end{DoxyCompactItemize}

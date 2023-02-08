@@ -1,0 +1,112 @@
+\begin{theindex}
+
+  \item {AddExpr}, \hyperpage{9}
+    \subitem {AddExpr}, \hyperpage{10, 11}
+    \subitem {equals}, \hyperpage{11}
+    \subitem {has\_variable}, \hyperpage{12}
+    \subitem {interp}, \hyperpage{12}
+    \subitem {pretty\_print}, \hyperpage{12}
+    \subitem {print}, \hyperpage{13}
+    \subitem {subst}, \hyperpage{13}
+
+  \indexspace
+
+  \item {equals}
+    \subitem {AddExpr}, \hyperpage{11}
+    \subitem {Expr}, \hyperpage{14}
+    \subitem {MultExpr}, \hyperpage{19}
+    \subitem {NumExpr}, \hyperpage{23}
+    \subitem {VarExpr}, \hyperpage{27}
+  \item {Expr}, \hyperpage{14}
+    \subitem {equals}, \hyperpage{14}
+    \subitem {has\_variable}, \hyperpage{14}
+    \subitem {interp}, \hyperpage{15}
+    \subitem {pretty\_print}, \hyperpage{15}
+    \subitem {print}, \hyperpage{15}
+    \subitem {subst}, \hyperpage{15}
+    \subitem {to\_pretty\_string}, \hyperpage{15}
+    \subitem {to\_string}, \hyperpage{16}
+
+  \indexspace
+
+  \item {has\_variable}
+    \subitem {AddExpr}, \hyperpage{12}
+    \subitem {Expr}, \hyperpage{14}
+    \subitem {MultExpr}, \hyperpage{19}
+    \subitem {NumExpr}, \hyperpage{24}
+    \subitem {VarExpr}, \hyperpage{27}
+
+  \indexspace
+
+  \item {interp}
+    \subitem {AddExpr}, \hyperpage{12}
+    \subitem {Expr}, \hyperpage{15}
+    \subitem {MultExpr}, \hyperpage{19}
+    \subitem {NumExpr}, \hyperpage{24}
+    \subitem {VarExpr}, \hyperpage{27}
+
+  \indexspace
+
+  \item {MultExpr}, \hyperpage{16}
+    \subitem {equals}, \hyperpage{19}
+    \subitem {has\_variable}, \hyperpage{19}
+    \subitem {interp}, \hyperpage{19}
+    \subitem {MultExpr}, \hyperpage{17, 18}
+    \subitem {pretty\_print}, \hyperpage{20}
+    \subitem {print}, \hyperpage{20}
+    \subitem {subst}, \hyperpage{20}
+
+  \indexspace
+
+  \item {NumExpr}, \hyperpage{22}
+    \subitem {equals}, \hyperpage{23}
+    \subitem {has\_variable}, \hyperpage{24}
+    \subitem {interp}, \hyperpage{24}
+    \subitem {NumExpr}, \hyperpage{23}
+    \subitem {pretty\_print}, \hyperpage{24}
+    \subitem {print}, \hyperpage{24}
+    \subitem {subst}, \hyperpage{25}
+
+  \indexspace
+
+  \item {pretty\_print}
+    \subitem {AddExpr}, \hyperpage{12}
+    \subitem {Expr}, \hyperpage{15}
+    \subitem {MultExpr}, \hyperpage{20}
+    \subitem {NumExpr}, \hyperpage{24}
+    \subitem {VarExpr}, \hyperpage{27}
+  \item {print}
+    \subitem {AddExpr}, \hyperpage{13}
+    \subitem {Expr}, \hyperpage{15}
+    \subitem {MultExpr}, \hyperpage{20}
+    \subitem {NumExpr}, \hyperpage{24}
+    \subitem {VarExpr}, \hyperpage{28}
+
+  \indexspace
+
+  \item {subst}
+    \subitem {AddExpr}, \hyperpage{13}
+    \subitem {Expr}, \hyperpage{15}
+    \subitem {MultExpr}, \hyperpage{20}
+    \subitem {NumExpr}, \hyperpage{25}
+    \subitem {VarExpr}, \hyperpage{28}
+
+  \indexspace
+
+  \item {to\_pretty\_string}
+    \subitem {Expr}, \hyperpage{15}
+  \item {to\_string}
+    \subitem {Expr}, \hyperpage{16}
+
+  \indexspace
+
+  \item {VarExpr}, \hyperpage{25}
+    \subitem {equals}, \hyperpage{27}
+    \subitem {has\_variable}, \hyperpage{27}
+    \subitem {interp}, \hyperpage{27}
+    \subitem {pretty\_print}, \hyperpage{27}
+    \subitem {print}, \hyperpage{28}
+    \subitem {subst}, \hyperpage{28}
+    \subitem {VarExpr}, \hyperpage{26}
+
+\end{theindex}

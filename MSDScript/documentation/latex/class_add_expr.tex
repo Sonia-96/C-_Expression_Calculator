@@ -1,0 +1,245 @@
+\hypertarget{class_add_expr}{}\doxysection{Add\+Expr Class Reference}
+\label{class_add_expr}\index{AddExpr@{AddExpr}}
+
+
+\mbox{\hyperlink{class_add_expr}{Add\+Expr}} class -\/ for add expressions.  
+
+
+
+
+{\ttfamily \#include $<$expr.\+hpp$>$}
+
+Inheritance diagram for Add\+Expr\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_add_expr}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_add_expr_a00fe6f7e16e3543b0fa35f7b13f58a9e}{Add\+Expr}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$left, \mbox{\hyperlink{class_expr}{Expr}} $\ast$right)
+\item 
+\mbox{\hyperlink{class_add_expr_a971dbbb18da9a6bf61b75f7dc789646a}{Add\+Expr}} (int left, int right)
+\item 
+\mbox{\hyperlink{class_add_expr_ad47406b42cc244350ff0057fd7a3bef4}{Add\+Expr}} (std\+::string left, int right)
+\item 
+\mbox{\hyperlink{class_add_expr_a2f4cc4a507bee223a407e2a47ea0abb2}{Add\+Expr}} (int left, std\+::string right)
+\item 
+\mbox{\hyperlink{class_add_expr_a9601260730cd5a83258f94b5d35ba66b}{Add\+Expr}} (std\+::string left, std\+::string right)
+\item 
+bool \mbox{\hyperlink{class_add_expr_ac45db119e75929dfdb6a0be61329bfac}{equals}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)
+\item 
+int \mbox{\hyperlink{class_add_expr_aa3a091a578f99dccaed47d724f602f42}{interp}} ()
+\item 
+bool \mbox{\hyperlink{class_add_expr_acac5ec05b02dc9d1308600027982a2ff}{has\+\_\+variable}} ()
+\item 
+\mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_add_expr_a352cadc15a4aa92c1279dbabd7843b75}{subst}} (std\+::string s, \mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)
+\item 
+void \mbox{\hyperlink{class_add_expr_aa82a06b3893450af5ec7fb204e263897}{print}} (std\+::ostream \&out)
+\item 
+void \mbox{\hyperlink{class_add_expr_ac3ff87673ca1dc48f8458e106ff7cf09}{pretty\+\_\+print}} (std\+::ostream \&out)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{class_expr_ab5d65cde79dd78c2e06b2d5a0f19c602}{equals}} (\mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)=0
+\item 
+virtual int \mbox{\hyperlink{class_expr_aeba8585d8225419d49166371306542c1}{interp}} ()=0
+\item 
+virtual bool \mbox{\hyperlink{class_expr_a92dc26078993a4b9721ea732274a435c}{has\+\_\+variable}} ()=0
+\item 
+virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a70934630e6142f285c46846b54335598}{subst}} (std\+::string s, \mbox{\hyperlink{class_expr}{Expr}} $\ast$expr)=0
+\item 
+virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
+\item 
+virtual void \mbox{\hyperlink{class_expr_ab777e5c814a5d154a6bdf0a1543a6e93}{pretty\+\_\+print}} (std\+::ostream \&out)=0
+\item 
+std\+::string \mbox{\hyperlink{class_expr_abe130f37bd185ec13c5113de16fc7bf7}{to\+\_\+string}} ()
+\item 
+\mbox{\Hypertarget{class_expr_a6577e9276c36556a02c8878c483a2c20}\label{class_expr_a6577e9276c36556a02c8878c483a2c20}} 
+precedence\+\_\+t {\bfseries get\+\_\+precedence} ()
+\item 
+std\+::string \mbox{\hyperlink{class_expr_a6ad7c18234f22d96d6917089b5bd7caa}{to\+\_\+pretty\+\_\+string}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+\doxysubsubsection*{Public Attributes inherited from \mbox{\hyperlink{class_expr}{Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}\label{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}} 
+precedence\+\_\+t {\bfseries prec}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_add_expr}{Add\+Expr}} class -\/ for add expressions. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_add_expr_a00fe6f7e16e3543b0fa35f7b13f58a9e}\label{class_add_expr_a00fe6f7e16e3543b0fa35f7b13f58a9e}} 
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{AddExpr()}{AddExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily Add\+Expr\+::\+Add\+Expr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{left,  }\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_add_expr}{Add\+Expr}} object with the specified left and right expressions. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified left expression \\
+\hline
+{\em right} & the specified right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_add_expr_a971dbbb18da9a6bf61b75f7dc789646a}\label{class_add_expr_a971dbbb18da9a6bf61b75f7dc789646a}} 
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{AddExpr()}{AddExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily Add\+Expr\+::\+Add\+Expr (\begin{DoxyParamCaption}\item[{int}]{left,  }\item[{int}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_add_expr}{Add\+Expr}} object with the specified int values. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified int value in the left expression \\
+\hline
+{\em right} & the specified int value in the right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_add_expr_ad47406b42cc244350ff0057fd7a3bef4}\label{class_add_expr_ad47406b42cc244350ff0057fd7a3bef4}} 
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{AddExpr()}{AddExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily Add\+Expr\+::\+Add\+Expr (\begin{DoxyParamCaption}\item[{std\+::string}]{left,  }\item[{int}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_add_expr}{Add\+Expr}} object with a specified string as the left expression and a specified int value as the right expression. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified string in the left expression \\
+\hline
+{\em right} & the specified int value in the right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_add_expr_a2f4cc4a507bee223a407e2a47ea0abb2}\label{class_add_expr_a2f4cc4a507bee223a407e2a47ea0abb2}} 
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{AddExpr()}{AddExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily Add\+Expr\+::\+Add\+Expr (\begin{DoxyParamCaption}\item[{int}]{left,  }\item[{std\+::string}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_add_expr}{Add\+Expr}} object with a specified int as the left expression and a specified string value as the right expression. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified int value in the left expression \\
+\hline
+{\em right} & the specified string in the right expression \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_add_expr_a9601260730cd5a83258f94b5d35ba66b}\label{class_add_expr_a9601260730cd5a83258f94b5d35ba66b}} 
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\index{AddExpr@{AddExpr}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{AddExpr()}{AddExpr()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily Add\+Expr\+::\+Add\+Expr (\begin{DoxyParamCaption}\item[{std\+::string}]{left,  }\item[{std\+::string}]{right }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_add_expr}{Add\+Expr}} object with the specified strings. 
+\begin{DoxyParams}{Parameters}
+{\em left} & the specified string in the left \mbox{\hyperlink{class_var_expr}{Var\+Expr}} expression \\
+\hline
+{\em right} & the specified string in the right \mbox{\hyperlink{class_var_expr}{Var\+Expr}} expression \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_add_expr_ac45db119e75929dfdb6a0be61329bfac}\label{class_add_expr_ac45db119e75929dfdb6a0be61329bfac}} 
+\index{AddExpr@{AddExpr}!equals@{equals}}
+\index{equals@{equals}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{equals()}{equals()}}
+{\footnotesize\ttfamily bool Add\+Expr\+::equals (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{expr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Compared the specified expression with this object for equality. 
+\begin{DoxyParams}{Parameters}
+{\em expr} & the expression to be compared for equality with this object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the specified expression is a \mbox{\hyperlink{class_add_expr}{Add\+Expr}} object and it has the same value with this object. Otherwise returns false. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_add_expr_acac5ec05b02dc9d1308600027982a2ff}\label{class_add_expr_acac5ec05b02dc9d1308600027982a2ff}} 
+\index{AddExpr@{AddExpr}!has\_variable@{has\_variable}}
+\index{has\_variable@{has\_variable}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{has\_variable()}{has\_variable()}}
+{\footnotesize\ttfamily bool Add\+Expr\+::has\+\_\+variable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Check if this \mbox{\hyperlink{class_add_expr}{Add\+Expr}} expression object contains a \mbox{\hyperlink{class_var_expr}{Var\+Expr}} object. \begin{DoxyReturn}{Returns}
+true if either its left or right expression contains a \mbox{\hyperlink{class_var_expr}{Var\+Expr}} object 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_add_expr_aa3a091a578f99dccaed47d724f602f42}\label{class_add_expr_aa3a091a578f99dccaed47d724f602f42}} 
+\index{AddExpr@{AddExpr}!interp@{interp}}
+\index{interp@{interp}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{interp()}{interp()}}
+{\footnotesize\ttfamily int Add\+Expr\+::interp (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Add the left and right expressions and returns the int value of the result. \begin{DoxyReturn}{Returns}
+the int value of the addition of the left and right expressions 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_add_expr_ac3ff87673ca1dc48f8458e106ff7cf09}\label{class_add_expr_ac3ff87673ca1dc48f8458e106ff7cf09}} 
+\index{AddExpr@{AddExpr}!pretty\_print@{pretty\_print}}
+\index{pretty\_print@{pretty\_print}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{pretty\_print()}{pretty\_print()}}
+{\footnotesize\ttfamily void Add\+Expr\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Print this object in a prettier way. To specify, we\textquotesingle{}ll omit redundant parentheses and add a space around operators. 
+\begin{DoxyParams}{Parameters}
+{\em out} & the output stream used to print this object \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_add_expr_aa82a06b3893450af5ec7fb204e263897}\label{class_add_expr_aa82a06b3893450af5ec7fb204e263897}} 
+\index{AddExpr@{AddExpr}!print@{print}}
+\index{print@{print}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily void Add\+Expr\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Print this object with parentheses and a add sign. 
+\begin{DoxyParams}{Parameters}
+{\em out} & the output stream used to print this object \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+\mbox{\Hypertarget{class_add_expr_a352cadc15a4aa92c1279dbabd7843b75}\label{class_add_expr_a352cadc15a4aa92c1279dbabd7843b75}} 
+\index{AddExpr@{AddExpr}!subst@{subst}}
+\index{subst@{subst}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{subst()}{subst()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_expr}{Expr}} $\ast$ Add\+Expr\+::subst (\begin{DoxyParamCaption}\item[{std\+::string}]{s,  }\item[{\mbox{\hyperlink{class_expr}{Expr}} $\ast$}]{expr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Substitute the specified string in this object with a specified expression 
+\begin{DoxyParams}{Parameters}
+{\em s} & the specified string to be substituted \\
+\hline
+{\em expr} & the specified expression used to substitute the string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a new \mbox{\hyperlink{class_add_expr}{Add\+Expr}} object with the specified strings in its left and right expressions have been substituted 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_expr}{Expr}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+hpp\item 
+/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+cpp\end{DoxyCompactItemize}

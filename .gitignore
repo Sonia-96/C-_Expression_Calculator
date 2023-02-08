@@ -39,5 +39,5 @@ out/
 .idea/
 
 ## doxygen
-html/
-latex/
+# html/
+# latex/
