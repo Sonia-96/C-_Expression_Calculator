@@ -216,7 +216,7 @@ void AddExpr::print(std::ostream& out) {
  * @param out the output stream used to print this object
  */
 void AddExpr::pretty_print(std::ostream &out) {
-    if (lhs -> get_precedence() != 0 && lhs -> get_precedence() <= this->get_precedence()) {
+    if (lhs -> get_precedence() != 0 && lhs -> get_precedence() <= prec_add) {
         out << "(";
         lhs -> pretty_print(out);
         out << ")";
@@ -224,13 +224,7 @@ void AddExpr::pretty_print(std::ostream &out) {
         lhs -> pretty_print(out);
     }
     out << " + ";
-    if (rhs -> get_precedence() != 0 && rhs -> get_precedence() < this -> get_precedence()) {
-        out << "(";
-        rhs -> pretty_print(out);
-        out << ")";
-    } else {
-        rhs -> pretty_print(out);
-    }
+    rhs -> pretty_print(out);
 }
 
 // Mult Expression
@@ -351,7 +345,7 @@ void MultExpr::print(std::ostream& out) {
  * @param out the output stream used to print this object
  */
 void MultExpr::pretty_print(std::ostream &out) {
-    if (lhs -> get_precedence() != 0 && lhs -> get_precedence() <= this -> get_precedence()) {
+    if (lhs -> get_precedence() != 0 && lhs -> get_precedence() <= prec_mult) {
         out << "(";
         lhs -> pretty_print(out);
         out << ")";
@@ -359,7 +353,7 @@ void MultExpr::pretty_print(std::ostream &out) {
         lhs -> pretty_print(out);
     }
     out << " * ";
-    if (rhs -> get_precedence() != 0 && rhs -> get_precedence() < this -> get_precedence()) {
+    if (rhs -> get_precedence() != 0 && rhs -> get_precedence() < prec_mult) {
         out << "(";
         rhs -> pretty_print(out);
         out << ")";
