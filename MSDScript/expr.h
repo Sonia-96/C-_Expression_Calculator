@@ -1,12 +1,11 @@
 //
 //  expr.hpp
-//  HW2_Expression
 //
 //  Created by Yue Sun on 1/12/23.
 //
 
-#ifndef expr_hpp
-#define expr_hpp
+#ifndef MSDSCRIPT_EXPR_H
+#define MSDSCRIPT_EXPR_H
 
 #include <sstream>
 #include <string>
@@ -110,4 +109,22 @@ public:
     void pretty_print(std::ostream& out);
 };
 
-#endif /* expr_hpp */
+class LetExpr : public Expr {
+private:
+    std::string name;
+    Expr* rhs;
+    Expr* body;
+public:
+    LetExpr(std::string v, Expr* r, Expr* b);
+    bool equals(Expr* expr);
+    int interp();
+    bool has_variable();
+    Expr* subst(std::string s, Expr* expr);
+    void print(std::ostream& out);
+    void pretty_print(std::ostream& out);
+};
+
+
+#endif //MSDSCRIPT_EXPR_H
+
+

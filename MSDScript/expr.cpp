@@ -6,7 +6,7 @@
 //
 
 #include <sstream>
-#include "expr.hpp"
+#include "expr.h"
 
 // Expr
 
@@ -204,9 +204,9 @@ Expr* AddExpr::subst(std::string s, Expr *expr) {
  */
 void AddExpr::print(std::ostream& out) {
     out << "(";
-    lhs -> print(out);
+    lhs->print(out);
     out << "+";
-    rhs -> print(out);
+    rhs->print(out);
     out << ")";
 }
 
@@ -216,12 +216,12 @@ void AddExpr::print(std::ostream& out) {
  * @param out the output stream used to print this object
  */
 void AddExpr::pretty_print(std::ostream &out) {
-    if (lhs -> get_precedence() != 0 && lhs -> get_precedence() <= prec_add) {
+    if (lhs->get_precedence() != 0 && lhs->get_precedence() <= prec_add) {
         out << "(";
-        lhs -> pretty_print(out);
+        lhs->pretty_print(out);
         out << ")";
     } else {
-        lhs -> pretty_print(out);
+        lhs->pretty_print(out);
     }
     out << " + ";
     rhs -> pretty_print(out);
@@ -305,7 +305,7 @@ bool MultExpr::equals(Expr* expr) {
  * @return the int value of the multiplication of the left and right expressions
  */
 int MultExpr::interp() {
-    return lhs->interp() * rhs -> interp();
+    return lhs->interp() * rhs->interp();
 }
 
 /**
@@ -431,4 +431,67 @@ void VarExpr::print(std::ostream& out) {
  */
 void VarExpr::pretty_print(std::ostream& out) {
     out << val;
+}
+
+////////////////////////////////////////////
+//                LetExpr                //
+///////////////////////////////////////////
+
+/**
+ * @param name
+ * @param rhs
+ * @param body
+ */
+LetExpr::LetExpr(std::string v, Expr* r, Expr* b) {
+    name = v;
+    rhs = r;
+    body = b;
+}
+
+// TODO is this correct?
+bool LetExpr::equals(Expr* expr) {
+    LetExpr* other = dynamic_cast<LetExpr*>(expr);
+    if (other == NULL) {
+        return false;
+    }
+    return name == other -> name && rhs -> equals(other -> rhs) && body -> equals(other -> body);
+}
+
+int LetExpr::interp() {
+    return body -> subst(name, rhs) -> interp();
+}
+
+/**
+ * Although _let always binds a variable, a _let expression doesn't
+ * necessarily have any variable expressions. That is, the “left-hand
+ * side” of a binding is always a name and not an expression in general.
+ * So, has_variable for a _let expression should return true only if
+ * the right-hand side or body expression contains a variable.
+ * @return true if the right-hand side or body expression contains a
+ * variable. Otherwise, returns false.
+ */
+bool LetExpr::has_variable() {
+    return rhs->has_variable() || body->has_variable();
+}
+
+// TODO do we always substitute the innermost LetExpr??
+// e.g. LetExpr let1("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
+Expr* LetExpr::subst(std::string s, Expr* expr) {
+    LetExpr* obj = dynamic_cast<LetExpr*>(body);
+    if (obj == NULL && name == s) {
+        return this;
+    }
+    return new LetExpr(name, rhs, body->subst(s, expr));
+}
+
+void LetExpr::print(std::ostream& out) {
+    out << "(_let " << name << "=";
+    rhs -> print(out);
+    out << " _in ";
+    body ->print(out);
+    out << ")";
+}
+
+void LetExpr::pretty_print(std::ostream& out) {
+
 }
