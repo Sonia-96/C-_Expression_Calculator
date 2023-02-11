@@ -107,6 +107,9 @@ public:
     void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
 };
 
+/** \brief
+ * LetExpr class is used to give a variable a value
+ */
 class LetExpr : public Expr {
 private:
     std::string variable;
@@ -119,7 +122,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
+    void pretty_print_at(std::ostream& out, precedence_t p, std::streampos& newLinePrevPos, bool letParen);
 };
 
 

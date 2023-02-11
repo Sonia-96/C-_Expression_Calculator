@@ -7,7 +7,7 @@
 
 
 
-{\ttfamily \#include $<$expr.\+hpp$>$}
+{\ttfamily \#include $<$expr.\+h$>$}
 
 Inheritance diagram for Num\+Expr\+:\begin{figure}[H]
 \begin{center}
@@ -30,7 +30,7 @@ bool \mbox{\hyperlink{class_num_expr_ad465572183e061f5caf34041b81cafd0}{has\+\_\
 \item 
 void \mbox{\hyperlink{class_num_expr_aef96d2756889ce7dd82c4813402b9530}{print}} (std\+::ostream \&out)
 \item 
-void \mbox{\hyperlink{class_num_expr_ab27cb99339007162d54491ca23d11c95}{pretty\+\_\+print}} (std\+::ostream \&out)
+void \mbox{\hyperlink{class_num_expr_aa397916afe95e0cf926782b671b9e55e}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, precedence\+\_\+t prec, std\+::streampos \&new\+Line\+Prev\+Pos, bool let\+Paren)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
 \begin{DoxyCompactItemize}
@@ -45,21 +45,13 @@ virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a
 \item 
 virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
 \item 
-virtual void \mbox{\hyperlink{class_expr_ab777e5c814a5d154a6bdf0a1543a6e93}{pretty\+\_\+print}} (std\+::ostream \&out)=0
-\item 
 std\+::string \mbox{\hyperlink{class_expr_abe130f37bd185ec13c5113de16fc7bf7}{to\+\_\+string}} ()
 \item 
-\mbox{\Hypertarget{class_expr_a6577e9276c36556a02c8878c483a2c20}\label{class_expr_a6577e9276c36556a02c8878c483a2c20}} 
-precedence\+\_\+t {\bfseries get\+\_\+precedence} ()
+void \mbox{\hyperlink{class_expr_a3cc45fc3d542a3b4c69c66d15b3a6e57}{pretty\+\_\+print}} (std\+::ostream \&out)
+\item 
+virtual void \mbox{\hyperlink{class_expr_af5359b4b3bde8eedd11cf980b2373a44}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, precedence\+\_\+t precedence, std\+::streampos \&new\+Line\+Prev\+Pos, bool let\+Paren)=0
 \item 
 std\+::string \mbox{\hyperlink{class_expr_a6ad7c18234f22d96d6917089b5bd7caa}{to\+\_\+pretty\+\_\+string}} ()
-\end{DoxyCompactItemize}
-\doxysubsection*{Additional Inherited Members}
-\doxysubsubsection*{Public Attributes inherited from \mbox{\hyperlink{class_expr}{Expr}}}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\Hypertarget{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}\label{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}} 
-precedence\+\_\+t {\bfseries prec}
 \end{DoxyCompactItemize}
 
 
@@ -125,11 +117,11 @@ the int value of the member variable val
 
 Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
-\mbox{\Hypertarget{class_num_expr_ab27cb99339007162d54491ca23d11c95}\label{class_num_expr_ab27cb99339007162d54491ca23d11c95}} 
-\index{NumExpr@{NumExpr}!pretty\_print@{pretty\_print}}
-\index{pretty\_print@{pretty\_print}!NumExpr@{NumExpr}}
-\doxysubsubsection{\texorpdfstring{pretty\_print()}{pretty\_print()}}
-{\footnotesize\ttfamily void Num\+Expr\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+\mbox{\Hypertarget{class_num_expr_aa397916afe95e0cf926782b671b9e55e}\label{class_num_expr_aa397916afe95e0cf926782b671b9e55e}} 
+\index{NumExpr@{NumExpr}!pretty\_print\_at@{pretty\_print\_at}}
+\index{pretty\_print\_at@{pretty\_print\_at}!NumExpr@{NumExpr}}
+\doxysubsubsection{\texorpdfstring{pretty\_print\_at()}{pretty\_print\_at()}}
+{\footnotesize\ttfamily void Num\+Expr\+::pretty\+\_\+print\+\_\+at (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{precedence\+\_\+t}]{p,  }\item[{std\+::streampos \&}]{new\+Line\+Prev\+Pos,  }\item[{bool}]{let\+Paren }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 Print this object in a prettier way. To specify, we\textquotesingle{}ll omit redundant parentheses and add space around operators. 
 \begin{DoxyParams}{Parameters}
@@ -179,5 +171,5 @@ Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+hpp\item 
+/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+h\item 
 /\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+cpp\end{DoxyCompactItemize}

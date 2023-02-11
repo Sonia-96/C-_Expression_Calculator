@@ -71,7 +71,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_expr-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Expr Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
@@ -80,7 +79,7 @@ $(function() {
 <p><a class="el" href="class_expr.html" title="Expr class - the base class for all expressions.">Expr</a> class - the base class for all expressions.  
  <a href="class_expr.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="expr_8hpp_source.html">expr.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="expr_8h_source.html">expr.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for Expr:</div>
 <div class="dyncontent">
@@ -88,9 +87,10 @@ Inheritance diagram for Expr:</div>
   <img src="class_expr.png" usemap="#Expr_map" alt=""/>
   <map id="Expr_map" name="Expr_map">
 <area href="class_add_expr.html" title="AddExpr class - for add expressions." alt="AddExpr" shape="rect" coords="0,56,63,80"/>
-<area href="class_mult_expr.html" title="MultExpr class - for multiplication expressions." alt="MultExpr" shape="rect" coords="73,56,136,80"/>
-<area href="class_num_expr.html" title="NumExpr class - for number expressions." alt="NumExpr" shape="rect" coords="146,56,209,80"/>
-<area href="class_var_expr.html" title="VarExpr class - for variable expressions." alt="VarExpr" shape="rect" coords="219,56,282,80"/>
+<area href="class_let_expr.html" title="LetExpr class is used to give a variable a value." alt="LetExpr" shape="rect" coords="73,56,136,80"/>
+<area href="class_mult_expr.html" title="MultExpr class - for multiplication expressions." alt="MultExpr" shape="rect" coords="146,56,209,80"/>
+<area href="class_num_expr.html" title="NumExpr class - for number expressions." alt="NumExpr" shape="rect" coords="219,56,282,80"/>
+<area href="class_var_expr.html" title="VarExpr class - for variable expressions." alt="VarExpr" shape="rect" coords="292,56,355,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -106,21 +106,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a70934630e6142f285c46846b54335598"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b84618e82e7b1205afee21bfc6c948"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#a25b84618e82e7b1205afee21bfc6c948">print</a> (std::ostream &amp;out)=0</td></tr>
 <tr class="separator:a25b84618e82e7b1205afee21bfc6c948"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab777e5c814a5d154a6bdf0a1543a6e93"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#ab777e5c814a5d154a6bdf0a1543a6e93">pretty_print</a> (std::ostream &amp;out)=0</td></tr>
-<tr class="separator:ab777e5c814a5d154a6bdf0a1543a6e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe130f37bd185ec13c5113de16fc7bf7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#abe130f37bd185ec13c5113de16fc7bf7">to_string</a> ()</td></tr>
 <tr class="separator:abe130f37bd185ec13c5113de16fc7bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6577e9276c36556a02c8878c483a2c20"><td class="memItemLeft" align="right" valign="top"><a id="a6577e9276c36556a02c8878c483a2c20" name="a6577e9276c36556a02c8878c483a2c20"></a>
-precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_precedence</b> ()</td></tr>
-<tr class="separator:a6577e9276c36556a02c8878c483a2c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cc45fc3d542a3b4c69c66d15b3a6e57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#a3cc45fc3d542a3b4c69c66d15b3a6e57">pretty_print</a> (std::ostream &amp;out)</td></tr>
+<tr class="separator:a3cc45fc3d542a3b4c69c66d15b3a6e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5359b4b3bde8eedd11cf980b2373a44"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#af5359b4b3bde8eedd11cf980b2373a44">pretty_print_at</a> (std::ostream &amp;out, precedence_t precedence, std::streampos &amp;newLinePrevPos, bool letParen)=0</td></tr>
+<tr class="separator:af5359b4b3bde8eedd11cf980b2373a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ad7c18234f22d96d6917089b5bd7caa"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#a6ad7c18234f22d96d6917089b5bd7caa">to_pretty_string</a> ()</td></tr>
 <tr class="separator:a6ad7c18234f22d96d6917089b5bd7caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ad826fcbd57d4c666296ddfd5e0139d9f"><td class="memItemLeft" align="right" valign="top"><a id="ad826fcbd57d4c666296ddfd5e0139d9f" name="ad826fcbd57d4c666296ddfd5e0139d9f"></a>
-precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td></tr>
-<tr class="separator:ad826fcbd57d4c666296ddfd5e0139d9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_expr.html" title="Expr class - the base class for all expressions.">Expr</a> class - the base class for all expressions. </p>
@@ -149,7 +142,7 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num_expr.html#a2400501d4eeb6dc4a47ed3ec471154ca">NumExpr</a>, <a class="el" href="class_add_expr.html#ac45db119e75929dfdb6a0be61329bfac">AddExpr</a>, <a class="el" href="class_mult_expr.html#a4717aa38bef4200514dcf0f54d27ae72">MultExpr</a>, and <a class="el" href="class_var_expr.html#a659e3043262bd9f797747a628249c999">VarExpr</a>.</p>
+<p>Implemented in <a class="el" href="class_num_expr.html#a2400501d4eeb6dc4a47ed3ec471154ca">NumExpr</a>, <a class="el" href="class_add_expr.html#ac45db119e75929dfdb6a0be61329bfac">AddExpr</a>, <a class="el" href="class_mult_expr.html#a4717aa38bef4200514dcf0f54d27ae72">MultExpr</a>, <a class="el" href="class_var_expr.html#a659e3043262bd9f797747a628249c999">VarExpr</a>, and <a class="el" href="class_let_expr.html#ae41c44f4ddb2513434d60092c001bcb9">LetExpr</a>.</p>
 
 </div>
 </div>
@@ -176,7 +169,7 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num_expr.html#ad465572183e061f5caf34041b81cafd0">NumExpr</a>, <a class="el" href="class_add_expr.html#acac5ec05b02dc9d1308600027982a2ff">AddExpr</a>, <a class="el" href="class_mult_expr.html#a5ecf878efa2a106dbac38a3a83b01309">MultExpr</a>, and <a class="el" href="class_var_expr.html#ad8e3aab06e58615fe677a7a45d6cf32e">VarExpr</a>.</p>
+<p>Implemented in <a class="el" href="class_num_expr.html#ad465572183e061f5caf34041b81cafd0">NumExpr</a>, <a class="el" href="class_add_expr.html#acac5ec05b02dc9d1308600027982a2ff">AddExpr</a>, <a class="el" href="class_mult_expr.html#a5ecf878efa2a106dbac38a3a83b01309">MultExpr</a>, <a class="el" href="class_var_expr.html#ad8e3aab06e58615fe677a7a45d6cf32e">VarExpr</a>, and <a class="el" href="class_let_expr.html#a3e754f302dbe1e5459f67c28ba78ee0e">LetExpr</a>.</p>
 
 </div>
 </div>
@@ -203,12 +196,36 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num_expr.html#aa70ad0c18b0a55d6bdc65fd4c0de3686">NumExpr</a>, <a class="el" href="class_add_expr.html#aa3a091a578f99dccaed47d724f602f42">AddExpr</a>, <a class="el" href="class_mult_expr.html#abfc094e6141c3c78633e27bcd3539f7b">MultExpr</a>, and <a class="el" href="class_var_expr.html#a79991fba1d40718c3074181d129d1ddf">VarExpr</a>.</p>
+<p>Implemented in <a class="el" href="class_num_expr.html#aa70ad0c18b0a55d6bdc65fd4c0de3686">NumExpr</a>, <a class="el" href="class_add_expr.html#aa3a091a578f99dccaed47d724f602f42">AddExpr</a>, <a class="el" href="class_mult_expr.html#abfc094e6141c3c78633e27bcd3539f7b">MultExpr</a>, <a class="el" href="class_var_expr.html#a79991fba1d40718c3074181d129d1ddf">VarExpr</a>, and <a class="el" href="class_let_expr.html#a20effedfda9d3a24f3726d0b7ed348f6">LetExpr</a>.</p>
 
 </div>
 </div>
-<a id="ab777e5c814a5d154a6bdf0a1543a6e93" name="ab777e5c814a5d154a6bdf0a1543a6e93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab777e5c814a5d154a6bdf0a1543a6e93">&#9670;&#160;</a></span>pretty_print()</h2>
+<a id="a3cc45fc3d542a3b4c69c66d15b3a6e57" name="a3cc45fc3d542a3b4c69c66d15b3a6e57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cc45fc3d542a3b4c69c66d15b3a6e57">&#9670;&#160;</a></span>pretty_print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Expr::pretty_print </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>out</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Print an <a class="el" href="class_expr.html" title="Expr class - the base class for all expressions.">Expr</a> object in a prettier format. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>the output stream </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af5359b4b3bde8eedd11cf980b2373a44" name="af5359b4b3bde8eedd11cf980b2373a44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5359b4b3bde8eedd11cf980b2373a44">&#9670;&#160;</a></span>pretty_print_at()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -217,11 +234,33 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Expr::pretty_print </td>
+          <td class="memname">virtual void Expr::pretty_print_at </td>
           <td>(</td>
           <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">precedence_t&#160;</td>
+          <td class="paramname"><em>precedence</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::streampos &amp;&#160;</td>
+          <td class="paramname"><em>newLinePrevPos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>letParen</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -231,7 +270,7 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num_expr.html#ab27cb99339007162d54491ca23d11c95">NumExpr</a>, <a class="el" href="class_add_expr.html#ac3ff87673ca1dc48f8458e106ff7cf09">AddExpr</a>, <a class="el" href="class_mult_expr.html#a99a8861ca4382931bb5c772476660575">MultExpr</a>, and <a class="el" href="class_var_expr.html#a60fcd6c2e22b4b48a3cd8e6e23373da2">VarExpr</a>.</p>
+<p>Implemented in <a class="el" href="class_mult_expr.html#a26a8ca94cc4822f671922dffbdf820d5">MultExpr</a>, <a class="el" href="class_let_expr.html#a2c6fc29cba717aad390035ae57aacb86">LetExpr</a>, <a class="el" href="class_num_expr.html#aa397916afe95e0cf926782b671b9e55e">NumExpr</a>, <a class="el" href="class_add_expr.html#a2687ae6342a288aa64508bcbf60582bd">AddExpr</a>, and <a class="el" href="class_var_expr.html#ac403224d554c342c7c2a31d1f2c8106f">VarExpr</a>.</p>
 
 </div>
 </div>
@@ -259,7 +298,7 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num_expr.html#aef96d2756889ce7dd82c4813402b9530">NumExpr</a>, <a class="el" href="class_add_expr.html#aa82a06b3893450af5ec7fb204e263897">AddExpr</a>, <a class="el" href="class_mult_expr.html#a936a368307072ec50770dd783b55f2f1">MultExpr</a>, and <a class="el" href="class_var_expr.html#a422a9feb5c5a0726b8a5ca2211617ed5">VarExpr</a>.</p>
+<p>Implemented in <a class="el" href="class_num_expr.html#aef96d2756889ce7dd82c4813402b9530">NumExpr</a>, <a class="el" href="class_add_expr.html#aa82a06b3893450af5ec7fb204e263897">AddExpr</a>, <a class="el" href="class_mult_expr.html#a936a368307072ec50770dd783b55f2f1">MultExpr</a>, <a class="el" href="class_var_expr.html#a422a9feb5c5a0726b8a5ca2211617ed5">VarExpr</a>, and <a class="el" href="class_let_expr.html#a2454e0cd255ffa19ddf6f43ab117d61c">LetExpr</a>.</p>
 
 </div>
 </div>
@@ -297,7 +336,7 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_num_expr.html#a82928bf08046cb344afa6be7eedca868">NumExpr</a>, <a class="el" href="class_add_expr.html#a352cadc15a4aa92c1279dbabd7843b75">AddExpr</a>, <a class="el" href="class_mult_expr.html#a6d62a8e3c0974a4e97aa68bfa9ef6350">MultExpr</a>, and <a class="el" href="class_var_expr.html#a2f69f27eddaa9cb81a0d6325f06272f7">VarExpr</a>.</p>
+<p>Implemented in <a class="el" href="class_num_expr.html#a82928bf08046cb344afa6be7eedca868">NumExpr</a>, <a class="el" href="class_add_expr.html#a352cadc15a4aa92c1279dbabd7843b75">AddExpr</a>, <a class="el" href="class_mult_expr.html#a6d62a8e3c0974a4e97aa68bfa9ef6350">MultExpr</a>, <a class="el" href="class_var_expr.html#a2f69f27eddaa9cb81a0d6325f06272f7">VarExpr</a>, and <a class="el" href="class_let_expr.html#a2040d7d3dd6a25652e750518cbe79610">LetExpr</a>.</p>
 
 </div>
 </div>
@@ -338,7 +377,7 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/Users/sonia/Documents/MSD/CS6015GitRepo/MSDScript/<a class="el" href="expr_8hpp_source.html">expr.hpp</a></li>
+<li>/Users/sonia/Documents/MSD/CS6015GitRepo/MSDScript/<a class="el" href="expr_8h_source.html">expr.h</a></li>
 <li>/Users/sonia/Documents/MSD/CS6015GitRepo/MSDScript/expr.cpp</li>
 </ul>
 </div><!-- contents -->

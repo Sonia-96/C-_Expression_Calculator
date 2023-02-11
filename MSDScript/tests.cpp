@@ -325,8 +325,8 @@ TEST_CASE("let") {
     }
 
     SECTION("subst + interp") {
-        LetExpr let1("x", new NumExpr(5), new AddExpr("x", 1));
-        CHECK(let1.interp() == 6);
+        CHECK(letBase1.interp() == 6);
+        CHECK(letBase2.interp() == 7);
         LetExpr let2("x", new AddExpr(5, 2), new AddExpr("x", 1));
         CHECK(let2.interp() == 8);
         LetExpr let3("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
