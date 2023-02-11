@@ -7,7 +7,7 @@
 
 
 
-{\ttfamily \#include $<$expr.\+hpp$>$}
+{\ttfamily \#include $<$expr.\+h$>$}
 
 Inheritance diagram for Add\+Expr\+:\begin{figure}[H]
 \begin{center}
@@ -38,7 +38,7 @@ bool \mbox{\hyperlink{class_add_expr_acac5ec05b02dc9d1308600027982a2ff}{has\+\_\
 \item 
 void \mbox{\hyperlink{class_add_expr_aa82a06b3893450af5ec7fb204e263897}{print}} (std\+::ostream \&out)
 \item 
-void \mbox{\hyperlink{class_add_expr_ac3ff87673ca1dc48f8458e106ff7cf09}{pretty\+\_\+print}} (std\+::ostream \&out)
+void \mbox{\hyperlink{class_add_expr_a2687ae6342a288aa64508bcbf60582bd}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, precedence\+\_\+t prec, std\+::streampos \&new\+Line\+Prev\+Pos, bool let\+Paren)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
 \begin{DoxyCompactItemize}
@@ -53,21 +53,13 @@ virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a
 \item 
 virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
 \item 
-virtual void \mbox{\hyperlink{class_expr_ab777e5c814a5d154a6bdf0a1543a6e93}{pretty\+\_\+print}} (std\+::ostream \&out)=0
-\item 
 std\+::string \mbox{\hyperlink{class_expr_abe130f37bd185ec13c5113de16fc7bf7}{to\+\_\+string}} ()
 \item 
-\mbox{\Hypertarget{class_expr_a6577e9276c36556a02c8878c483a2c20}\label{class_expr_a6577e9276c36556a02c8878c483a2c20}} 
-precedence\+\_\+t {\bfseries get\+\_\+precedence} ()
+void \mbox{\hyperlink{class_expr_a3cc45fc3d542a3b4c69c66d15b3a6e57}{pretty\+\_\+print}} (std\+::ostream \&out)
+\item 
+virtual void \mbox{\hyperlink{class_expr_af5359b4b3bde8eedd11cf980b2373a44}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, precedence\+\_\+t precedence, std\+::streampos \&new\+Line\+Prev\+Pos, bool let\+Paren)=0
 \item 
 std\+::string \mbox{\hyperlink{class_expr_a6ad7c18234f22d96d6917089b5bd7caa}{to\+\_\+pretty\+\_\+string}} ()
-\end{DoxyCompactItemize}
-\doxysubsection*{Additional Inherited Members}
-\doxysubsubsection*{Public Attributes inherited from \mbox{\hyperlink{class_expr}{Expr}}}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\Hypertarget{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}\label{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}} 
-precedence\+\_\+t {\bfseries prec}
 \end{DoxyCompactItemize}
 
 
@@ -187,18 +179,32 @@ the int value of the addition of the left and right expressions
 
 Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
-\mbox{\Hypertarget{class_add_expr_ac3ff87673ca1dc48f8458e106ff7cf09}\label{class_add_expr_ac3ff87673ca1dc48f8458e106ff7cf09}} 
-\index{AddExpr@{AddExpr}!pretty\_print@{pretty\_print}}
-\index{pretty\_print@{pretty\_print}!AddExpr@{AddExpr}}
-\doxysubsubsection{\texorpdfstring{pretty\_print()}{pretty\_print()}}
-{\footnotesize\ttfamily void Add\+Expr\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+\mbox{\Hypertarget{class_add_expr_a2687ae6342a288aa64508bcbf60582bd}\label{class_add_expr_a2687ae6342a288aa64508bcbf60582bd}} 
+\index{AddExpr@{AddExpr}!pretty\_print\_at@{pretty\_print\_at}}
+\index{pretty\_print\_at@{pretty\_print\_at}!AddExpr@{AddExpr}}
+\doxysubsubsection{\texorpdfstring{pretty\_print\_at()}{pretty\_print\_at()}}
+{\footnotesize\ttfamily void Add\+Expr\+::pretty\+\_\+print\+\_\+at (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{precedence\+\_\+t}]{p,  }\item[{std\+::streampos \&}]{new\+Line\+Prev\+Pos,  }\item[{bool}]{let\+Paren }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
-Print this object in a prettier way. To specify, we\textquotesingle{}ll omit redundant parentheses and add a space around operators. 
+Print this object in a prettier way. To specify, we\textquotesingle{}ll omit redundant parentheses and add a space around operators. @\+Rules An expression can be represented as\+: lhs op rhs. And the operator (op) is right associative. Therefore\+:~\newline
+ For expressions other than \mbox{\hyperlink{class_let_expr}{Let\+Expr}}\+:~\newline
+
+\begin{DoxyItemize}
+\item if precedence(lhs) \texorpdfstring{$<$}{<}= op, add parentheses around lhs~\newline
+
+\item if precedence(rhs) \texorpdfstring{$<$}{<} op (or precedence(rhs) \texorpdfstring{$<$}{<}= op -\/ 1), add parentheses around rhs~\newline
+ For let\+Expr\+: only add parentheses when it\textquotesingle{}s in lhs 
 \begin{DoxyParams}{Parameters}
 {\em out} & the output stream used to print this object \\
 \hline
+{\em p} & the precedence of the outer expression (or the op in the above expression) \\
+\hline
+{\em new\+Line\+Prev\+Pos} & the position of the previous new line in the output stream \\
+\hline
+{\em let\+Paren} & should we add parentheses around a \mbox{\hyperlink{class_let_expr}{Let\+Expr}} object \\
+\hline
 \end{DoxyParams}
 
+\end{DoxyItemize}
 
 Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
@@ -241,5 +247,5 @@ Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+hpp\item 
+/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+h\item 
 /\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+cpp\end{DoxyCompactItemize}

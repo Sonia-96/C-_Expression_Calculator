@@ -80,7 +80,7 @@ $(function() {
 <p><a class="el" href="class_mult_expr.html" title="MultExpr class - for multiplication expressions.">MultExpr</a> class - for multiplication expressions.  
  <a href="class_mult_expr.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="expr_8hpp_source.html">expr.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="expr_8h_source.html">expr.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for MultExpr:</div>
 <div class="dyncontent">
@@ -113,8 +113,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6d62a8e3c0974a4e97aa68bfa9ef6350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a936a368307072ec50770dd783b55f2f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mult_expr.html#a936a368307072ec50770dd783b55f2f1">print</a> (std::ostream &amp;out)</td></tr>
 <tr class="separator:a936a368307072ec50770dd783b55f2f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99a8861ca4382931bb5c772476660575"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mult_expr.html#a99a8861ca4382931bb5c772476660575">pretty_print</a> (std::ostream &amp;out)</td></tr>
-<tr class="separator:a99a8861ca4382931bb5c772476660575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26a8ca94cc4822f671922dffbdf820d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mult_expr.html#a26a8ca94cc4822f671922dffbdf820d5">pretty_print_at</a> (std::ostream &amp;out, precedence_t p, std::streampos &amp;newLinePrevPos, bool letParen)</td></tr>
+<tr class="separator:a26a8ca94cc4822f671922dffbdf820d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_expr"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_expr')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_expr.html">Expr</a></td></tr>
 <tr class="memitem:ab5d65cde79dd78c2e06b2d5a0f19c602 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#ab5d65cde79dd78c2e06b2d5a0f19c602">equals</a> (<a class="el" href="class_expr.html">Expr</a> *expr)=0</td></tr>
 <tr class="separator:ab5d65cde79dd78c2e06b2d5a0f19c602 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,13 +126,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a70934630e6142f285c46846b54335598 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b84618e82e7b1205afee21bfc6c948 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#a25b84618e82e7b1205afee21bfc6c948">print</a> (std::ostream &amp;out)=0</td></tr>
 <tr class="separator:a25b84618e82e7b1205afee21bfc6c948 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab777e5c814a5d154a6bdf0a1543a6e93 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#ab777e5c814a5d154a6bdf0a1543a6e93">pretty_print</a> (std::ostream &amp;out)=0</td></tr>
-<tr class="separator:ab777e5c814a5d154a6bdf0a1543a6e93 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe130f37bd185ec13c5113de16fc7bf7 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#abe130f37bd185ec13c5113de16fc7bf7">to_string</a> ()</td></tr>
 <tr class="separator:abe130f37bd185ec13c5113de16fc7bf7 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6577e9276c36556a02c8878c483a2c20 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top"><a id="a6577e9276c36556a02c8878c483a2c20" name="a6577e9276c36556a02c8878c483a2c20"></a>
-precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_precedence</b> ()</td></tr>
-<tr class="separator:a6577e9276c36556a02c8878c483a2c20 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cc45fc3d542a3b4c69c66d15b3a6e57 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#a3cc45fc3d542a3b4c69c66d15b3a6e57">pretty_print</a> (std::ostream &amp;out)</td></tr>
+<tr class="separator:a3cc45fc3d542a3b4c69c66d15b3a6e57 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5359b4b3bde8eedd11cf980b2373a44 inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#af5359b4b3bde8eedd11cf980b2373a44">pretty_print_at</a> (std::ostream &amp;out, precedence_t precedence, std::streampos &amp;newLinePrevPos, bool letParen)=0</td></tr>
+<tr class="separator:af5359b4b3bde8eedd11cf980b2373a44 inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ad7c18234f22d96d6917089b5bd7caa inherit pub_methods_class_expr"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expr.html#a6ad7c18234f22d96d6917089b5bd7caa">to_pretty_string</a> ()</td></tr>
 <tr class="separator:a6ad7c18234f22d96d6917089b5bd7caa inherit pub_methods_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -144,10 +143,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ae70fd4159bdde5ae4beaade8510d9103"><td class="memItemLeft" align="right" valign="top"><a id="ae70fd4159bdde5ae4beaade8510d9103" name="ae70fd4159bdde5ae4beaade8510d9103"></a>
 <a class="el" href="class_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>rhs</b></td></tr>
 <tr class="separator:ae70fd4159bdde5ae4beaade8510d9103"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_class_expr"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_expr')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_expr.html">Expr</a></td></tr>
-<tr class="memitem:ad826fcbd57d4c666296ddfd5e0139d9f inherit pub_attribs_class_expr"><td class="memItemLeft" align="right" valign="top"><a id="ad826fcbd57d4c666296ddfd5e0139d9f" name="ad826fcbd57d4c666296ddfd5e0139d9f"></a>
-precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td></tr>
-<tr class="separator:ad826fcbd57d4c666296ddfd5e0139d9f inherit pub_attribs_class_expr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_mult_expr.html" title="MultExpr class - for multiplication expressions.">MultExpr</a> class - for multiplication expressions. </p>
@@ -419,8 +414,8 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 
 </div>
 </div>
-<a id="a99a8861ca4382931bb5c772476660575" name="a99a8861ca4382931bb5c772476660575"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99a8861ca4382931bb5c772476660575">&#9670;&#160;</a></span>pretty_print()</h2>
+<a id="a26a8ca94cc4822f671922dffbdf820d5" name="a26a8ca94cc4822f671922dffbdf820d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26a8ca94cc4822f671922dffbdf820d5">&#9670;&#160;</a></span>pretty_print_at()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,11 +424,33 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void MultExpr::pretty_print </td>
+          <td class="memname">void MultExpr::pretty_print_at </td>
           <td>(</td>
           <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">precedence_t&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::streampos &amp;&#160;</td>
+          <td class="paramname"><em>newLinePrevPos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>letParen</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -442,12 +459,26 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Print this object in a prettier way. To specify, we'll omit redundant parentheses and add a space around operators. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Print this object in a prettier way. To specify, we'll omit redundant parentheses and add a space around operators. @Rules An expression can be represented as: lhs op rhs. And the operator (op) is right associative. Therefore:<br  />
+ For expressions other than <a class="el" href="class_let_expr.html" title="LetExpr class is used to give a variable a value.">LetExpr</a>:<br  />
+</p><ul>
+<li>if precedence(lhs) &lt;= op, add parentheses around lhs<br  />
+</li>
+<li>if precedence(rhs) &lt; op (or precedence(rhs) &lt;= op - 1), add parentheses around rhs<br  />
+ For letExpr:</li>
+<li>add parentheses when it's in lhs<br  />
+</li>
+<li>add parentheses when it's in rhs and this <a class="el" href="class_mult_expr.html" title="MultExpr class - for multiplication expressions.">MultExpr</a> object is followed with an <a class="el" href="class_add_expr.html" title="AddExpr class - for add expressions.">AddExpr</a> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">out</td><td>the output stream used to print this object </td></tr>
+    <tr><td class="paramname">p</td><td>the precedence of the outer expression (or the op in the above expression) </td></tr>
+    <tr><td class="paramname">newLinePrevPos</td><td>the position of the previous new line in the output stream </td></tr>
+    <tr><td class="paramname">letParen</td><td>should we add parentheses around a <a class="el" href="class_let_expr.html" title="LetExpr class is used to give a variable a value.">LetExpr</a> object </td></tr>
   </table>
   </dd>
 </dl>
+</li>
+</ul>
 
 <p>Implements <a class="el" href="class_expr.html">Expr</a>.</p>
 
@@ -534,7 +565,7 @@ precedence_t&#160;</td><td class="memItemRight" valign="bottom"><b>prec</b></td>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/Users/sonia/Documents/MSD/CS6015GitRepo/MSDScript/<a class="el" href="expr_8hpp_source.html">expr.hpp</a></li>
+<li>/Users/sonia/Documents/MSD/CS6015GitRepo/MSDScript/<a class="el" href="expr_8h_source.html">expr.h</a></li>
 <li>/Users/sonia/Documents/MSD/CS6015GitRepo/MSDScript/expr.cpp</li>
 </ul>
 </div><!-- contents -->

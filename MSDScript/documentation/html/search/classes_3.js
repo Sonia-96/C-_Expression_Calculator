@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['numexpr_0',['NumExpr',['../class_num_expr.html',1,'']]]
+  ['multexpr_0',['MultExpr',['../class_mult_expr.html',1,'']]]
 ];

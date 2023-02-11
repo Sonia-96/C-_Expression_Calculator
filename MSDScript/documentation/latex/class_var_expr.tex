@@ -7,7 +7,7 @@
 
 
 
-{\ttfamily \#include $<$expr.\+hpp$>$}
+{\ttfamily \#include $<$expr.\+h$>$}
 
 Inheritance diagram for Var\+Expr\+:\begin{figure}[H]
 \begin{center}
@@ -30,7 +30,7 @@ bool \mbox{\hyperlink{class_var_expr_ad8e3aab06e58615fe677a7a45d6cf32e}{has\+\_\
 \item 
 void \mbox{\hyperlink{class_var_expr_a422a9feb5c5a0726b8a5ca2211617ed5}{print}} (std\+::ostream \&out)
 \item 
-void \mbox{\hyperlink{class_var_expr_a60fcd6c2e22b4b48a3cd8e6e23373da2}{pretty\+\_\+print}} (std\+::ostream \&out)
+void \mbox{\hyperlink{class_var_expr_ac403224d554c342c7c2a31d1f2c8106f}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, precedence\+\_\+t prec, std\+::streampos \&new\+Line\+Prev\+Pos, bool let\+Paren)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_expr}{Expr}}}
 \begin{DoxyCompactItemize}
@@ -45,21 +45,13 @@ virtual \mbox{\hyperlink{class_expr}{Expr}} $\ast$ \mbox{\hyperlink{class_expr_a
 \item 
 virtual void \mbox{\hyperlink{class_expr_a25b84618e82e7b1205afee21bfc6c948}{print}} (std\+::ostream \&out)=0
 \item 
-virtual void \mbox{\hyperlink{class_expr_ab777e5c814a5d154a6bdf0a1543a6e93}{pretty\+\_\+print}} (std\+::ostream \&out)=0
-\item 
 std\+::string \mbox{\hyperlink{class_expr_abe130f37bd185ec13c5113de16fc7bf7}{to\+\_\+string}} ()
 \item 
-\mbox{\Hypertarget{class_expr_a6577e9276c36556a02c8878c483a2c20}\label{class_expr_a6577e9276c36556a02c8878c483a2c20}} 
-precedence\+\_\+t {\bfseries get\+\_\+precedence} ()
+void \mbox{\hyperlink{class_expr_a3cc45fc3d542a3b4c69c66d15b3a6e57}{pretty\+\_\+print}} (std\+::ostream \&out)
+\item 
+virtual void \mbox{\hyperlink{class_expr_af5359b4b3bde8eedd11cf980b2373a44}{pretty\+\_\+print\+\_\+at}} (std\+::ostream \&out, precedence\+\_\+t precedence, std\+::streampos \&new\+Line\+Prev\+Pos, bool let\+Paren)=0
 \item 
 std\+::string \mbox{\hyperlink{class_expr_a6ad7c18234f22d96d6917089b5bd7caa}{to\+\_\+pretty\+\_\+string}} ()
-\end{DoxyCompactItemize}
-\doxysubsection*{Additional Inherited Members}
-\doxysubsubsection*{Public Attributes inherited from \mbox{\hyperlink{class_expr}{Expr}}}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\Hypertarget{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}\label{class_expr_ad826fcbd57d4c666296ddfd5e0139d9f}} 
-precedence\+\_\+t {\bfseries prec}
 \end{DoxyCompactItemize}
 
 
@@ -119,17 +111,17 @@ Implements \mbox{\hyperlink{class_expr}{Expr}}.
 {\footnotesize\ttfamily int Var\+Expr\+::interp (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 Returns the int value of this \mbox{\hyperlink{class_var_expr}{Var\+Expr}} object \begin{DoxyReturn}{Returns}
-throw a runtime error since a varibale cannot be evaluated to a int value 
+throw a runtime error since a variable cannot be evaluated to a int value 
 \end{DoxyReturn}
 
 
 Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
-\mbox{\Hypertarget{class_var_expr_a60fcd6c2e22b4b48a3cd8e6e23373da2}\label{class_var_expr_a60fcd6c2e22b4b48a3cd8e6e23373da2}} 
-\index{VarExpr@{VarExpr}!pretty\_print@{pretty\_print}}
-\index{pretty\_print@{pretty\_print}!VarExpr@{VarExpr}}
-\doxysubsubsection{\texorpdfstring{pretty\_print()}{pretty\_print()}}
-{\footnotesize\ttfamily void Var\+Expr\+::pretty\+\_\+print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+\mbox{\Hypertarget{class_var_expr_ac403224d554c342c7c2a31d1f2c8106f}\label{class_var_expr_ac403224d554c342c7c2a31d1f2c8106f}} 
+\index{VarExpr@{VarExpr}!pretty\_print\_at@{pretty\_print\_at}}
+\index{pretty\_print\_at@{pretty\_print\_at}!VarExpr@{VarExpr}}
+\doxysubsubsection{\texorpdfstring{pretty\_print\_at()}{pretty\_print\_at()}}
+{\footnotesize\ttfamily void Var\+Expr\+::pretty\+\_\+print\+\_\+at (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{precedence\+\_\+t}]{p,  }\item[{std\+::streampos \&}]{new\+Line\+Prev\+Pos,  }\item[{bool}]{let\+Paren }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 Print this object in a prettier way. 
 \begin{DoxyParams}{Parameters}
@@ -179,5 +171,5 @@ Implements \mbox{\hyperlink{class_expr}{Expr}}.
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+hpp\item 
+/\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+h\item 
 /\+Users/sonia/\+Documents/\+MSD/\+CS6015\+Git\+Repo/\+MSDScript/expr.\+cpp\end{DoxyCompactItemize}

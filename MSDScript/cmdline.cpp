@@ -1,6 +1,5 @@
 //
 //  cmdline.cpp
-//  hw1
 //
 //  Created by Yue Sun on 1/12/23.
 //

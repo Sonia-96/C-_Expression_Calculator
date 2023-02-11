@@ -40,4 +40,8 @@ out/
 
 ## doxygen
 # html/
-# latex/
+# latex
+
+## Clion
+cmake-build-debug/
+cmake-build-debug-coverage/
