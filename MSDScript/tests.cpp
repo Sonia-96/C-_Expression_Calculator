@@ -314,33 +314,48 @@ TEST_CASE("pretty_print") {
 }
 
 TEST_CASE("let") {
+    LetExpr letBase1("x", new NumExpr(5), new AddExpr("x", 1));
+    LetExpr letBase2("x", new NumExpr(6), new AddExpr("x", 1));
+
     SECTION("equals") {
         LetExpr let1("x", new NumExpr(5), new AddExpr("x", 1));
-        LetExpr let2("y", new NumExpr(5), new AddExpr("y", 1));
-        LetExpr let3("x", new NumExpr(5), new AddExpr("x", 1));
-        CHECK(let1.equals(&let3));
-        CHECK(!let2.equals(&let3));
+        CHECK(letBase1.equals(&let1));
+        CHECK(!letBase2.equals(&let1));
+        CHECK(!letBase1.equals(new AddExpr(1, 2)));
     }
 
-    SECTION("subst") {
-        LetExpr let1("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
-        LetExpr let2("x", new NumExpr(5), new LetExpr("y", new NumExpr(6), new AddExpr("x", 1)));
-        let2.subst("x", new NumExpr(5));
-        LetExpr let1res("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
-        LetExpr let2res("x", new NumExpr(5), new LetExpr("y", new NumExpr(6), new AddExpr(5, 1)));
-        CHECK(let1.subst("x", new NumExpr(5))->equals(&let1res));
-        CHECK(let2.subst("x", new NumExpr(5))->equals(&let2res));
-        LetExpr let3("x", new NumExpr(5), new AddExpr("x", 1));
-        LetExpr let4("y", new NumExpr(5), new AddExpr("x", 1));
-        LetExpr let3res("x", new NumExpr(5), new AddExpr("x", 1));
-        LetExpr let4res("y", new NumExpr(5), new AddExpr(5, 1));
-        CHECK(let3.subst("x", new NumExpr(5))->equals(&let3res));
-        CHECK(let4.subst("x", new NumExpr(5))->equals(&let4res));
-    }
-
-    SECTION("interp") {
+    SECTION("subst + interp") {
         LetExpr let1("x", new NumExpr(5), new AddExpr("x", 1));
         CHECK(let1.interp() == 6);
+        LetExpr let2("x", new AddExpr(5, 2), new AddExpr("x", 1));
+        CHECK(let2.interp() == 8);
+        LetExpr let3("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
+        CHECK(let3.interp() == 7);
+        LetExpr let4("x", new NumExpr(5), new LetExpr("y", new NumExpr(6), new AddExpr("x", 1)));
+        CHECK(let4.interp() == 6);
+        LetExpr let5("x", new AddExpr(2, 5), new LetExpr("x", new AddExpr("x", -13), new AddExpr("x", 1)));
+        CHECK(let5.interp() == -5);
+        LetExpr let6("x", new AddExpr(-1, -6), new LetExpr("x", new AddExpr(-3, 2), new AddExpr("x", 3)));
+        CHECK(let6.interp() == 2);
+        LetExpr let2Nested("x", new NumExpr(5), new LetExpr("y", new NumExpr(8), new AddExpr("x", "y")));
+        CHECK(let2Nested.interp() == 13);
+        LetExpr let3Nested("x", new NumExpr(1), new LetExpr("y", new NumExpr(2), new LetExpr("z", new NumExpr(3), new AddExpr(new VarExpr("x"), new AddExpr("y", "z")))));
+        CHECK(let3Nested.interp() == 6);
+        LetExpr let3Nested2("x", new NumExpr(1), new LetExpr("y", new AddExpr("x", 1), new LetExpr("z", new AddExpr("y", 1), new AddExpr(new VarExpr("x"), new AddExpr("y", "z")))));
+        let3Nested2.interp();
+        CHECK(let3Nested2.interp() == 6);
+        LetExpr letError("x", new AddExpr("y", 2), new AddExpr("x", 1));
+        CHECK_THROWS_WITH(letError.interp(), "A variable has no value!");
+    }
+
+    SECTION("has_variable") {
+        LetExpr let1("x", new NumExpr(5), new AddExpr(3, 1));
+        CHECK(!let1.has_variable());
+        CHECK(letBase1.has_variable()); // body has variable
+        LetExpr let2("x", new VarExpr("x + 1"), new AddExpr(3, 1)); // rhs has variable
+        CHECK(let2.has_variable());
+        LetExpr let3("x", new VarExpr("x"), new AddExpr("x", 1)); // both has variable
+        CHECK(let3.has_variable());
     }
 
     SECTION("print") {
@@ -353,6 +368,44 @@ TEST_CASE("let") {
     }
 
     SECTION("pretty_print") {
-
+        CHECK(letBase1.to_pretty_string() == "_let x = 5\n_in  x + 1");
+        CHECK(letBase2.to_pretty_string() == "_let x = 6\n_in  x + 1");
+        // one nested let
+        LetExpr let2("x", new NumExpr(5),&letBase2);
+        let2.to_pretty_string();
+        CHECK(let2.to_pretty_string() == "_let x = 5\n"
+                                         "_in  _let x = 6\n"
+                                         "     _in  x + 1");
+        // let body as left arg of add
+        LetExpr let3("x",new NumExpr(5),new AddExpr(&letBase2, new VarExpr("x")));
+        CHECK(let3.to_pretty_string() == "_let x = 5\n"
+                                         "_in  (_let x = 6\n"
+                                         "      _in  x + 1) + x");
+        // let body as left arg of mult
+        LetExpr let4("x", new NumExpr(5), new MultExpr(&letBase2, new VarExpr("x")));
+        CHECK(let4.to_pretty_string() == "_let x = 5\n"
+                                         "_in  (_let x = 6\n"
+                                         "      _in  x + 1) * x");
+        // let as right arg of unparenthized mult
+        MultExpr let5(new NumExpr(2), &letBase1);
+        CHECK(let5.to_pretty_string() == "2 * _let x = 5\n"
+                                         "    _in  x + 1");
+        // let as right arg of parenthized add
+        AddExpr let6( new AddExpr(new NumExpr(2), &letBase1), new NumExpr(3));
+        CHECK(let6.to_pretty_string() == "(2 + _let x = 5\n"
+                                         "     _in  x + 1) + 3");
+        // let as right arg of parenthized mult TODO
+        MultExpr let7(new MultExpr(new NumExpr(2), &letBase1), new NumExpr(3));
+        CHECK(let7.to_pretty_string() == "(2 * _let x = 5\n"
+                                         "     _in  x + 1) * 3");
+        // let as rhs
+        LetExpr let8("x", &letBase1, new AddExpr("x", 6));
+        CHECK(let8.to_pretty_string() == "_let x = _let x = 5\n"
+                                         "         _in  x + 1\n"
+                                         "_in  x + 6");
+        LetExpr let9("x", new AddExpr(&letBase1, new NumExpr(2)), new AddExpr("x", 6));
+        CHECK(let9.to_pretty_string() == "_let x = (_let x = 5\n"
+                                         "          _in  x + 1) + 2\n"
+                                         "_in  x + 6");
     }
 }

@@ -6,9 +6,12 @@
 //
 
 #include <sstream>
+#include <iostream>
 #include "expr.h"
 
-// Expr
+////////////////////////////////////////////
+//                  Expr                  //
+///////////////////////////////////////////
 
 /**
  * Store the result of print method into a string.
@@ -30,7 +33,14 @@ std::string Expr::to_pretty_string() {
     return st.str();
 }
 
-// Num Expression
+void Expr::pretty_print(std::ostream &out) {
+    std::streampos pos = out.tellp();
+    pretty_print_at(out, prec_none, pos, false);
+}
+
+////////////////////////////////////////////
+//                NumExpr                //
+///////////////////////////////////////////
 
 /**
  * Constructs a NumExpr with the specified value and the precedence 0.
@@ -38,7 +48,6 @@ std::string Expr::to_pretty_string() {
  */
 NumExpr::NumExpr(int v) {
     val = v;
-    prec = prec_none;
 }
 
 /**
@@ -94,11 +103,13 @@ void NumExpr::print(std::ostream& out) {
  * omit redundant parentheses and add space around operators.
  * @param out the output stream used to print this object
  */
-void NumExpr::pretty_print(std::ostream& out) {
+void NumExpr::pretty_print_at(std::ostream& out, precedence_t p, std::streampos& newLinePrevPos, bool letParen) {
     out << val;
 }
 
-// Add Expression
+////////////////////////////////////////////
+//                AddExpr                 //
+///////////////////////////////////////////
 
 /**
  * Constructs a AddExpr object with the specified left and right expressions.
@@ -108,7 +119,6 @@ void NumExpr::pretty_print(std::ostream& out) {
 AddExpr::AddExpr(Expr *left, Expr *right) {
     lhs = left;
     rhs = right;
-    prec = prec_add;
 }
 
 /**
@@ -119,7 +129,6 @@ AddExpr::AddExpr(Expr *left, Expr *right) {
 AddExpr::AddExpr(int left, int right) {
     lhs = new NumExpr(left);
     rhs = new NumExpr(right);
-    prec = prec_add;
 }
 
 /**
@@ -131,7 +140,6 @@ AddExpr::AddExpr(int left, int right) {
 AddExpr::AddExpr(std::string left, int right) {
     lhs = new VarExpr(left);
     rhs = new NumExpr(right);
-    prec = prec_add;
 }
 
 /**
@@ -143,7 +151,6 @@ AddExpr::AddExpr(std::string left, int right) {
 AddExpr::AddExpr(int left, std::string right) {
     lhs = new NumExpr(left);
     rhs = new VarExpr(right);
-    prec = prec_add;
 }
 
 /**
@@ -154,7 +161,6 @@ AddExpr::AddExpr(int left, std::string right) {
 AddExpr::AddExpr(std::string left, std::string right) {
     lhs = new VarExpr(left);
     rhs = new VarExpr(right);
-    prec = prec_add;
 }
 
 /**
@@ -210,24 +216,36 @@ void AddExpr::print(std::ostream& out) {
     out << ")";
 }
 
-/**
- * Print this object in a prettier way. To specify, we'll
- * omit redundant parentheses and add a space around operators.
- * @param out the output stream used to print this object
- */
-void AddExpr::pretty_print(std::ostream &out) {
-    if (lhs->get_precedence() != 0 && lhs->get_precedence() <= prec_add) {
+ /**
+  * Print this object in a prettier way. To specify, we'll
+  * omit redundant parentheses and add a space around operators.
+  * <br>
+  * Logic:
+  * <br>
+  * An expression can be represented as: lhs op rhs. And
+  * the operator is right associative. Therefore:<br>
+  * - if precedence(lhs) <= op, add parentheses around lhs<br>
+  * - if precedence(rhs) < op (or precedence(rhs) <= op - 1), add parentheses around rhs<br>
+  * @param out the output stream used to print this object
+  * @param p the precedence of the outer expression (or the op in the above expression)
+  */
+void AddExpr::pretty_print_at(std::ostream &out, precedence_t p, std::streampos& newLinePrevPos, bool letParen) {
+    bool addParentheses = prec_add <= p;
+    if (addParentheses) {
         out << "(";
-        lhs->pretty_print(out);
-        out << ")";
-    } else {
-        lhs->pretty_print(out);
     }
+    LetExpr* temp = dynamic_cast<LetExpr*>(lhs);
+    lhs->pretty_print_at(out, prec_add, newLinePrevPos, temp != NULL);
     out << " + ";
-    rhs -> pretty_print(out);
+    rhs->pretty_print_at(out, prec_none, newLinePrevPos, false); // TODO
+    if (addParentheses) {
+        out << ")";
+    }
 }
 
-// Mult Expression
+ ////////////////////////////////////////////
+//                MultExpr                //
+///////////////////////////////////////////
 
 /**
  * Constructs a MultExpr object with the specified left and right expressions.
@@ -237,7 +255,6 @@ void AddExpr::pretty_print(std::ostream &out) {
 MultExpr::MultExpr(Expr *left, Expr *right) {
     lhs = left;
     rhs = right;
-    prec = prec_mult;
 }
 
 /**
@@ -248,7 +265,6 @@ MultExpr::MultExpr(Expr *left, Expr *right) {
 MultExpr::MultExpr(int left, int right) {
     lhs = new NumExpr(left);
     rhs = new NumExpr(right);
-    prec = prec_mult;
 }
 
 /**
@@ -260,7 +276,6 @@ MultExpr::MultExpr(int left, int right) {
 MultExpr::MultExpr(std::string left, int right) {
     lhs = new VarExpr(left);
     rhs = new NumExpr(right);
-    prec = prec_mult;
 }
 
 /**
@@ -272,7 +287,6 @@ MultExpr::MultExpr(std::string left, int right) {
 MultExpr::MultExpr(int left, std::string right) {
     lhs = new NumExpr(left);
     rhs = new VarExpr(right);
-    prec = prec_mult;
 }
 
 /**
@@ -283,7 +297,6 @@ MultExpr::MultExpr(int left, std::string right) {
 MultExpr::MultExpr(std::string left, std::string right) {
     lhs = new VarExpr(left);
     rhs = new VarExpr(right);
-    prec = prec_mult;
 }
 
 /**
@@ -344,25 +357,25 @@ void MultExpr::print(std::ostream& out) {
  * omit redundant parentheses and add a space around operators.
  * @param out the output stream used to print this object
  */
-void MultExpr::pretty_print(std::ostream &out) {
-    if (lhs -> get_precedence() != 0 && lhs -> get_precedence() <= prec_mult) {
+void MultExpr::pretty_print_at(std::ostream &out, precedence_t p, std::streampos& newLinePrevPos, bool letParen) {
+    bool addParentheses = prec_mult <= p;
+    if (addParentheses) {
         out << "(";
-        lhs -> pretty_print(out);
-        out << ")";
-    } else {
-        lhs -> pretty_print(out);
     }
+    LetExpr* temp = dynamic_cast<LetExpr*>(lhs);
+    lhs->pretty_print_at(out, prec_mult,newLinePrevPos, temp != NULL);
     out << " * ";
-    if (rhs -> get_precedence() != 0 && rhs -> get_precedence() < prec_mult) {
-        out << "(";
-        rhs -> pretty_print(out);
+    temp = dynamic_cast<LetExpr*>(rhs);
+    // add parentheses for rhs when : 1. rhs is let 2. this is followed with +/*  3. no parentheses around this
+    rhs->pretty_print_at(out, prec_add, newLinePrevPos, temp != NULL && p != prec_none && !addParentheses);
+    if (addParentheses) {
         out << ")";
-    } else {
-        rhs -> pretty_print(out);
     }
 }
 
-// Variable Expression
+  ///////////////////////////////////////////
+ //                VarExpr                //
+///////////////////////////////////////////
 
 /**
  * Constructs a NumExpr with the specified string and the precedence 0.
@@ -370,7 +383,6 @@ void MultExpr::pretty_print(std::ostream &out) {
  */
 VarExpr::VarExpr(std::string s) {
     val = s;
-    prec = prec_none;
 }
 
 /**
@@ -389,7 +401,7 @@ bool VarExpr::equals(Expr* expr) {
 
 /**
  * Returns the int value of this VarExpr object
- * @return throw a runtime error since a varibale cannot be evaluated to a int value
+ * @return throw a runtime error since a variable cannot be evaluated to a int value
  */
 int VarExpr::interp() {
     throw std::runtime_error("A variable has no value!");
@@ -412,7 +424,7 @@ bool VarExpr::has_variable() {
  */
 Expr* VarExpr::subst(std::string s, Expr* expr) {
     if (val == s) {
-        return expr; // TODO just return expr?
+        return expr;
     }
     return new VarExpr(val);
 }
@@ -429,7 +441,7 @@ void VarExpr::print(std::ostream& out) {
  * Print this object in a prettier way.
  * @param out the output stream used to print this object
  */
-void VarExpr::pretty_print(std::ostream& out) {
+void VarExpr::pretty_print_at(std::ostream& out, precedence_t p, std::streampos& newLinePrevPos, bool letParen) {
     out << val;
 }
 
@@ -443,55 +455,70 @@ void VarExpr::pretty_print(std::ostream& out) {
  * @param body
  */
 LetExpr::LetExpr(std::string v, Expr* r, Expr* b) {
-    name = v;
+    variable = v;
     rhs = r;
     body = b;
 }
 
-// TODO is this correct?
 bool LetExpr::equals(Expr* expr) {
     LetExpr* other = dynamic_cast<LetExpr*>(expr);
     if (other == NULL) {
         return false;
     }
-    return name == other -> name && rhs -> equals(other -> rhs) && body -> equals(other -> body);
+    return variable == other->variable && rhs->equals(other->rhs) && body->equals(other->body);
 }
 
 int LetExpr::interp() {
-    return body -> subst(name, rhs) -> interp();
+    return body->subst(variable, rhs)->interp();
 }
 
-/**
- * Although _let always binds a variable, a _let expression doesn't
- * necessarily have any variable expressions. That is, the “left-hand
- * side” of a binding is always a name and not an expression in general.
- * So, has_variable for a _let expression should return true only if
- * the right-hand side or body expression contains a variable.
- * @return true if the right-hand side or body expression contains a
- * variable. Otherwise, returns false.
- */
 bool LetExpr::has_variable() {
     return rhs->has_variable() || body->has_variable();
 }
 
-// TODO do we always substitute the innermost LetExpr??
-// e.g. LetExpr let1("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
 Expr* LetExpr::subst(std::string s, Expr* expr) {
-    LetExpr* obj = dynamic_cast<LetExpr*>(body);
-    if (obj == NULL && name == s) {
-        return this;
+    // substitute rhs first, so the value of higher-level variable can be passed to the lower level
+    Expr* temp = rhs->subst(s, expr);
+    // if variable == s, update the value of the variable
+    if (variable == s) {
+        return new LetExpr(variable, temp, body);
     }
-    return new LetExpr(name, rhs, body->subst(s, expr));
+    // else substitute the body
+    return new LetExpr(variable, temp, body->subst(s, expr));
 }
 
 void LetExpr::print(std::ostream& out) {
-    out << "(_let " << name << "=";
-    rhs -> print(out);
+    out << "(_let " << variable << "=";
+    rhs->print(out);
     out << " _in ";
-    body ->print(out);
+    body->print(out);
     out << ")";
 }
 
-void LetExpr::pretty_print(std::ostream& out) {
+/**
+ * Rules:
+ * 1. the rhs or body need no more parentheses if they are the whole expression
+ * 2. needs parentheses as the left argument of + or *
+ * 3. needs parentheses as the right argument of an unparenthesized *
+ * @param out
+ * @param prec
+ * @param newLinePrevPos
+ */
+void LetExpr::pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen) {
+    if (letParen) {
+        out << "(";
+    }
+    int indentation = out.tellp() - newLinePrevPos;
+    out << "_let " << variable << " = ";
+    rhs->pretty_print_at(out, prec_let, newLinePrevPos, false);
+    out << "\n";
+    newLinePrevPos = out.tellp();
 
+    out << std::string(indentation, ' ');
+    out << "_in  ";
+    body->pretty_print_at(out, prec_let, newLinePrevPos, false);
+
+    if (letParen) {
+        out << ")";
+    }
 }

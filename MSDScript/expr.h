@@ -12,8 +12,9 @@
 
 enum precedence_t {
     prec_none, // 0
-    prec_add, // 1
-    prec_mult, // 2
+    prec_let, // 1
+    prec_add, // 2
+    prec_mult, // 3
 };
 
 /** \brief
@@ -21,17 +22,14 @@ enum precedence_t {
  */
 class Expr {
 public:
-    precedence_t prec; // !< the precedence of an expression
     virtual bool equals(Expr* expr)=0;
     virtual int interp() = 0;
     virtual bool has_variable() = 0;
     virtual Expr* subst(std::string s, Expr* expr) = 0;
     virtual void print(std::ostream& out) = 0;
-    virtual void pretty_print(std::ostream& out) = 0;
     std::string to_string();
-    precedence_t get_precedence() {
-        return prec;
-    }
+    void pretty_print(std::ostream& out);
+    virtual void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool letParen) = 0;
     std::string to_pretty_string();
 };
 
@@ -48,7 +46,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print(std::ostream& out);
+    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
 };
 
 /** \brief
@@ -69,7 +67,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print(std::ostream& out);
+    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
 };
 
 /** \brief
@@ -90,7 +88,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print(std::ostream& out);
+    void pretty_print_at(std::ostream& out, precedence_t p, std::streampos& newLinePrevPos, bool letParen);
 };
 
 /** \brief
@@ -106,12 +104,12 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print(std::ostream& out);
+    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
 };
 
 class LetExpr : public Expr {
 private:
-    std::string name;
+    std::string variable;
     Expr* rhs;
     Expr* body;
 public:
@@ -121,7 +119,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print(std::ostream& out);
+    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
 };
 
 
