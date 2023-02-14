@@ -418,6 +418,7 @@ TEST_CASE("let") {
                                           "     _in  x + 1) + 5");
         // TODO check if others can past this test
         AddExpr let13(&let11, new NumExpr(5));
+        let13.to_pretty_string();
         CHECK(let13.to_pretty_string() == "1 * 2 * (_let x = 5\n"
                                           "         _in  x + 1) + 5");
         AddExpr let14(new AddExpr(new NumExpr(1), new MultExpr(new NumExpr(2), &letBase1)), new NumExpr(1));
