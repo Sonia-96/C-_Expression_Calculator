@@ -121,7 +121,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t precedence, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 
