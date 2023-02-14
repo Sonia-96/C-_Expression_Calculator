@@ -394,7 +394,7 @@ TEST_CASE("let") {
         AddExpr let6( new AddExpr(new NumExpr(2), &letBase1), new NumExpr(3));
         CHECK(let6.to_pretty_string() == "(2 + _let x = 5\n"
                                          "     _in  x + 1) + 3");
-        // let as right arg of parenthized mult TODO
+        // let as right arg of parenthized mult
         MultExpr let7(new MultExpr(new NumExpr(2), &letBase1), new NumExpr(3));
         CHECK(let7.to_pretty_string() == "(2 * _let x = 5\n"
                                          "     _in  x + 1) * 3");
@@ -407,5 +407,25 @@ TEST_CASE("let") {
         CHECK(let9.to_pretty_string() == "_let x = (_let x = 5\n"
                                          "          _in  x + 1) + 2\n"
                                          "_in  x + 6");
+        AddExpr let10(new NumExpr(1), new MultExpr(new NumExpr(3), &letBase1));
+        CHECK(let10.to_pretty_string() == "1 + 3 * _let x = 5\n"
+                                          "        _in  x + 1");
+        MultExpr let11(new NumExpr(1), new MultExpr(new NumExpr(2), &letBase1));
+        CHECK(let11.to_pretty_string() == "1 * 2 * _let x = 5\n"
+                                          "        _in  x + 1");
+        AddExpr let12(new MultExpr(new NumExpr(2), &letBase1), new NumExpr(5));
+        CHECK(let12.to_pretty_string() == "2 * (_let x = 5\n"
+                                          "     _in  x + 1) + 5");
+        // TODO check if others can past this test
+        AddExpr let13(&let11, new NumExpr(5));
+        let13.to_pretty_string();
+        CHECK(let13.to_pretty_string() == "1 * 2 * (_let x = 5\n"
+                                          "         _in  x + 1) + 5");
+        AddExpr let14(new AddExpr(new NumExpr(1), new MultExpr(new NumExpr(2), &letBase1)), new NumExpr(1));
+        CHECK(let14.to_pretty_string() == "(1 + 2 * _let x = 5\n"
+                                          "         _in  x + 1) + 1");
+        AddExpr let15(new MultExpr(new AddExpr(new NumExpr(2), &letBase1), new NumExpr(1)), new NumExpr(1));
+        CHECK(let15.to_pretty_string() == "(2 + _let x = 5\n"
+                                          "     _in  x + 1) * 1 + 1");
     }
 }

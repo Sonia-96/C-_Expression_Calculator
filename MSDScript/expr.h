@@ -12,9 +12,8 @@
 
 enum precedence_t {
     prec_none, // 0
-    prec_let, // 1
-    prec_add, // 2
-    prec_mult, // 3
+    prec_add, // 1
+    prec_mult, // 2
 };
 
 /** \brief
@@ -29,7 +28,7 @@ public:
     virtual void print(std::ostream& out) = 0;
     std::string to_string();
     void pretty_print(std::ostream& out);
-    virtual void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool letParen) = 0;
+    virtual void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) = 0;
     std::string to_pretty_string();
 };
 
@@ -46,7 +45,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 /** \brief
@@ -67,7 +66,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 /** \brief
@@ -88,7 +87,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t p, std::streampos& newLinePrevPos, bool letParen);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 /** \brief
@@ -104,7 +103,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool letParen);
+    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 /** \brief
@@ -122,10 +121,8 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t p, std::streampos& newLinePrevPos, bool letParen);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 
 #endif //MSDSCRIPT_EXPR_H
-
-
