@@ -381,9 +381,8 @@ void MultExpr::pretty_print_at(std::ostream &out, precedence_t precedence, std::
     }
     lhs->pretty_print_at(out, prec_mult, newLinePrevPos, true);
     out << " * ";
-    LetExpr* temp = dynamic_cast<LetExpr*>(rhs);
     // add parentheses for rhs when : 1. rhs is let 2. the outermost mult expression is followed with an add expression
-    rhs->pretty_print_at(out, prec_add, newLinePrevPos, temp == NULL ? addParenthesesToLet : (addParenthesesToLet && !addParentheses));
+    rhs->pretty_print_at(out, prec_add, newLinePrevPos, addParenthesesToLet && !addParentheses);
     if (addParentheses) {
         out << ")";
     }

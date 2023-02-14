@@ -9,7 +9,7 @@
 #include <iostream>
 
 TEST_CASE("Equals") {
-    SECTION("Num") {
+    SECTION("NumExpr") {
         NumExpr num1(1);
         NumExpr num2(2);
         NumExpr num3(1);
@@ -87,7 +87,7 @@ TEST_CASE("Equals") {
 };
 
 TEST_CASE("Interp") {
-    SECTION("Num") {
+    SECTION("NumExpr") {
         CHECK((new NumExpr(0)) -> interp() == 0);
         CHECK((new NumExpr(-100))-> interp() == -100);
     }
@@ -132,7 +132,7 @@ TEST_CASE("Interp") {
 }
 
 TEST_CASE("has_variable") {
-    SECTION("Num") {
+    SECTION("NumExpr") {
         CHECK(!(new NumExpr(3)) -> has_variable());
     }
 
@@ -168,7 +168,7 @@ TEST_CASE("has_variable") {
 }
 
 TEST_CASE("subst") {
-    SECTION("Num") {
+    SECTION("NumExpr") {
         CHECK((new NumExpr(4)) -> subst("x", new NumExpr(3)) -> equals(new NumExpr(4)));
     }
 
@@ -227,7 +227,7 @@ TEST_CASE("Interpt + Subst") {
 };
 
 TEST_CASE("to_string + print") {
-    SECTION("Num") {
+    SECTION("NumExpr") {
         CHECK(NumExpr(10).to_string() == "10");
         CHECK(NumExpr(-10).to_string() == "-10");
     }
