@@ -6,7 +6,6 @@
 //
 
 #include <sstream>
-#include <iostream>
 #include "expr.h"
 
  ////////////////////////////////////////////
@@ -387,7 +386,7 @@ void MultExpr::pretty_print_at(std::ostream &out, precedence_t p, std::streampos
     temp = dynamic_cast<LetExpr*>(rhs);
     // add parentheses for rhs when : 1. rhs is let 2. this is followed with +/*  3. no parentheses around this
     // (2 + 3 -> followed with +)
-    rhs->pretty_print_at(out, prec_add, newLinePrevPos, temp != NULL && p == prec_add);
+    rhs->pretty_print_at(out, prec_add, newLinePrevPos, temp != NULL && p != prec_none && !addParentheses);
     if (addParentheses) {
         out << ")";
     }
