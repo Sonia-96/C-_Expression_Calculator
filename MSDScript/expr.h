@@ -12,9 +12,8 @@
 
 enum precedence_t {
     prec_none, // 0
-    prec_let, // 1
-    prec_add, // 2
-    prec_mult, // 3
+    prec_add, // 1
+    prec_mult, // 2
 };
 
 /** \brief
@@ -67,7 +66,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t precedence, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 /** \brief
@@ -104,7 +103,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t prec, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    void pretty_print_at(std::ostream& out, precedence_t prec, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet);
 };
 
 /** \brief

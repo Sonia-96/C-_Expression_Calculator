@@ -416,8 +416,15 @@ TEST_CASE("let") {
         AddExpr let12(new MultExpr(new NumExpr(2), &letBase1), new NumExpr(5));
         CHECK(let12.to_pretty_string() == "2 * (_let x = 5\n"
                                           "     _in  x + 1) + 5");
-//        AddExpr let13(&let11, new NumExpr(5));
-//        CHECK(let13.to_pretty_string() == "1 * 2 * (_let x = 5\n"
-//                                          "         _in  x + 1) + 5");
+        // TODO check if others can past this test
+        AddExpr let13(&let11, new NumExpr(5));
+        CHECK(let13.to_pretty_string() == "1 * 2 * (_let x = 5\n"
+                                          "         _in  x + 1) + 5");
+        AddExpr let14(new AddExpr(new NumExpr(1), new MultExpr(new NumExpr(2), &letBase1)), new NumExpr(1));
+        CHECK(let14.to_pretty_string() == "(1 + 2 * _let x = 5\n"
+                                          "         _in  x + 1) + 1");
+        AddExpr let15(new MultExpr(new AddExpr(new NumExpr(2), &letBase1), new NumExpr(1)), new NumExpr(1));
+        CHECK(let15.to_pretty_string() == "(2 + _let x = 5\n"
+                                          "     _in  x + 1) * 1 + 1");
     }
 }

@@ -106,7 +106,7 @@ void NumExpr::print(std::ostream& out) {
  * omit redundant parentheses and add space around operators.
  * @param out the output stream used to print this object
  */
-void NumExpr::pretty_print_at(std::ostream& out, precedence_t precedence, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
+void NumExpr::pretty_print_at(std::ostream& out, precedence_t precedence, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
     out << val;
 }
 
@@ -234,16 +234,20 @@ void AddExpr::print(std::ostream& out) {
    * @param newLinePrevPos the position of the previous new line in the output stream
    * @param addParenthesesToLet should we add parentheses around a LetExpr object
    */
-void AddExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
+void AddExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
     bool addParentheses = prec_add <= precedence;
     if (addParentheses) {
         out << "(";
     }
     LetExpr* temp = dynamic_cast<LetExpr*>(lhs);
-    lhs->pretty_print_at(out, prec_add, true, newLinePrevPos, temp != NULL);
+    MultExpr* temp2 = dynamic_cast<MultExpr*>(lhs);
+    if (temp2 != NULL) {
+        inLeftMult = true;
+    }
+    lhs->pretty_print_at(out, prec_add, inLeftMult, newLinePrevPos, temp != NULL);
     out << " + ";
     // let as right arg in AddExpr never need parentheses
-    rhs->pretty_print_at(out, prec_none, false, newLinePrevPos, false);
+    rhs->pretty_print_at(out, prec_none, inLeftMult, newLinePrevPos, false);
     if (addParentheses) {
         out << ")";
     }
@@ -375,18 +379,22 @@ void MultExpr::print(std::ostream& out) {
  * @param newLinePrevPos the position of the previous new line in the output stream
  * @param addParenthesesToLet should we add parentheses around a LetExpr object
  */
-void MultExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
+void MultExpr::pretty_print_at(std::ostream &out, precedence_t precedence, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
     bool addParentheses = prec_mult <= precedence;
     if (addParentheses) {
         out << "(";
     }
     LetExpr* temp = dynamic_cast<LetExpr*>(lhs);
-    lhs->pretty_print_at(out, prec_mult, true, newLinePrevPos, temp != NULL);
+    MultExpr* temp2 = dynamic_cast<MultExpr*>(lhs);
+    if (temp2 != NULL) {
+        inLeftMult = true;
+    }
+    lhs->pretty_print_at(out, prec_mult, inLeftMult, newLinePrevPos, temp != NULL);
     out << " * ";
     temp = dynamic_cast<LetExpr*>(rhs);
     // add parentheses for rhs when : 1. rhs is let 2. this is followed with +/*  3. no parentheses around this
     // (2 + 3 -> followed with +)
-    rhs->pretty_print_at(out, prec_add, false, newLinePrevPos, temp != NULL && (precedence == prec_add && isLeftArg));
+    rhs->pretty_print_at(out, prec_add, inLeftMult, newLinePrevPos, temp != NULL && precedence == prec_add && inLeftMult);
     if (addParentheses) {
         out << ")";
     }
@@ -460,7 +468,7 @@ void VarExpr::print(std::ostream& out) {
  * Print this object in a prettier way.
  * @param out the output stream used to print this object
  */
-void VarExpr::pretty_print_at(std::ostream& out, precedence_t precedence, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
+void VarExpr::pretty_print_at(std::ostream& out, precedence_t precedence, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
     out << val;
 }
 
@@ -553,19 +561,19 @@ void LetExpr::print(std::ostream& out) {
 * @param newLinePrevPos the position of the previous new line in the output stream
 * @param addParenthesesToLet should we add parentheses around a LetExpr object
 */
-void LetExpr::pretty_print_at(std::ostream& out, precedence_t precedence, bool isLeftArg, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
+void LetExpr::pretty_print_at(std::ostream& out, precedence_t precedence, bool inLeftMult, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
     if (addParenthesesToLet) {
         out << "(";
     }
     int indentation = out.tellp() - newLinePrevPos;
     out << "_let " << variable << " = ";
-    rhs->pretty_print_at(out, prec_let, false, newLinePrevPos, false);
+    rhs->pretty_print_at(out, prec_none, false, newLinePrevPos, false);
     out << "\n";
     newLinePrevPos = out.tellp();
 
     out << std::string(indentation, ' ');
     out << "_in  ";
-    body->pretty_print_at(out, prec_let, false, newLinePrevPos, false);
+    body->pretty_print_at(out, prec_none, false, newLinePrevPos, false);
 
     if (addParenthesesToLet) {
         out << ")";
