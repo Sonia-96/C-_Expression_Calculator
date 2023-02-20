@@ -460,6 +460,10 @@ void VarExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::s
     out << val;
 }
 
+std::string VarExpr::getVal() {
+    return val;
+}
+
 ///////////////////////////////////////////
 //                LetExpr                //
 ///////////////////////////////////////////
@@ -492,9 +496,12 @@ bool LetExpr::equals(Expr* expr) {
 
 /**
  * Returns the int value of this LetExpr object
- * @return the int value of the its body after subsitute the variable with rhs
+ * @return the int value of the its body after substitute the variable with rhs
  */
 int LetExpr::interp() {
+    // TODO maybe this will not work in some cases?
+//    NumExpr* num = new NumExpr(rhs->interp());
+//    return body->subst(variable, num)->interp();
     return body->subst(variable, rhs)->interp();
 }
 

@@ -104,6 +104,7 @@ public:
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
     void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    std::string getVal();
 };
 
 /** \brief

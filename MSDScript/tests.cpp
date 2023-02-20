@@ -6,6 +6,7 @@
 
 #include "catch.h"
 #include "expr.h"
+#include "parser.h"
 #include <iostream>
 
 TEST_CASE("Equals") {
@@ -327,6 +328,8 @@ TEST_CASE("let") {
     SECTION("subst + interp") {
         CHECK(letBase1.interp() == 6);
         CHECK(letBase2.interp() == 7);
+        LetExpr let1("x", new AddExpr(5, 2), new MultExpr("x", 3));
+        CHECK(let1.interp() == 21);
         LetExpr let2("x", new AddExpr(5, 2), new AddExpr("x", 1));
         CHECK(let2.interp() == 8);
         LetExpr let3("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
@@ -416,7 +419,6 @@ TEST_CASE("let") {
         AddExpr let12(new MultExpr(new NumExpr(2), &letBase1), new NumExpr(5));
         CHECK(let12.to_pretty_string() == "2 * (_let x = 5\n"
                                           "     _in  x + 1) + 5");
-        // TODO check if others can past this test
         AddExpr let13(&let11, new NumExpr(5));
         let13.to_pretty_string();
         CHECK(let13.to_pretty_string() == "1 * 2 * (_let x = 5\n"
@@ -427,5 +429,106 @@ TEST_CASE("let") {
         AddExpr let15(new MultExpr(new AddExpr(new NumExpr(2), &letBase1), new NumExpr(1)), new NumExpr(1));
         CHECK(let15.to_pretty_string() == "(2 + _let x = 5\n"
                                           "     _in  x + 1) * 1 + 1");
+        AddExpr let16(new LetExpr("x",new NumExpr(5),new LetExpr("y", new NumExpr(3),new AddExpr("y", 2))),new VarExpr("x"));
+        CHECK(let16.to_pretty_string() == "(_let x = 5\n"
+                                          " _in  _let y = 3\n"
+                                          "      _in  y + 2) + x");
     }
+}
+
+TEST_CASE("parse") {
+    LetExpr letBase1("x", new NumExpr(5), new AddExpr("x", 1));
+    LetExpr letBase2("x", new NumExpr(6), new MultExpr("x", 1));
+
+    SECTION("num") {
+        CHECK(parse_str("123")->equals(new NumExpr(123)));
+        CHECK(parse_str("-123")->equals(new NumExpr(-123)));
+        CHECK(parse_str("     123")->equals(new NumExpr(123)));
+        CHECK(parse_str("     123     ")->equals(new NumExpr(123)));
+    }
+
+    SECTION("var") {
+        CHECK(parse_str("ABc")->equals(new VarExpr("ABc")));
+        CHECK_THROWS_WITH(parse_str("abc+ "), "bad input");
+        CHECK_THROWS_WITH(parse_str("abc* "), "bad input");
+        CHECK_THROWS_WITH(parse_str("a2"), "invalid variable name");
+    }
+
+    SECTION("let + mult + add") {
+        // parentheses and spaces
+        std::string let1a = "_let x = 5 _in x + 1";
+        CHECK(parse_str(let1a)->equals(&letBase1));
+        std::string let1b = "(_let x = 5 _in x + 1)";
+        CHECK(parse_str(let1b)->equals(&letBase1));
+        std::string let1c = "_let x = 5 _in (x + 1)";
+        CHECK(parse_str(let1c)->equals(&letBase1));
+        std::string let1d = "_let x = (5) _in x + 1";
+        CHECK(parse_str(let1d)->equals(&letBase1));
+        std::string let1e = "_let x = (5)\n"
+                            "_in x + 1";
+        CHECK(parse_str(let1e)->equals(&letBase1));
+        std::string let1f = "_let x =                5 _in x + 1";
+        CHECK(parse_str(let1f)->equals(&letBase1));
+        std::string let1g = "(_let x = (5 _in x + 1))"; // wrong parentheses
+        CHECK_THROWS_WITH(parse_str(let1g), "parentheses mismatch");
+
+        std::string let2 = "(_let x = 5 _in  x) + 1";
+        AddExpr let2res(new LetExpr("x", new NumExpr(5), new VarExpr("x")), new NumExpr(1));
+        CHECK(parse_str(let2)->equals(&let2res));
+
+        std::string let3 = "_let x = 2 _in _let x = 5 _in x + 1";
+        LetExpr let3res("x", new NumExpr(2), &letBase1);
+        CHECK(parse_str(let3)->equals(&let3res));
+
+        std::string let4 = "1 * 2 * _let x = 5 _in x + 1";
+        MultExpr let4res(new NumExpr(1), new MultExpr(new NumExpr(2), &letBase1));
+        CHECK(parse_str(let4)->equals(&let4res));
+
+        std::string let5 = "_let x = 5\n"
+                           "_in  (_let x = 6\n"
+                           "      _in  x * 1) + x";
+        LetExpr let5res("x",new NumExpr(5),new AddExpr(&letBase2, new VarExpr("x")));
+        CHECK(parse_str(let5)->equals(&let5res));
+
+        // wrong format
+        std::string let6a = "_let x";
+        CHECK_THROWS_WITH(parse_str(let6a), "wrong format for let expression");
+        std::string let6b = "_led x";
+        CHECK_THROWS_WITH(parse_str(let6b), "wrong format for let expression");
+        std::string let6c = "_led x = 55 _in";
+        CHECK_THROWS_WITH(parse_str(let6c), "wrong format for let expression");
+
+        // interp error
+        std::string let7 = "_let x = y _in x + 1";
+        CHECK_THROWS_WITH(parse_str(let7)->interp(), "A variable has no value!");
+    }
+}
+
+TEST_CASE("parse given tests") {
+    // parentheses
+    CHECK_THROWS_WITH( parse_str("()"), "bad input");
+    CHECK( parse_str("(1)")->equals(new NumExpr(1)) );
+    CHECK( parse_str("(((1)))")->equals(new NumExpr(1)) );
+    CHECK_THROWS_WITH( parse_str("(1"), "parentheses mismatch" );
+
+    // numbers
+    CHECK( parse_str("1")->equals(new NumExpr(1)) );
+    CHECK( parse_str("10")->equals(new NumExpr(10)) );
+    CHECK( parse_str("-3")->equals(new NumExpr(-3)) );
+    CHECK( parse_str("  \n 5  ")->equals(new NumExpr(5)) );
+    CHECK_THROWS_WITH( parse_str("-"), "invalid input" );
+    CHECK(parse_str(" -   5  ")->equals(new NumExpr(-5)));
+//    CHECK_THROWS_WITH( parse_str(" -   5  "), "invalid input" );
+
+    // variables
+    CHECK( parse_str("x")->equals(new VarExpr("x")) );
+    CHECK( parse_str("xyz")->equals(new VarExpr("xyz")) );
+    CHECK( parse_str("xYz")->equals(new VarExpr("xYz")) );
+    CHECK_THROWS_WITH( parse_str("x_z"), "invalid variable name" );
+
+    // add & mult expressions
+    CHECK( parse_str("x + y")->equals(new AddExpr(new VarExpr("x"), new VarExpr("y"))) );
+    CHECK( parse_str("x * y")->equals(new MultExpr(new VarExpr("x"), new VarExpr("y"))) );
+    CHECK( parse_str("z * x + y")->equals(new AddExpr(new MultExpr("z", "x"),new VarExpr("y"))));
+    CHECK( parse_str("z * (x + y)")->equals(new MultExpr(new VarExpr("z"),new AddExpr("x", "y"))));
 }

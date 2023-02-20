@@ -11,6 +11,12 @@ program: $(OBJ)
 	$(CC) $(CFLAGS) -c $<
 test:
 	./program --test
+interp:
+	./program --interp
+print:
+	./program --print
+pretty-print:
+	./program --pretty-print
 clean:
 	rm -rf *.o program
 doc:
