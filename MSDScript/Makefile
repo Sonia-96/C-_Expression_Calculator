@@ -9,6 +9,8 @@ program: $(OBJ)
 %.o: %.h
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $<
+run:
+	./program
 test:
 	./program --test
 interp:
