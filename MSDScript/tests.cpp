@@ -375,7 +375,6 @@ TEST_CASE("let") {
         CHECK(letBase2.to_pretty_string() == "_let x = 6\n_in  x + 1");
         // one nested let
         LetExpr let2("x", new NumExpr(5),&letBase2);
-        let2.to_pretty_string();
         CHECK(let2.to_pretty_string() == "_let x = 5\n"
                                          "_in  _let x = 6\n"
                                          "     _in  x + 1");
@@ -407,9 +406,9 @@ TEST_CASE("let") {
                                          "         _in  x + 1\n"
                                          "_in  x + 6");
         LetExpr let9("x", new AddExpr(&letBase1, new NumExpr(2)), new AddExpr("x", 6));
-        CHECK(let9.to_pretty_string() == "_let x = (_let x = 5\n"
+        CHECK(let9.to_pretty_string() == ("_let x = (_let x = 5\n"
                                          "          _in  x + 1) + 2\n"
-                                         "_in  x + 6");
+                                         "_in  x + 6"));
         AddExpr let10(new NumExpr(1), new MultExpr(new NumExpr(3), &letBase1));
         CHECK(let10.to_pretty_string() == "1 + 3 * _let x = 5\n"
                                           "        _in  x + 1");
@@ -445,13 +444,16 @@ TEST_CASE("parse") {
         CHECK(parse_str("-123")->equals(new NumExpr(-123)));
         CHECK(parse_str("     123")->equals(new NumExpr(123)));
         CHECK(parse_str("     123     ")->equals(new NumExpr(123)));
+        CHECK_THROWS_WITH(parse_str("12x"), "bad input");
     }
 
     SECTION("var") {
         CHECK(parse_str("ABc")->equals(new VarExpr("ABc")));
+        CHECK(parse_str("ABc   ")->equals(new VarExpr("ABc")));
         CHECK_THROWS_WITH(parse_str("abc+ "), "bad input");
         CHECK_THROWS_WITH(parse_str("abc* "), "bad input");
         CHECK_THROWS_WITH(parse_str("a2"), "invalid variable name");
+//        CHECK_THROWS_WITH(parse_str("x y"), "bad input"); TODO
     }
 
     SECTION("let + mult + add") {
@@ -501,6 +503,12 @@ TEST_CASE("parse") {
         // interp error
         std::string let7 = "_let x = y _in x + 1";
         CHECK_THROWS_WITH(parse_str(let7)->interp(), "A variable has no value!");
+
+        std::string let8 = "_let x = _let x = 5\n"
+                           "         _in  x + 1\n"
+                           "_in  x + 6";
+        LetExpr let8res("x", &letBase1, new AddExpr("x", 6));
+        CHECK(parse_str(let8)->equals(&let8res));
     }
 }
 

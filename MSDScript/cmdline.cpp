@@ -28,27 +28,11 @@ run_mode_t use_arguments(int argc, const char* argv[]) {
                 exit(1);
             }
         } else if (strcmp(argv[i], "--interp") == 0) {
-//            std::string line;
-//            while (getline(std::cin, line)) {
-//                std::istringstream in{line};
-//                Expr* expr = parse_expr(in);
-//                printf("Standard Expression: %s\n", expr->to_pretty_string().c_str());
-//                printf("Value: %d\n", expr->interp());
-//            }
             task = do_interp;
-            Expr* expr = parse_expr(std::cin);
-            printf("Value: %d\n", expr->interp());
-            exit(0);
         } else if (strcmp(argv[i], "--print") == 0) {
             task = do_print;
-            Expr* expr = parse_expr(std::cin);
-            printf("Standard Expression (print):\n%s\n", expr->to_string().c_str());
-            exit(0);
         } else if (strcmp(argv[i], "--pretty-print") == 0) {
-            task = do_print;
-            Expr* expr = parse_expr(std::cin);
-            printf("Standard Expression (pretty_print):\n%s\n", expr->to_pretty_string().c_str());
-            exit(0);
+            task = do_pretty_print;
         }
         else {
             std::cerr << argv[i] << " is an illegal argument!\n";

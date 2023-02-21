@@ -4,7 +4,6 @@
 
 #include "parser.h"
 #include <vector>
-#include <iostream>
 #include <set>
 
 // <expr> = <addend> | <addend> + <expr>
@@ -72,6 +71,10 @@ Expr* parse_num(std::istream& in) {
         consume(in, c);
         num = num * 10 + c - '0';
     }
+    std::set<char> ops = {'+', '*', '=', ')'};
+    if (c != -1 && !isspace(c) && ops.find(c) == ops.end()) {
+        throw std::runtime_error("bad input");
+    }
     if (negative) {
         num = - num;
     }
@@ -86,7 +89,7 @@ Expr* parse_var(std::istream& in) {
         consume(in, c);
         s.push_back(c);
     }
-    std::set<char> ops = {'+', '*', '=', '(', ')'};
+    std::set<char> ops = {'+', '*', '=', ')'};
     if (c != -1 && !isspace(c) && ops.find(c) == ops.end()) {
         throw std::runtime_error("invalid variable name");
     }
@@ -94,17 +97,18 @@ Expr* parse_var(std::istream& in) {
 }
 
 Expr* parse_let(std::istream& in) {
-    consume(in, "_let", "wrong format for let expression");
+    std::string errorMsg = "wrong format for let expression";
+    consume(in, "_let", errorMsg);
     Expr* temp = parse_var(in);
     VarExpr* var = dynamic_cast<VarExpr*>(temp);
     if (var == NULL) {
-        throw std::runtime_error("wrong format for let expression");
+        throw std::runtime_error(errorMsg);
     }
     skip_whitespace(in);
-    consume(in, '=', "wrong format for let expression");
+    consume(in, '=', errorMsg);
     Expr* rhs = parse_expr(in);
     skip_whitespace(in);
-    consume(in, "_in", "wrong format for let expression");
+    consume(in, "_in", errorMsg);
     Expr* body = parse_expr(in);
     return new LetExpr(var->getVal(), rhs, body);
 }
