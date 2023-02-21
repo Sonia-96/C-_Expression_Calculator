@@ -526,8 +526,7 @@ TEST_CASE("parse given tests") {
     CHECK( parse_str("-3")->equals(new NumExpr(-3)) );
     CHECK( parse_str("  \n 5  ")->equals(new NumExpr(5)) );
     CHECK_THROWS_WITH( parse_str("-"), "invalid input" );
-    CHECK(parse_str(" -   5  ")->equals(new NumExpr(-5)));
-//    CHECK_THROWS_WITH( parse_str(" -   5  "), "invalid input" );
+    CHECK_THROWS_WITH( parse_str(" -   5  "), "invalid input" );
 
     // variables
     CHECK( parse_str("x")->equals(new VarExpr("x")) );

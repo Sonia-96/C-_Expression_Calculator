@@ -67,7 +67,6 @@ Expr* parse_num(std::istream& in) {
         negative = true;
         consume(in, '-');
     }
-    skip_whitespace(in);
     if (!isdigit(in.peek())) {
         throw std::runtime_error("invalid input");
     }
