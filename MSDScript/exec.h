@@ -1,9 +1,5 @@
-//
-// Created by Yue Sun on 2/21/23.
-//
-
-#ifndef MSDSCRIPT_EXEC_H
-#define MSDSCRIPT_EXEC_H
+#ifndef exec_hpp
+#define exec_hpp
 
 #include <string>
 
@@ -12,8 +8,14 @@ public:
     int exit_code;
     std::string out;
     std::string err;
+
+    ExecResult() {
+        exit_code = 0;
+        out = "";
+        err = "";
+    }
 };
 
-ExecResult exec_program(int argc, const char** argv, std::string in);
+extern ExecResult exec_program(int argc, const char * const *argv, std::string input);
 
-#endif //MSDSCRIPT_EXEC_H
+#endif /* exec_hpp */

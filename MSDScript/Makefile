@@ -2,23 +2,27 @@ CC=c++
 CFLAGS=-std=c++11
 SRC=$(wildcard *.cpp)
 OBJ=$(patsubst %.cpp, %.o, $(SRC))
+MSD_OBJ=$(filter-out test_msdscript.o exec.o, $(OBJ))
+TEST_OBJ=$(filter-out main.o tests.o cmdline.o, $(OBJ))
 
-.PHONY: clean test doc open
-program: $(OBJ)
+.PHONY: clean test interp print pretty-print doc open
+msdscript: $(MSD_OBJ)
+	$(CC) $(CFLAGS) $^ -o $@
+test_msdscript:$(TEST_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 %.o: %.h
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $<
 run:
-	./program
+	./msdscript
 test:
-	./program --test
+	./msdscript --test
 interp:
-	./program --interp
+	./msdscript --interp
 print:
-	./program --print
+	./msdscript --print
 pretty-print:
-	./program --pretty-print
+	./msdscript --pretty-print
 clean:
 	rm -rf *.o program
 doc:
