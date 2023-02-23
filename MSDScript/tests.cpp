@@ -453,7 +453,8 @@ TEST_CASE("parse") {
         CHECK_THROWS_WITH(parse_str("abc+ "), "bad input");
         CHECK_THROWS_WITH(parse_str("abc* "), "bad input");
         CHECK_THROWS_WITH(parse_str("a2"), "invalid variable name");
-//        CHECK_THROWS_WITH(parse_str("x y"), "bad input"); TODO
+        CHECK_THROWS_WITH(parse_str("x y"), "bad input");  // TODO
+        CHECK_THROWS_WITH(parse_str("1 y"), "bad input");
     }
 
     SECTION("let + mult + add") {
@@ -525,8 +526,7 @@ TEST_CASE("parse given tests") {
     CHECK( parse_str("-3")->equals(new NumExpr(-3)) );
     CHECK( parse_str("  \n 5  ")->equals(new NumExpr(5)) );
     CHECK_THROWS_WITH( parse_str("-"), "invalid input" );
-    CHECK(parse_str(" -   5  ")->equals(new NumExpr(-5)));
-//    CHECK_THROWS_WITH( parse_str(" -   5  "), "invalid input" );
+    CHECK_THROWS_WITH( parse_str(" -   5  "), "invalid input" );
 
     // variables
     CHECK( parse_str("x")->equals(new VarExpr("x")) );
@@ -535,6 +535,7 @@ TEST_CASE("parse given tests") {
     CHECK_THROWS_WITH( parse_str("x_z"), "invalid variable name" );
 
     // add & mult expressions
+    parse_str("x + y");
     CHECK( parse_str("x + y")->equals(new AddExpr(new VarExpr("x"), new VarExpr("y"))) );
     CHECK( parse_str("x * y")->equals(new MultExpr(new VarExpr("x"), new VarExpr("y"))) );
     CHECK( parse_str("z * x + y")->equals(new AddExpr(new MultExpr("z", "x"),new VarExpr("y"))));

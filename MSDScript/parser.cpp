@@ -31,6 +31,10 @@ Expr* parse_addend(std::istream& in) {
         Expr* rhs = parse_addend(in);
         return new MultExpr(lhs, rhs);
     }
+    std::set<char> ops = {'+', '*', '=', ')', '_'}; // handle "<expr> <expr>" error
+    if (c != -1 && ops.find(c) == ops.end()) {
+        throw std::runtime_error("bad input");
+    }
     return lhs;
 }
 
@@ -63,7 +67,6 @@ Expr* parse_num(std::istream& in) {
         negative = true;
         consume(in, '-');
     }
-    skip_whitespace(in);
     if (!isdigit(in.peek())) {
         throw std::runtime_error("invalid input");
     }
@@ -72,10 +75,11 @@ Expr* parse_num(std::istream& in) {
         consume(in, c);
         num = num * 10 + c - '0';
     }
-    std::set<char> ops = {'+', '*', '=', ')'};
-    if (c != -1 && !isspace(c) && ops.find(c) == ops.end()) {
-        throw std::runtime_error("bad input");
-    }
+    // TODO this is not necessary
+//    std::set<char> ops = {'+', '*', '=', ')'};
+//    if (c != -1 && !isspace(c) && ops.find(c) == ops.end()) {
+//        throw std::runtime_error("bad input");
+//    }
     if (negative) {
         num = - num;
     }
