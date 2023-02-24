@@ -5,7 +5,7 @@
 #include "expr_gen.h"
 
 std::string expr_gen::random_expr_string()  {
-    return exprGenerator()->to_pretty_string();
+    return exprGenerator()->to_string();
 }
 
 Expr* expr_gen::exprGenerator() {
@@ -14,23 +14,18 @@ Expr* expr_gen::exprGenerator() {
 
 Expr* expr_gen::exprGenerator(std::string var) {
     int n = rand() % 10;
-    if (n < 6) {
+    if (n < 6) { // 60% - numbers
         return numExprGenerator();
     }
-    if (n < 9) {
+    if (n < 9) { // 15% - add, 15% - mult
         return addOrMultExprGenerator(var);
     }
-    return letExprGenerator();
+    return letExprGenerator(var); // 10% - let
 }
 
 Expr* expr_gen::addOrMultExprGenerator(std::string var) {
-    Expr* expr1;
-    if (!var.empty()) {
-        expr1 = new VarExpr(var);
-    } else {
-        expr1 = exprGenerator();
-    }
-    Expr* expr2 = exprGenerator();
+    Expr* expr1 = exprGenerator(var);
+    Expr* expr2 = exprGenerator(var);
     // put variable on either side
     Expr* lhs;
     Expr* rhs;
@@ -46,19 +41,19 @@ Expr* expr_gen::addOrMultExprGenerator(std::string var) {
     return new MultExpr(lhs, rhs);
 }
 
-LetExpr* expr_gen::letExprGenerator() {
-    std::string var = varExprGenerator()->getVal();
-    Expr* lhs = exprGenerator();
-    int n = rand() % 10;
-    Expr* rhs;
-    if (n < 6) { // 80% - same var name
-        rhs = exprGenerator(var);
-    } else if (n < 9) {
-        rhs = exprGenerator(); // 20% - just numbers
-    } else { // 10% - new var name (will trigger an error in interp)
-        rhs = exprGenerator(varExprGenerator()->getVal()); // different var name, will trigger an error in interp
+LetExpr* expr_gen::letExprGenerator(std::string var) {
+    if (var.empty()) {
+        var = varExprGenerator()->getVal();
     }
-    return new LetExpr(var, lhs, rhs);
+    Expr* rhs = exprGenerator();
+    int n = rand() % 10;
+    Expr* body;
+    if (n < 6) { // 80% - same var name
+        body = exprGenerator(var);
+    } else { // 20% - new var name (might trigger an error in interp)
+        body = exprGenerator(varExprGenerator()->getVal()); // different var name, will trigger an error in interp
+    }
+    return new LetExpr(var, rhs, body);
 }
 
 NumExpr* expr_gen::numExprGenerator() {
@@ -77,9 +72,9 @@ VarExpr* expr_gen::varExprGenerator() {
 char expr_gen::alphaGenerator() {
     int n = rand();
     if (n & 1) { // upper case
-        n = 65 + n % 26;
+        n = 'A' + n % 26;
     } else { // lower case
-        n = 97 + n % 26;
+        n = 'a' + n % 26;
     }
     return n;
 }

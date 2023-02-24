@@ -35,7 +35,7 @@ void testAddOrMult() {
 
 void testLet() {
     for (int i = 0; i < ITERATION; i++) {
-        Expr* expr = expr_gen::letExprGenerator();
+        Expr* expr = expr_gen::letExprGenerator("");
         std::cout << expr->to_pretty_string() << std::endl;
     }
 }
