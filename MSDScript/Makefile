@@ -11,7 +11,7 @@ msdscript: $(MSD_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 test_msdscript:$(TEST_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
-test_gen:$(GEN_OBJ)
+test_generator:$(GEN_OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 %.o: %.h
 %.o: %.cpp
@@ -27,7 +27,7 @@ print:
 pretty-print:
 	./msdscript --pretty-print
 clean:
-	rm -rf *.o program
+	rm -rf *.o msdscript test_msdscript test_generator
 doc:
 	cd documentation && doxygen
 open_doc:
