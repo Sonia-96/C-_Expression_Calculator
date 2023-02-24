@@ -5,5 +5,6 @@
 #include "expr_gen_test.h"
 
 int main(int argc, const char * argv[]) {
-    testAll();
+//    testAll();
+    testExpr();
 }

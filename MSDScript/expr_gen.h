@@ -16,7 +16,7 @@ public:
     static Expr* exprGenerator();
     static Expr* exprGenerator(std::string var);
     static Expr* addOrMultExprGenerator(std::string var);
-    static LetExpr* letExprGenerator();
+    static LetExpr* letExprGenerator(std::string var);
     static NumExpr* numExprGenerator();
     static VarExpr* varExprGenerator();
 };

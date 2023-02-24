@@ -9,10 +9,16 @@
 #define ITERATION 100
 
 void testExecutables();
+void testArgs(int argc, const char* argv[]);
 void printTestResult(const char* name, const char* modes[], double rate[]);
 
 
 int main(int argc, const char * argv[]) {
+//    testExecutables();
+    testArgs(argc, argv);
+}
+
+void testArgs(int argc, const char* argv[]) {
     const char* modes[] = {"--interp", "--print", "--pretty-print"};
     const char* expected_args[2];
     const char* actual_args[2];
@@ -59,7 +65,7 @@ void testExecutables() {
         strcat(buff, std::to_string(i).c_str());
         args2[0] = buff;
         double passRates[3];
-        for (int j = 0; j < 2; j++) {
+        for (int j = 0; j < 3; j++) {
             args1[1] = modes[j];
             args2[1] = modes[j];
 //            std::cout << args1[0] << " " << args1[1] << "\n";
@@ -73,7 +79,7 @@ void testExecutables() {
                     failCount++;
                 }
             }
-            passRates[j] = (100.0 - failCount) / 100;
+            passRates[j] = (ITERATION + 0.0 - failCount) / ITERATION;
         }
         printTestResult(args2[0], modes, passRates);
     }
