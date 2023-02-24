@@ -453,7 +453,7 @@ TEST_CASE("parse") {
         CHECK_THROWS_WITH(parse_str("abc+ "), "bad input");
         CHECK_THROWS_WITH(parse_str("abc* "), "bad input");
         CHECK_THROWS_WITH(parse_str("a2"), "invalid variable name");
-        CHECK_THROWS_WITH(parse_str("x y"), "bad input");  // TODO
+        CHECK_THROWS_WITH(parse_str("x y"), "bad input");
         CHECK_THROWS_WITH(parse_str("1 y"), "bad input");
     }
 
@@ -510,6 +510,13 @@ TEST_CASE("parse") {
                            "_in  x + 6";
         LetExpr let8res("x", &letBase1, new AddExpr("x", 6));
         CHECK(parse_str(let8)->equals(&let8res));
+
+        // this case is from my test generator!!
+        std::string let9 = "(_let FPsk = _let uDiak = 316958877\n"
+                           "             _in  1733846665 * P\n"
+                           " _in  1735924491) * 1996497710";
+        Expr* expr = parse_str(let9);
+        CHECK_THROWS_WITH(parse_str(let9)->interp(), "A variable has no value!");
     }
 }
 
