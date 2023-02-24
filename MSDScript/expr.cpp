@@ -499,10 +499,9 @@ bool LetExpr::equals(Expr* expr) {
  * @return the int value of the its body after substitute the variable with rhs
  */
 int LetExpr::interp() {
-    // TODO maybe this will not work in some cases?
-//    NumExpr* num = new NumExpr(rhs->interp());
-//    return body->subst(variable, num)->interp();
-    return body->subst(variable, rhs)->interp();
+    NumExpr* num = new NumExpr(rhs->interp());
+    return body->subst(variable, num)->interp();
+//    return body->subst(variable, rhs)->interp(); not correct
 }
 
 /**

@@ -2,8 +2,8 @@ CC=c++
 CFLAGS=-std=c++11
 SRC=$(wildcard *.cpp)
 OBJ=$(patsubst %.cpp, %.o, $(SRC))
-MSD_OBJ=$(filter-out test_msdscript.o exec.o, $(OBJ))
-TEST_OBJ=$(filter-out main.o tests.o cmdline.o, $(OBJ))
+MSD_OBJ=main.o expr.o parser.o tests.o cmdline.o
+TEST_OBJ=fuzzTest.o expr_gen.o exec.o expr.o
 
 .PHONY: clean test interp print pretty-print doc open
 msdscript: $(MSD_OBJ)
