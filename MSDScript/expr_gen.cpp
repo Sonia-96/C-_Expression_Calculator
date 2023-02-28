@@ -24,16 +24,8 @@ Expr* expr_gen::exprGenerator(std::string var) {
 }
 
 Expr* expr_gen::addOrMultExprGenerator(std::string var) {
-    Expr* expr1 = exprGenerator(var);
-    Expr* expr2 = exprGenerator(var);
-    // put variable on either side
-    Expr* lhs;
-    Expr* rhs;
-    if (rand() & 1) {
-        lhs = expr1, rhs = expr2;
-    } else {
-        lhs = expr2, rhs = expr1;
-    }
+    Expr* lhs = exprGenerator(var);
+    Expr* rhs = exprGenerator(var);
     // generate add or mult
     if (rand() & 1) {
         return new AddExpr(lhs, rhs);
@@ -45,7 +37,7 @@ LetExpr* expr_gen::letExprGenerator(std::string var) {
     if (var.empty()) {
         var = varExprGenerator()->getVal();
     }
-    Expr* rhs = exprGenerator();
+    Expr* rhs = exprGenerator(var);
     int n = rand() % 10;
     Expr* body;
     if (n < 6) { // 80% - same var name

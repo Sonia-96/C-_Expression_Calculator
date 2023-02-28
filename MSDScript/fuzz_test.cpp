@@ -36,7 +36,7 @@ void testArgs(int argc, const char* argv[]) {
             }
         }
     } else {
-        const char* modes[] = {"--pretty-print", "--interp", "--print", };
+        const char* modes[] = {"--interp", "--print", "--pretty-print"};
         const char* expected_args[2];
         const char* actual_args[2];
         expected_args[0] = argv[1];
