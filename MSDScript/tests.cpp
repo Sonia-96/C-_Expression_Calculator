@@ -515,7 +515,6 @@ TEST_CASE("parse") {
         std::string let9 = "(_let FPsk = _let uDiak = 316958877\n"
                            "             _in  1733846665 * P\n"
                            " _in  1735924491) * 1996497710";
-        Expr* expr = parse_str(let9);
         CHECK_THROWS_WITH(parse_str(let9)->interp(), "A variable has no value!");
     }
 }

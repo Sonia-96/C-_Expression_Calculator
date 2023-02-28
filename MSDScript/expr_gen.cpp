@@ -57,7 +57,7 @@ LetExpr* expr_gen::letExprGenerator(std::string var) {
 }
 
 NumExpr* expr_gen::numExprGenerator() {
-    return new NumExpr(rand());
+    return new NumExpr(rand() % 100000 - 50000);
 }
 
 VarExpr* expr_gen::varExprGenerator() {

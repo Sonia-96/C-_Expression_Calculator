@@ -5,7 +5,6 @@
 #include "parser.h"
 #include <vector>
 #include <set>
-#include <iostream>
 
 // <expr> = <addend> | <addend> + <expr>
 Expr* parse_expr(std::istream& in) {

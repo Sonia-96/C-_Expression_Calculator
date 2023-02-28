@@ -11,6 +11,7 @@
 void testExecutables();
 void testArgs(int argc, const char* argv[]);
 void printTestResult(const char* name, const char* modes[], double rate[]);
+int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
 
 
 int main(int argc, const char * argv[]) {
@@ -19,34 +20,40 @@ int main(int argc, const char * argv[]) {
 }
 
 void testArgs(int argc, const char* argv[]) {
-    const char* modes[] = {"--interp", "--print", "--pretty-print"};
-    const char* expected_args[2];
-    const char* actual_args[2];
+    srand(clock());
     if (argc == 2) {
-        expected_args[0] = "msdscript";
-        actual_args[0] = argv[1];
+        for (int i = 0; i < ITERATION; i++) {
+            const char* interp_args[] = {argv[1], "--interp"};
+            const char* print_args[] = {argv[1], "--print"};
+            Expr* expr = expr_gen::exprGenerator();
+            std::string in = expr->to_pretty_string();
+            printf("Trying:\n%s \n", in.c_str());
+            ExecResult interp_result = exec_program(2, interp_args, in);
+            ExecResult print_result = exec_program(2, print_args, in);
+            ExecResult interp_result_2 = exec_program(2, interp_args, print_result.out);
+            if (checkResult(interp_result, interp_result_2, "interp", "print") > 0) {
+                exit(1);
+            }
+        }
     } else {
+        const char* modes[] = {"--pretty-print", "--interp", "--print", };
+        const char* expected_args[2];
+        const char* actual_args[2];
         expected_args[0] = argv[1];
         actual_args[0] = argv[2];
-    }
-    srand(clock());
-    for (int j = 0; j < 3; j++) {
-        printf("================================%s================================\n", modes[j]);
-        expected_args[1] = modes[j];
-        actual_args[1] = modes[j];
-        for (int i = 0; i < ITERATION; i++) {
-            std::string in = expr_gen::random_expr_string();
-            printf("Trying:\n%s \n", in.c_str());
-
-            ExecResult expected_res = exec_program(2, expected_args, in);
-            ExecResult actual_res = exec_program(2, actual_args, in);
-            if (expected_res.out != actual_res.out) {
-                printf("%s:\n %s\n", expected_args[0], expected_res.out.c_str());
-                printf("%s:\n %s\n", actual_args[0], actual_res.out.c_str());
-                std::cout << "\n";
-                throw std::runtime_error("Different result!\n");
-            } else {
-                std::cout << ">>> Test passed!\n";
+        for (int j = 0; j < 3; j++) {
+            printf("================================%s================================\n", modes[j]);
+            expected_args[1] = modes[j];
+            actual_args[1] = modes[j];
+            for (int i = 0; i < ITERATION; i++) {
+                Expr* expr = expr_gen::exprGenerator();
+                std::string in = expr->to_string();
+                printf("Trying:\n%s \n", in.c_str());
+                ExecResult expected_res = exec_program(2, expected_args, in);
+                ExecResult actual_res = exec_program(2, actual_args, in);
+                if (checkResult(expected_res, actual_res, expected_args[0], actual_args[0]) > 0) {
+                    exit(1);
+                }
             }
         }
     }
@@ -68,8 +75,6 @@ void testExecutables() {
         for (int j = 0; j < 3; j++) {
             args1[1] = modes[j];
             args2[1] = modes[j];
-//            std::cout << args1[0] << " " << args1[1] << "\n";
-//            std::cout << args2[0] << " " << args2[1] << "\n";
             int failCount = 0;
             for (int k = 0; k < ITERATION; k++) {
                 std::string in = expr_gen::random_expr_string();
@@ -89,5 +94,24 @@ void printTestResult(const char* name, const char* modes[], double rate[]) {
     printf(">>>%s\n", name);
     for (int i = 0; i < 3; i++) {
         printf("%s: %.0f%%\n", modes[i], rate[i] * 100);
+    }
+}
+
+int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2) {
+    if (expectedRes.exit_code == 0 && actualRes.exit_code == 0) {
+        if (expectedRes.out != actualRes.out) {
+            printf("%s:\n%s\n", name1.c_str(), expectedRes.out.c_str());
+            printf("%s:\n%s\n", name2.c_str(), actualRes.out.c_str());
+            std::cout << "\n";
+            throw std::runtime_error("Different result!\n");
+        } else {
+            std::cout << ">>> Test passed!\n";
+            return 0;
+        }
+    } else {
+        std::cout << "Failed test!\n";
+        printf("%s: %d, %s\n", name1.c_str(), expectedRes.exit_code, expectedRes.err.c_str());
+        printf("%s: %d, %s\n", name2.c_str(), actualRes.exit_code, actualRes.err.c_str());
+        return 1;
     }
 }
