@@ -554,8 +554,13 @@ TEST_CASE("parse given tests") {
 TEST_CASE("NumVal") {
 
     SECTION("equals") {
-        CHECK(!NumExpr(1).interp()->equals(nullptr));
+        CHECK(NumVal(1).equals(new NumVal(1)));
+        CHECK(!NumVal(1).equals(nullptr));
         CHECK(AddExpr(2, 3).interp()->equals(new NumVal(5)));
+    }
+
+    SECTION("to_expr") {
+        CHECK(NumVal(1).to_expr()->equals(new NumExpr(1)));
     }
 
     SECTION("add_to") {
@@ -572,5 +577,65 @@ TEST_CASE("NumVal") {
 
     SECTION("to_string") {
         CHECK(NumVal(120).to_string() == "120");
+    }
+}
+
+TEST_CASE("BoolVal") {
+
+    SECTION("equals") {
+        CHECK(BoolVal(true).equals(new BoolVal(true)));
+        CHECK(!BoolVal(false).equals(new BoolVal(true)));
+        CHECK(!BoolVal(true).equals(new NumVal(1)));
+    }
+
+    SECTION("to_expr") {
+        CHECK(BoolVal(true).to_expr()->equals(new BoolExpr(true)));
+        CHECK(BoolVal(false).to_expr()->equals(new BoolExpr(false)));
+    }
+
+    SECTION("add_to") {
+        CHECK_THROWS_WITH(BoolVal(true).add_to(new NumVal(1)), "add of non-number");
+    }
+
+    SECTION("mult_with") {
+        CHECK_THROWS_WITH(BoolVal(3).mult_with(nullptr), "multiply with non-number");
+    }
+
+    SECTION("to_string") {
+        CHECK(BoolVal(true).to_string() == "_true");
+        CHECK(BoolVal(false).to_string() == "_false");
+    }
+}
+
+TEST_CASE("BoolExpr") {
+    SECTION("equals") {
+        CHECK(!BoolExpr(true).equals(new BoolExpr(false)));
+        CHECK(BoolExpr(true).equals(new BoolExpr(true)));
+        CHECK(!BoolExpr(true).equals(new NumExpr(3)));
+    }
+
+    SECTION("interp") {
+        CHECK(BoolExpr(true).interp()->equals(new BoolVal(true)));
+        CHECK(BoolExpr(false).interp()->equals(new BoolVal(false)));
+        CHECK(!BoolExpr(true).interp()->equals(new BoolVal(false)));
+        CHECK(!BoolExpr(true).interp()->equals(new NumVal(3)));
+    }
+
+    SECTION("has_variable") {
+        CHECK(!BoolExpr(true).has_variable());
+    }
+
+    SECTION("subst") {
+        CHECK(BoolExpr(true).subst("x", new NumExpr(1))->equals(new BoolExpr(true)));
+    }
+
+    SECTION("print") {
+        CHECK(BoolExpr(true).to_string() == "_true");
+        CHECK(BoolExpr(false).to_string() == "_false");
+    }
+
+    SECTION("pretty_print") {
+        CHECK(BoolExpr(true).to_pretty_string() == "_true");
+        CHECK(BoolExpr(false).to_pretty_string() == "_false");
     }
 }

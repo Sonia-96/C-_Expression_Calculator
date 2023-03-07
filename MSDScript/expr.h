@@ -44,12 +44,12 @@ private:
     int val;
 public:
     NumExpr(int v);
-    bool equals(Expr* expr);
-    Val* interp();
-    bool has_variable();
-    Expr* subst(std::string s, Expr* expr);
-    void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    bool equals(Expr* expr) override;
+    Val* interp() override;
+    bool has_variable() override;
+    Expr* subst(std::string s, Expr* expr) override;
+    void print(std::ostream& out) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
 };
 
 /** \brief
@@ -121,12 +121,25 @@ private:
     Expr* body;
 public:
     LetExpr(std::string v, Expr* r, Expr* b);
-    bool equals(Expr* expr);
-    Val* interp();
-    bool has_variable();
-    Expr* subst(std::string s, Expr* expr);
-    void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    bool equals(Expr* expr) override;
+    Val* interp() override;
+    bool has_variable() override;
+    Expr* subst(std::string s, Expr* expr) override;
+    void print(std::ostream& out) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+};
+
+class BoolExpr : public Expr {
+private:
+    bool val;
+public:
+    BoolExpr(bool v);
+    bool equals(Expr* rhs) override;
+    Val* interp() override;
+    bool has_variable() override;
+    Expr* subst(std::string s, Expr* expr) override;
+    void print(std::ostream& out) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
 };
 
 

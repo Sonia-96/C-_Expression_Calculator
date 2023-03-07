@@ -23,11 +23,23 @@ private:
     int val;
 public:
     NumVal(int v);
-    Expr * to_expr();
-    bool equals(Val* rhs);
-    Val* add_to(Val* rhs);
-    Val* mult_with(Val* rhs);
-    std::string to_string();
+    Expr * to_expr() override;
+    bool equals(Val* rhs) override;
+    Val* add_to(Val* rhs) override;
+    Val* mult_with(Val* rhs) override;
+    std::string to_string() override;
+};
+
+class BoolVal : public Val {
+private:
+    bool val;
+public:
+    BoolVal(bool v);
+    Expr* to_expr() override;
+    bool equals(Val* rhs) override;
+    Val* add_to(Val* rhs) override;
+    Val* mult_with(Val* rhs) override;
+    std::string to_string() override;
 };
 
 #endif //MSDSCRIPT_VAL_H

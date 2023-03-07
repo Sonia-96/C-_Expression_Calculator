@@ -62,7 +62,7 @@ NumExpr::NumExpr(int v) {
  */
 bool NumExpr::equals(Expr* expr) {
     NumExpr *n = dynamic_cast<NumExpr*>(expr);
-    if (n == NULL) {
+    if (n == nullptr) {
         return false;
     }
     return val == n->val;
@@ -91,7 +91,7 @@ bool NumExpr::has_variable() {
  * @return a new NumExpr object with the same value as this object
  */
 Expr* NumExpr::subst(std::string s, Expr *expr) {
-    return new NumExpr(val);
+    return this;
 }
 
 /**
@@ -442,7 +442,7 @@ Expr* VarExpr::subst(std::string s, Expr* expr) {
     if (val == s) {
         return expr;
     }
-    return new VarExpr(val);
+    return this;
 }
 
 /**
@@ -489,7 +489,7 @@ LetExpr::LetExpr(std::string v, Expr* r, Expr* b) {
  */
 bool LetExpr::equals(Expr* expr) {
     LetExpr* other = dynamic_cast<LetExpr*>(expr);
-    if (other == NULL) {
+    if (other == nullptr) {
         return false;
     }
     return variable == other->variable && rhs->equals(other->rhs) && body->equals(other->body);
@@ -573,4 +573,41 @@ void LetExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::s
     if (addParenthesesToLet) {
         out << ")";
     }
+}
+
+  ///////////////////////////////////////////
+ //               BoolExpr                //
+///////////////////////////////////////////
+
+BoolExpr::BoolExpr(bool v) {
+    val = v;
+}
+
+bool BoolExpr::equals(Expr* rhs) {
+    BoolExpr* other = dynamic_cast<BoolExpr*>(rhs);
+    if (other == nullptr) {
+        return false;
+    }
+    return val == other->val;
+}
+
+Val* BoolExpr::interp() {
+    return new BoolVal(val);
+}
+
+
+bool BoolExpr::has_variable() {
+    return false;
+}
+
+Expr* BoolExpr::subst(std::string s, Expr* expr) {
+    return this; // TODO is this right?
+}
+
+void BoolExpr::print(std::ostream& out) {
+    val ? out << "_true" : out << "_false";
+}
+
+void BoolExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
+    val ? out << "_true" : out << "_false";
 }
