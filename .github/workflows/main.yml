@@ -8,6 +8,6 @@ jobs:
       - name: Checkout v1
         uses: actions/checkout@v1
       - name: make executable
-        run: cd MSDScript && make program
+        run: cd MSDScript && make msdscript
       - name: run test 
         run: cd MSDScript && make test
