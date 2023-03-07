@@ -516,6 +516,10 @@ TEST_CASE("parse") {
                            "             _in  1733846665 * P\n"
                            " _in  1735924491) * 1996497710";
         CHECK_THROWS_WITH(parse_str(let9)->interp(), "A variable has no value!");
+
+        std::string let10 = "_let 1 = 2 _in 3";
+        CHECK_THROWS_WITH(parse_str(let10), "invalid variable name");
+
     }
 }
 
@@ -564,5 +568,9 @@ TEST_CASE("NumVal") {
         CHECK(NumVal(3).mult_with(new NumVal(2))->equals(new NumVal(6)));
         CHECK(NumVal(3).mult_with(new NumVal(2))->mult_with(new NumVal(-1))->equals(new NumVal(-6)));
         CHECK_THROWS_WITH(NumVal(3).mult_with(nullptr), "multiply with non-number");
+    }
+
+    SECTION("to_string") {
+        CHECK(NumVal(120).to_string() == "120");
     }
 }
