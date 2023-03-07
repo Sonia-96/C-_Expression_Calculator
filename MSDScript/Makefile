@@ -1,8 +1,8 @@
 CC=c++
-CFLAGS=-std=c++11
+CFLAGS=-std=c++14
 #SRC=$(wildcard *.cpp)
 #OBJ=$(patsubst %.cpp, %.o, $(SRC))
-MSD_OBJ=main.o expr.o parser.o tests.o cmdline.o
+MSD_OBJ=main.o expr.o parser.o tests.o cmdline.o val.o
 TEST_OBJ=fuzz_test.o expr_gen.o exec.o expr.o
 GEN_OBJ=test_expr_gen.o expr_gen.o expr_gen_test.o expr.o
 

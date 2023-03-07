@@ -7,7 +7,7 @@
 #include "catch.h"
 #include "expr.h"
 #include "parser.h"
-#include <iostream>
+#include "val.h"
 
 TEST_CASE("Equals") {
     SECTION("NumExpr") {
@@ -89,41 +89,41 @@ TEST_CASE("Equals") {
 
 TEST_CASE("Interp") {
     SECTION("NumExpr") {
-        CHECK((new NumExpr(0)) -> interp() == 0);
-        CHECK((new NumExpr(-100))-> interp() == -100);
+        CHECK((new NumExpr(0))->interp()->equals(new NumVal(0)));
+        CHECK((new NumExpr(-100))->interp()->equals(new NumVal(-100)));
     }
 
     SECTION("Add_simple") {
-        CHECK((new AddExpr(1, 3)) -> interp() == 4);
-        CHECK((new AddExpr(-2019, 5072)) -> interp() == 3053);
-        CHECK((new AddExpr(new NumExpr(57), new AddExpr(3, -800))) -> interp() == -740);
+        CHECK((new AddExpr(1, 3))->interp()->equals(new NumVal(4)));
+        CHECK((new AddExpr(-2019, 5072))->interp()->equals(new NumVal(3053)));
+        CHECK((new AddExpr(new NumExpr(57), new AddExpr(3, -800)))->interp()->equals(new NumVal(-740)));
     }
 
     SECTION("Add_nested") {
         AddExpr add1(new AddExpr(1, 9), new MultExpr(2, 50));
         AddExpr add2(new AddExpr(-31000, 19), new AddExpr(20, 61));
         AddExpr add3(new AddExpr(1010, 2), new MultExpr(0, 10000));
-        CHECK(add1.interp() == 110);
-        CHECK(add2.interp() == -30900);
-        CHECK(add3.interp() == 1012);
+        CHECK(add1.interp()->equals(new NumVal(110)));
+        CHECK(add2.interp()->equals(new NumVal(-30900)));
+        CHECK(add3.interp()->equals(new NumVal(1012)));
     }
 
     SECTION("Mult_simple") {
         MultExpr mult1(-3, 2);
         MultExpr mult2(-1034, -730);
         MultExpr mult3(12345678, 0);
-        CHECK(mult1.interp() == -6);
-        CHECK(mult2.interp() == 754820);
-        CHECK(mult3.interp() == 0);
+        CHECK(mult1.interp()->equals(new NumVal(-6)));
+        CHECK(mult2.interp()->equals(new NumVal(754820)));
+        CHECK(mult3.interp()->equals(new NumVal(0)));
     }
 
     SECTION("Mult_nested") {
         MultExpr mult1(new AddExpr(2, 3), new MultExpr(4, 5));
         MultExpr mult2(new MultExpr(-5, 10), new MultExpr(-300, 20));
         MultExpr mult3(new MultExpr(2, 6), new AddExpr(1, -9));
-        CHECK(mult1.interp() == 100);
-        CHECK(mult2.interp() == 300000);
-        CHECK(mult3.interp() == -96);
+        CHECK(mult1.interp()->equals(new NumVal(100)));
+        CHECK(mult2.interp()->equals(new NumVal(300000)));
+        CHECK(mult3.interp()->equals(new NumVal(-96)));
     }
 
     SECTION("Variable") {
@@ -221,9 +221,9 @@ TEST_CASE("subst") {
 
 TEST_CASE("Interpt + Subst") {
     AddExpr add1(new AddExpr(1, 5), new AddExpr("a", 9));
-    CHECK(add1.subst("a", new NumExpr(100)) -> interp() == 115);
+    CHECK(add1.subst("a", new NumExpr(100))->interp()->equals(new NumVal(115)));
     MultExpr mult1(new AddExpr(1, 5), new AddExpr("a", 9));
-    CHECK(mult1.subst("a", new NumExpr(100)) -> interp() == 654);
+    CHECK(mult1.subst("a", new NumExpr(100))->interp()->equals(new NumVal(654)));
 
 };
 
@@ -326,27 +326,27 @@ TEST_CASE("let") {
     }
 
     SECTION("subst + interp") {
-        CHECK(letBase1.interp() == 6);
-        CHECK(letBase2.interp() == 7);
+        CHECK(letBase1.interp()->equals(new NumVal(6)));
+        CHECK(letBase2.interp()->equals(new NumVal(7)));
         LetExpr let1("x", new AddExpr(5, 2), new MultExpr("x", 3));
-        CHECK(let1.interp() == 21);
+        CHECK(let1.interp()->equals(new NumVal(21)));
         LetExpr let2("x", new AddExpr(5, 2), new AddExpr("x", 1));
-        CHECK(let2.interp() == 8);
+        CHECK(let2.interp()->equals(new NumVal(8)));
         LetExpr let3("x", new NumExpr(5), new LetExpr("x", new NumExpr(6), new AddExpr("x", 1)));
-        CHECK(let3.interp() == 7);
+        CHECK(let3.interp()->equals(new NumVal(7)));
         LetExpr let4("x", new NumExpr(5), new LetExpr("y", new NumExpr(6), new AddExpr("x", 1)));
-        CHECK(let4.interp() == 6);
+        CHECK(let4.interp()->equals(new NumVal(6)));
         LetExpr let5("x", new AddExpr(2, 5), new LetExpr("x", new AddExpr("x", -13), new AddExpr("x", 1)));
-        CHECK(let5.interp() == -5);
+        CHECK(let5.interp()->equals(new NumVal(-5)));
         LetExpr let6("x", new AddExpr(-1, -6), new LetExpr("x", new AddExpr(-3, 2), new AddExpr("x", 3)));
-        CHECK(let6.interp() == 2);
+        CHECK(let6.interp()->equals(new NumVal(2)));
         LetExpr let2Nested("x", new NumExpr(5), new LetExpr("y", new NumExpr(8), new AddExpr("x", "y")));
-        CHECK(let2Nested.interp() == 13);
+        CHECK(let2Nested.interp()->equals(new NumVal(13)));
         LetExpr let3Nested("x", new NumExpr(1), new LetExpr("y", new NumExpr(2), new LetExpr("z", new NumExpr(3), new AddExpr(new VarExpr("x"), new AddExpr("y", "z")))));
-        CHECK(let3Nested.interp() == 6);
+        CHECK(let3Nested.interp()->equals(new NumVal(6)));
         LetExpr let3Nested2("x", new NumExpr(1), new LetExpr("y", new AddExpr("x", 1), new LetExpr("z", new AddExpr("y", 1), new AddExpr(new VarExpr("x"), new AddExpr("y", "z")))));
         let3Nested2.interp();
-        CHECK(let3Nested2.interp() == 6);
+        CHECK(let3Nested2.interp()->equals(new NumVal(6)));
         LetExpr letError("x", new AddExpr("y", 2), new AddExpr("x", 1));
         CHECK_THROWS_WITH(letError.interp(), "A variable has no value!");
     }
@@ -541,9 +541,28 @@ TEST_CASE("parse given tests") {
     CHECK_THROWS_WITH( parse_str("x_z"), "invalid variable name" );
 
     // add & mult expressions
-    parse_str("x + y");
     CHECK( parse_str("x + y")->equals(new AddExpr(new VarExpr("x"), new VarExpr("y"))) );
     CHECK( parse_str("x * y")->equals(new MultExpr(new VarExpr("x"), new VarExpr("y"))) );
     CHECK( parse_str("z * x + y")->equals(new AddExpr(new MultExpr("z", "x"),new VarExpr("y"))));
     CHECK( parse_str("z * (x + y)")->equals(new MultExpr(new VarExpr("z"),new AddExpr("x", "y"))));
+}
+
+TEST_CASE("NumVal") {
+
+    SECTION("equals") {
+        CHECK(!NumExpr(1).interp()->equals(nullptr));
+        CHECK(AddExpr(2, 3).interp()->equals(new NumVal(5)));
+    }
+
+    SECTION("add_to") {
+        CHECK(NumVal(3).add_to(new NumVal(2))->equals(new NumVal(5)));
+        CHECK(NumVal(3).add_to(new NumVal(2))->add_to(new NumVal(-1))->equals(new NumVal(4)));
+        CHECK_THROWS_WITH(NumVal(3).add_to(nullptr), "add of non-number");
+    }
+
+    SECTION("mult_with") {
+        CHECK(NumVal(3).mult_with(new NumVal(2))->equals(new NumVal(6)));
+        CHECK(NumVal(3).mult_with(new NumVal(2))->mult_with(new NumVal(-1))->equals(new NumVal(-6)));
+        CHECK_THROWS_WITH(NumVal(3).mult_with(nullptr), "multiply with non-number");
+    }
 }
