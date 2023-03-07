@@ -6,6 +6,7 @@
 //
 
 #include <sstream>
+#include "val.h"
 #include "expr.h"
 
 ////////////////////////////////////////////
@@ -64,15 +65,15 @@ bool NumExpr::equals(Expr* expr) {
     if (n == NULL) {
         return false;
     }
-    return val == n -> val;
+    return val == n->val;
 }
 
 /**
  * Evaluated the expression and returns the int value.
  * @return the int value of the member variable val
  */
-int NumExpr::interp() {
-    return val;
+Val* NumExpr::interp() {
+    return new NumVal(val);
 }
 
 /**
@@ -184,8 +185,8 @@ bool AddExpr::equals(Expr* expr) {
  * Add the left and right expressions and returns the int value of the result.
  * @return the int value of the addition of the left and right expressions
  */
-int AddExpr::interp() {
-    return lhs->interp() + rhs->interp();
+Val* AddExpr::interp() {
+    return lhs->interp()->add_to(rhs->interp());
 }
 
 /**
@@ -322,8 +323,8 @@ bool MultExpr::equals(Expr* expr) {
  * Multiply the left and right expressions and returns the int value of the result.
  * @return the int value of the multiplication of the left and right expressions
  */
-int MultExpr::interp() {
-    return lhs->interp() * rhs->interp();
+Val* MultExpr::interp() {
+    return lhs->interp()->mult_with(rhs->interp());
 }
 
 /**
@@ -418,7 +419,7 @@ bool VarExpr::equals(Expr* expr) {
  * Returns the int value of this VarExpr object
  * @return throw a runtime error since a variable cannot be evaluated to a int value
  */
-int VarExpr::interp() {
+Val * VarExpr::interp() {
     throw std::runtime_error("A variable has no value!");
 }
 
@@ -498,9 +499,9 @@ bool LetExpr::equals(Expr* expr) {
  * Returns the int value of this LetExpr object
  * @return the int value of the its body after substitute the variable with rhs
  */
-int LetExpr::interp() {
-    NumExpr* num = new NumExpr(rhs->interp());
-    return body->subst(variable, num)->interp();
+Val * LetExpr::interp() {
+    Val* rhs_val = rhs->interp();
+    return body->subst(variable, rhs_val->to_expr())->interp();
 //    return body->subst(variable, rhs)->interp(); not correct
 }
 

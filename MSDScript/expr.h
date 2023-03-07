@@ -10,11 +10,15 @@
 #include <sstream>
 #include <string>
 
+class Val;
+
 enum precedence_t {
     prec_none, // 0
     prec_add, // 1
     prec_mult, // 2
 };
+
+//class Val;
 
 /** \brief
  * Expr class - the base class for all expressions
@@ -22,7 +26,7 @@ enum precedence_t {
 class Expr {
 public:
     virtual bool equals(Expr* expr)=0;
-    virtual int interp() = 0;
+    virtual Val* interp() = 0;
     virtual bool has_variable() = 0;
     virtual Expr* subst(std::string s, Expr* expr) = 0;
     virtual void print(std::ostream& out) = 0;
@@ -41,7 +45,7 @@ private:
 public:
     NumExpr(int v);
     bool equals(Expr* expr);
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
@@ -62,7 +66,7 @@ public:
     AddExpr(int left, std::string right);
     AddExpr(std::string left, std::string right);
     bool equals(Expr* expr);
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
@@ -83,7 +87,7 @@ public:
     MultExpr(int left, std::string right);
     MultExpr(std::string left, std::string right);
     bool equals(Expr* expr);
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
@@ -99,7 +103,7 @@ private:
 public:
     VarExpr(std::string s);
     bool equals(Expr* expr);
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
@@ -118,7 +122,7 @@ private:
 public:
     LetExpr(std::string v, Expr* r, Expr* b);
     bool equals(Expr* expr);
-    int interp();
+    Val* interp();
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);

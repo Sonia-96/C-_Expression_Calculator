@@ -14,6 +14,7 @@
 #include "cmdline.h"
 #include "expr.h"
 #include "parser.h"
+#include "val.h"
 
 int main(int argc, const char * argv[]) {
     try {
@@ -23,7 +24,7 @@ int main(int argc, const char * argv[]) {
             switch (mode) {
                 case do_interp:
 //                    printf("Value: %d\n", expr->interp());
-                    printf("%d\n", expr->interp());
+                    printf("%s\n", expr->interp()->to_string().c_str());
                     break;
                 case do_print:
 //                    printf("Standard Expression (print):\n%s\n", expr->to_string().c_str());
