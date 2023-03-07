@@ -3,6 +3,7 @@
 //
 
 #include "expr_gen.h"
+#include "val.h"
 
 std::string expr_gen::random_expr_string()  {
     return exprGenerator()->to_string();

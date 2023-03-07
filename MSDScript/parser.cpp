@@ -103,11 +103,7 @@ Expr* parse_var(std::istream& in) {
 Expr* parse_let(std::istream& in) {
     std::string errorMsg = "wrong format for let expression";
     consume(in, "_let", errorMsg);
-    Expr* temp = parse_var(in);
-    VarExpr* var = dynamic_cast<VarExpr*>(temp);
-    if (var == NULL) {
-        throw std::runtime_error(errorMsg);
-    }
+    VarExpr* var = dynamic_cast<VarExpr*>(parse_var(in));
     skip_whitespace(in);
     consume(in, '=', errorMsg);
     Expr* rhs = parse_expr(in);
