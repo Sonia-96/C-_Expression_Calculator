@@ -2,10 +2,10 @@
 // Created by Yue Sun on 2/23/23.
 //
 
-#ifndef MSDSCRIPT_EXPR_GEN_TEST_H
-#define MSDSCRIPT_EXPR_GEN_TEST_H
+#ifndef MSDSCRIPT_EXPRGENTEST_H
+#define MSDSCRIPT_EXPRGENTEST_H
 
-#include "expr_gen.h"
+#include "ExprGen.h"
 
 #define ITERATION 100
 
@@ -17,4 +17,4 @@ void testExpr();
 void testAll();
 
 
-#endif //MSDSCRIPT_EXPR_GEN_TEST_H
+#endif //MSDSCRIPT_EXPRGENTEST_H

@@ -2,13 +2,13 @@
 // Created by Yue Sun on 2/23/23.
 //
 
-#ifndef MSDSCRIPT_EXPR_GEN_H
-#define MSDSCRIPT_EXPR_GEN_H
+#ifndef MSDSCRIPT_EXPRGEN_H
+#define MSDSCRIPT_EXPRGEN_H
 
 #include "expr.h"
 #include <iostream>
 
-class expr_gen {
+class ExprGen {
 private:
     static char alphaGenerator();
 public:
@@ -17,9 +17,12 @@ public:
     static Expr* exprGenerator(std::string var);
     static Expr* addOrMultExprGenerator(std::string var);
     static LetExpr* letExprGenerator(std::string var);
+    static IfExpr* ifExprGenerator(std::string var);
     static NumExpr* numExprGenerator();
     static VarExpr* varExprGenerator();
+    static BoolExpr* boolExprGenerator();
+    static EqExpr* eqExprGenerator(std::string var);
 };
 
 
-#endif //MSDSCRIPT_EXPR_GEN_H
+#endif //MSDSCRIPT_EXPRGEN_H

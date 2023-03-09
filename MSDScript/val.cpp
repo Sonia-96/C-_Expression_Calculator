@@ -45,6 +45,10 @@ std::string NumVal::to_string() {
     return std::to_string(val);
 }
 
+bool NumVal::is_true() {
+    throw std::runtime_error("a number value can not be evaluated to a boolean");
+}
+
   ///////////////////////////////////////////
  //                BoolVal                //
 ///////////////////////////////////////////
@@ -75,6 +79,10 @@ Val* BoolVal::mult_with(Val *rhs) {
 
 std::string BoolVal::to_string() {
     return val ? "_true" : "_false";
+}
+
+bool BoolVal::is_true() {
+    return val;
 }
 
 

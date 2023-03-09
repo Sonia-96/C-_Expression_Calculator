@@ -8,6 +8,7 @@
 #include "expr.h"
 #include "parser.h"
 #include "val.h"
+#include <iostream>
 
 TEST_CASE("Equals") {
     SECTION("NumExpr") {
@@ -29,6 +30,7 @@ TEST_CASE("Equals") {
         AddExpr add1(new NumExpr(1), new NumExpr(2));
         AddExpr add2(new NumExpr(2), new NumExpr(1));
         AddExpr add3(new NumExpr(1), new NumExpr(2));
+        AddExpr add4(1, 3);
         CHECK_FALSE(add1.equals(&add2));
         CHECK_FALSE(add2.equals(&add1));
         CHECK(add1.equals(&add3));
@@ -36,6 +38,7 @@ TEST_CASE("Equals") {
         CHECK(!add2.equals(&add3));
         CHECK(!add3.equals(&add2));
         CHECK(!add1.equals(new MultExpr(1, 2)));
+        CHECK(!add1.equals(&add4));
     }
 
     SECTION("Add_nested") {
@@ -55,6 +58,7 @@ TEST_CASE("Equals") {
         MultExpr mult1(1, 2);
         MultExpr mult2(2, 1);
         MultExpr mult3(1, 2);
+        MultExpr mult4(1, 3);
         CHECK_FALSE(mult1.equals(&mult2));
         CHECK_FALSE(mult2.equals(&mult1));
         CHECK(mult1.equals(&mult3));
@@ -62,6 +66,7 @@ TEST_CASE("Equals") {
         CHECK(!mult2.equals(&mult3));
         CHECK(!mult3.equals(&mult2));
         CHECK(!mult1.equals(new VarExpr("x")));
+        CHECK(!mult1.equals(&mult4));
     }
 
     SECTION("Mult_nested") {
@@ -419,7 +424,6 @@ TEST_CASE("let") {
         CHECK(let12.to_pretty_string() == "2 * (_let x = 5\n"
                                           "     _in  x + 1) + 5");
         AddExpr let13(&let11, new NumExpr(5));
-        let13.to_pretty_string();
         CHECK(let13.to_pretty_string() == "1 * 2 * (_let x = 5\n"
                                           "         _in  x + 1) + 5");
         AddExpr let14(new AddExpr(new NumExpr(1), new MultExpr(new NumExpr(2), &letBase1)), new NumExpr(1));
@@ -438,6 +442,8 @@ TEST_CASE("let") {
 TEST_CASE("parse") {
     LetExpr letBase1("x", new NumExpr(5), new AddExpr("x", 1));
     LetExpr letBase2("x", new NumExpr(6), new MultExpr("x", 1));
+    IfExpr ifBase1(new BoolExpr(true), new NumExpr(1), new NumExpr(2));
+    IfExpr ifBase2(new BoolExpr(false), new NumExpr(1), new NumExpr(2));
 
     SECTION("num") {
         CHECK(parse_str("123")->equals(new NumExpr(123)));
@@ -497,9 +503,9 @@ TEST_CASE("parse") {
         std::string let6a = "_let x";
         CHECK_THROWS_WITH(parse_str(let6a), "wrong format for let expression");
         std::string let6b = "_led x";
-        CHECK_THROWS_WITH(parse_str(let6b), "wrong format for let expression");
+        CHECK_THROWS_WITH(parse_str(let6b), "unknown keyword: led");
         std::string let6c = "_led x = 55 _in";
-        CHECK_THROWS_WITH(parse_str(let6c), "wrong format for let expression");
+        CHECK_THROWS_WITH(parse_str(let6c), "unknown keyword: led");
 
         // interp error
         std::string let7 = "_let x = y _in x + 1";
@@ -519,7 +525,29 @@ TEST_CASE("parse") {
 
         std::string let10 = "_let 1 = 2 _in 3";
         CHECK_THROWS_WITH(parse_str(let10), "invalid variable name");
+    }
 
+    SECTION("if + let") {
+        std::string if1a = "_if _true _then 1 _else 2";
+        CHECK(parse_str(if1a)->equals(&ifBase1));
+        std::string if1b = "(_if _true _then 1 _else 2)";
+        CHECK(parse_str(if1b)->equals(&ifBase1));
+        std::string if1c = "(_if _false _then 1 _else 2)";
+        CHECK(parse_str(if1c)->equals(&ifBase2));
+
+        std::string if2 = "_if _false _then 1";
+        CHECK_THROWS_WITH(parse_str(if2), "wrong format for if expression");
+        std::string if3 = "(_if _true _then 1 _else 2) + 1";
+        CHECK(parse_str(if3)->equals(new AddExpr(&ifBase1, 1)));
+    }
+
+    SECTION("equal") {
+        std::string eq1 = "1 == 2";
+        parse_str(eq1);
+        CHECK(parse_str(eq1)->equals(new EqExpr(1, 2)));
+        EqExpr eq2(&letBase1, new NumExpr(2));
+        CHECK(eq2.to_pretty_string() == "(_let x = 5\n"
+                                        " _in  x + 1) == 2");
     }
 }
 
@@ -637,5 +665,274 @@ TEST_CASE("BoolExpr") {
     SECTION("pretty_print") {
         CHECK(BoolExpr(true).to_pretty_string() == "_true");
         CHECK(BoolExpr(false).to_pretty_string() == "_false");
+    }
+}
+
+TEST_CASE("EqExpr") {
+    EqExpr eq1(new NumExpr(1), new NumExpr(2));
+    EqExpr eq2(new NumExpr(1), new NumExpr(1));
+    EqExpr eq3(new VarExpr("x"), new VarExpr("x"));
+    EqExpr eq4(new NumExpr(2), new AddExpr(1, 1));
+    EqExpr eq5(new MultExpr(2, 1), new AddExpr(1, 1));
+    EqExpr eq6(new LetExpr("x", new NumExpr(4), new AddExpr("x", 3)), new MultExpr(2, 3));
+
+    SECTION("equals") {
+        CHECK(!eq1.equals(&eq2));
+        CHECK(eq1.equals(new EqExpr(new NumExpr(1), new NumExpr(2))));
+        CHECK(!eq1.equals(new NumExpr(3)));
+        CHECK(!eq4.equals(&eq5));
+        CHECK(!eq5.equals(&eq6));
+    }
+
+    SECTION("interp") {
+        CHECK(eq1.interp()->equals(new BoolVal(false)));
+        CHECK(eq2.interp()->equals(new BoolVal(true)));
+        CHECK_THROWS_WITH(eq3.interp(), "A variable has no value!");
+        CHECK(eq4.interp()->equals(new BoolVal(true)));
+        CHECK(eq5.interp()->equals(new BoolVal(true)));
+        CHECK(eq6.interp()->equals(new BoolVal(false)));
+    }
+
+    SECTION("has_variable") {
+        CHECK(!eq1.has_variable());
+        CHECK(!eq2.has_variable());
+        CHECK(eq3.has_variable());
+        CHECK(!eq4.has_variable());
+        CHECK(!eq5.has_variable());
+        CHECK(eq6.has_variable());
+        CHECK((new EqExpr(new NumExpr(1), new VarExpr("x")))->has_variable());
+    }
+
+    SECTION("subst") {
+        CHECK(eq1.subst("x", new NumExpr(2))->equals(&eq1));
+    }
+
+    SECTION("print") {
+        CHECK(eq1.to_string() == "(1==2)");
+        CHECK(eq2.to_string() == "(1==1)");
+        CHECK(eq3.to_string() == "(x==x)");
+        CHECK(eq4.to_string() == "(2==(1+1))");
+        CHECK(eq5.to_string() == "((2*1)==(1+1))");
+        CHECK(eq6.to_string() == "((_let x=4 _in (x+3))==(2*3))");
+    }
+
+    SECTION("pretty_print") {
+        CHECK(eq1.to_pretty_string() == "1 == 2");
+        CHECK(eq2.to_pretty_string() == "1 == 1");
+        CHECK(eq3.to_pretty_string() == "x == x");
+        CHECK(eq4.to_pretty_string() == "2 == 1 + 1");
+        CHECK(eq5.to_pretty_string() == "2 * 1 == 1 + 1");
+        // let / if as left arg
+        CHECK(eq6.to_pretty_string() == "(_let x = 4\n"
+                                        " _in  x + 3) == 2 * 3");
+        IfExpr ifBase(new BoolExpr(true), new NumExpr(1), new NumExpr(2));
+        LetExpr letBase("x", new NumExpr(1), new AddExpr("x", 1));
+        EqExpr eq7(&ifBase, new NumExpr(2));
+        CHECK(eq7.to_pretty_string() == "(_if _true\n"
+                                        " _then 1\n"
+                                        " _else 2) == 2");
+        EqExpr eq8(&letBase, new NumExpr(2));
+        CHECK(eq8.to_pretty_string() == "(_let x = 1\n"
+                                        " _in  x + 1) == 2");
+        // left / if as right arg
+        EqExpr eq9(new NumExpr(1), &ifBase);
+        CHECK(eq9.to_pretty_string() == "1 == _if _true\n"
+                                        "     _then 1\n"
+                                        "     _else 2");
+        EqExpr eq10(new NumExpr(2), &letBase);
+        CHECK(eq10.to_pretty_string() == "2 == _let x = 1\n"
+                                         "     _in  x + 1");
+        AddExpr eq11(&eq9, new NumExpr(3));
+        CHECK(eq11.to_pretty_string() == "(1 == _if _true\n"
+                                         "      _then 1\n"
+                                         "      _else 2) + 3");
+        // eq as left/right arg of add
+        AddExpr eq12a(&eq10, new NumExpr(3));
+        CHECK(eq12a.to_pretty_string() == "(2 == _let x = 1\n"
+                                         "      _in  x + 1) + 3");
+        AddExpr eq12b(new NumExpr(3), &eq10);
+        CHECK(eq12b.to_pretty_string() == "3 + (2 == _let x = 1\n"
+                                          "          _in  x + 1)");
+        AddExpr eq12c(&eq12b, new NumExpr(5));
+        CHECK(eq12c.to_pretty_string() == "(3 + (2 == _let x = 1\n"
+                                          "           _in  x + 1)) + 5");
+        AddExpr eq12d(&eq1, 3);
+        CHECK(eq12d.to_pretty_string() == "(1 == 2) + 3");
+        // add as right arg of eq
+        EqExpr eq13(new NumExpr(2), new AddExpr(&ifBase, new NumExpr(3)));
+        CHECK(eq13.to_pretty_string() == "2 == (_if _true\n"
+                                         "      _then 1\n"
+                                         "      _else 2) + 3");
+        EqExpr eq14(new NumExpr(2), new AddExpr(&letBase, new NumExpr(3)));
+        CHECK(eq14.to_pretty_string() == "2 == (_let x = 1\n"
+                                         "      _in  x + 1) + 3");
+        EqExpr eq15(new NumExpr(2), new AddExpr(new NumExpr(3), &ifBase));
+        CHECK(eq15.to_pretty_string() == "2 == 3 + _if _true\n"
+                                         "         _then 1\n"
+                                         "         _else 2");
+        EqExpr eq16(new NumExpr(2), new AddExpr(new NumExpr(3), &letBase));
+        CHECK(eq16.to_pretty_string() == "2 == 3 + _let x = 1\n"
+                                         "         _in  x + 1");
+        // consecutive ==
+        EqExpr eq17(&eq4, new BoolExpr(true));
+        CHECK(eq17.to_pretty_string() == "(2 == 1 + 1) == _true");
+        EqExpr eq18(new BoolExpr(false), &eq4);
+        CHECK(eq18.to_pretty_string() == "_false == 2 == 1 + 1");
+
+    }
+}
+
+TEST_CASE("IfExpr") {
+    IfExpr ifBase1(new BoolExpr(true), new NumExpr(1), new NumExpr(2));
+    IfExpr ifBase2(new BoolExpr(false), new NumExpr(1), new NumExpr(2));
+    IfExpr ifBase3(new EqExpr(1, 2), new AddExpr(new BoolExpr(false), new NumExpr(5)), new NumExpr(88));
+    IfExpr ifBase4(new EqExpr(2, 2), new AddExpr(new BoolExpr(false), new NumExpr(5)), new NumExpr(88));
+    IfExpr ifBase5(new EqExpr(new VarExpr("x"), new NumExpr(3)), new NumExpr(1), new NumExpr(0));
+
+    SECTION("equals") {
+        IfExpr if1(new BoolExpr(true), new NumExpr(1), new NumExpr(2));
+        IfExpr if2(new BoolExpr(true), new NumExpr(3), new NumExpr(2));
+        IfExpr if3(new BoolExpr(true), new NumExpr(1), new VarExpr("x"));
+        CHECK(ifBase1.equals(&if1));
+        CHECK(!ifBase1.equals(&if2));
+        CHECK(!ifBase1.equals(&if3));
+        CHECK(!ifBase1.equals(&ifBase2));
+        CHECK(!ifBase1.equals(new NumExpr(1)));
+    }
+
+    SECTION("interp") {
+        CHECK(ifBase1.interp()->equals(new NumVal(1)));
+        CHECK(ifBase2.interp()->equals(new NumVal(2)));
+        LetExpr if1("x", new EqExpr(1, 2), &ifBase3);
+        CHECK(if1.interp()->equals(new NumVal(88)));
+        LetExpr if2("x", new EqExpr(1, 2), &ifBase4);
+        CHECK_THROWS_WITH(if2.interp(), "add of non-number");
+        CHECK(ifBase3.interp()->equals(new NumVal(88)));
+        CHECK_THROWS_WITH(ifBase4.interp(), "add of non-number");
+        CHECK_THROWS_WITH(ifBase5.interp(), "A variable has no value!");
+    }
+
+    SECTION("has_variable") {
+        CHECK(!ifBase1.has_variable());
+        CHECK(!ifBase2.has_variable());
+        CHECK(!ifBase3.has_variable());
+        CHECK(!ifBase4.has_variable());
+        CHECK(ifBase5.has_variable());
+        IfExpr if1(new BoolExpr(true), new VarExpr("x"), new NumExpr(1));
+        CHECK(if1.has_variable());
+        IfExpr if2(new BoolExpr(true), new NumExpr(1), new VarExpr("x"));
+        CHECK(if2.has_variable());
+    }
+
+    SECTION("subst") {
+        CHECK(ifBase1.subst("x", new NumExpr(10))->equals(&ifBase1));
+        IfExpr if1(new EqExpr(new NumExpr(10), new NumExpr(3)), new NumExpr(1), new NumExpr(0));
+        CHECK(ifBase5.subst("x", new NumExpr(10))->equals(&if1));
+    }
+
+    SECTION("print") {
+        CHECK(ifBase1.to_string() == "(_if _true _then 1 _else 2)");
+        CHECK(ifBase2.to_string() == "(_if _false _then 1 _else 2)");
+        CHECK(ifBase3.to_string() == "(_if (1==2) _then (_false+5) _else 88)");
+        CHECK(ifBase4.to_string() == "(_if (2==2) _then (_false+5) _else 88)");
+        CHECK(ifBase5.to_string() == "(_if (x==3) _then 1 _else 0)");
+    }
+
+    SECTION("pretty_print") {
+        // simple if
+        CHECK(ifBase1.to_pretty_string() == "_if _true\n_then 1\n_else 2");
+        CHECK(ifBase2.to_pretty_string() == "_if _false\n_then 1\n_else 2");
+        CHECK(ifBase3.to_pretty_string() == "_if 1 == 2\n_then _false + 5\n_else 88");
+        CHECK(ifBase4.to_pretty_string() == "_if 2 == 2\n_then _false + 5\n_else 88");
+        CHECK(ifBase5.to_pretty_string() == "_if x == 3\n_then 1\n_else 0");
+        // if as let body (rhs is eq)
+        LetExpr if1("x", new EqExpr(1, 2), &ifBase3);
+        CHECK(if1.to_pretty_string() == "_let x = 1 == 2\n"
+                                        "_in  _if 1 == 2\n"
+                                        "     _then _false + 5\n"
+                                        "     _else 88");
+        CHECK(parse_str(if1.to_string())->equals(&if1));
+        // if as let rhs
+        LetExpr if2("x", &ifBase1, new AddExpr("x", 1));
+        CHECK(if2.to_pretty_string() == "_let x = _if _true\n"
+                                        "         _then 1\n"
+                                        "         _else 2\n"
+                                        "_in  x + 1");
+        CHECK(parse_str(if2.to_string())->equals(&if2));
+        // if as left arg of mult in let rhs
+        LetExpr if3("x", new MultExpr(&ifBase1, new NumExpr(3)), new AddExpr("x", 1));
+        CHECK(if3.to_pretty_string() == "_let x = (_if _true\n"
+                                        "          _then 1\n"
+                                        "          _else 2) * 3\n"
+                                        "_in  x + 1");
+        CHECK(parse_str(if3.to_string())->equals(&if3));
+        // if as left arg of eq in let rhs
+        LetExpr if4("x", new EqExpr(&ifBase1, new NumExpr(3)), new AddExpr("x", 1));
+        CHECK(if4.to_pretty_string() == "_let x = (_if _true\n"
+                                        "          _then 1\n"
+                                        "          _else 2) == 3\n"
+                                        "_in  x + 1");
+        CHECK(parse_str(if4.to_string())->equals(&if4));
+        // if as left arg of add in let rhs
+        LetExpr if5("x", new AddExpr(&ifBase1, new NumExpr(3)), new AddExpr("x", 1));
+        CHECK(if5.to_pretty_string() == "_let x = (_if _true\n"
+                                        "          _then 1\n"
+                                        "          _else 2) + 3\n"
+                                        "_in  x + 1");
+        CHECK(parse_str(if5.to_string())->equals(&if5));
+        // if as let body
+        LetExpr if6("x", new NumExpr(1), new AddExpr(&ifBase1, new VarExpr("x")));
+        CHECK(if6.to_pretty_string() == "_let x = 1\n"
+                                        "_in  (_if _true\n"
+                                        "      _then 1\n"
+                                        "      _else 2) + x");
+        CHECK(if6.interp()->equals(new NumVal(2)));
+        CHECK(parse_str(if6.to_string())->equals(&if6));
+        AddExpr if7(&if6, new NumExpr(1));
+        CHECK(if7.to_pretty_string() == "(_let x = 1\n"
+                                        " _in  (_if _true\n"
+                                        "       _then 1\n"
+                                        "       _else 2) + x) + 1");
+        CHECK(parse_str(if7.to_string())->equals(&if7));
+        // one nested if
+        IfExpr if8(new BoolExpr(true), &ifBase2, new NumExpr(3));
+        CHECK(if8.to_pretty_string() == "_if _true\n"
+                                        "_then _if _false\n"
+                                        "      _then 1\n"
+                                        "      _else 2\n"
+                                        "_else 3");
+        CHECK(if8.interp()->equals(new NumVal(2)));
+        CHECK(parse_str(if8.to_string())->equals(&if8));
+        // if as right arg of mult
+        MultExpr if9(3, &ifBase1);
+        CHECK(if9.to_pretty_string() == "3 * _if _true\n"
+                                        "    _then 1\n"
+                                        "    _else 2");
+        CHECK(parse_str(if9.to_string())->equals(&if9));
+        MultExpr if10(&if9, 4);
+        CHECK(if10.to_pretty_string() == "(3 * _if _true\n"
+                                         "     _then 1\n"
+                                         "     _else 2) * 4");
+        CHECK(parse_str(if10.to_string())->equals(&if10));
+        AddExpr if11(1, &if9);
+        CHECK(if11.to_pretty_string() == "1 + 3 * _if _true\n"
+                                         "        _then 1\n"
+                                         "        _else 2");
+        CHECK(parse_str(if11.to_string())->equals(&if11));
+        MultExpr if12(1, &if9);
+        CHECK(if12.to_pretty_string() == "1 * 3 * _if _true\n"
+                                         "        _then 1\n"
+                                         "        _else 2");
+        CHECK(parse_str(if12.to_string())->equals(&if12));
+        AddExpr if13(&if9, 5);
+        CHECK(if13.to_pretty_string() == "3 * (_if _true\n"
+                                         "     _then 1\n"
+                                         "     _else 2) + 5");
+        CHECK(parse_str(if13.to_string())->equals(&if13));
+        AddExpr if14(&if12, 5);
+        CHECK(if14.to_pretty_string() == "1 * 3 * (_if _true\n"
+                                         "         _then 1\n"
+                                         "         _else 2) + 5");
+        CHECK(parse_str(if14.to_string())->equals(&if14));
     }
 }

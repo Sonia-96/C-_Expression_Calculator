@@ -3,8 +3,8 @@ CFLAGS=-std=c++14
 #SRC=$(wildcard *.cpp)
 #OBJ=$(patsubst %.cpp, %.o, $(SRC))
 MSD_OBJ=main.o expr.o parser.o tests.o cmdline.o val.o
-TEST_OBJ=fuzz_test.o expr_gen.o exec.o expr.o val.o
-GEN_OBJ=test_expr_gen.o expr_gen.o expr_gen_test.o expr.o
+TEST_OBJ=fuzzTest.o ExprGen.o exec.o expr.o val.o
+GEN_OBJ= ExprGen.o ExprGenTest.o expr.o
 
 .PHONY: clean test interp print pretty-print doc open_doc run fuzz_test
 msdscript: $(MSD_OBJ)

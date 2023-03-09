@@ -167,6 +167,16 @@ AddExpr::AddExpr(std::string left, std::string right) {
     rhs = new VarExpr(right);
 }
 
+AddExpr::AddExpr(int left, Expr* right) {
+    lhs = new NumExpr(left);
+    rhs = right;
+}
+
+AddExpr::AddExpr(Expr* left, int right) {
+    lhs = left;
+    rhs = new NumExpr(right);
+}
+
 /**
  * Compared the specified expression with this object for equality.
  * @param expr the expression to be compared for equality with this object
@@ -243,7 +253,7 @@ void AddExpr::pretty_print_at(std::ostream &out, precedence_t precedence, std::s
     lhs->pretty_print_at(out, prec_add, newLinePrevPos, true);
     out << " + ";
     // let as right arg in AddExpr never need parentheses
-    rhs->pretty_print_at(out, prec_none, newLinePrevPos, false);
+    rhs->pretty_print_at(out, prec_equal, newLinePrevPos, false);
     if (addParentheses) {
         out << ")";
     }
@@ -303,6 +313,16 @@ MultExpr::MultExpr(int left, std::string right) {
 MultExpr::MultExpr(std::string left, std::string right) {
     lhs = new VarExpr(left);
     rhs = new VarExpr(right);
+}
+
+MultExpr::MultExpr(int left, Expr* right) {
+    lhs = new NumExpr(left);
+    rhs = right;
+}
+
+MultExpr::MultExpr(Expr* left, int right) {
+    lhs = left;
+    rhs = new NumExpr(right);
 }
 
 /**
@@ -611,3 +631,131 @@ void BoolExpr::print(std::ostream& out) {
 void BoolExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
     val ? out << "_true" : out << "_false";
 }
+
+  ///////////////////////////////////////////
+ //                IfExpr                 //
+///////////////////////////////////////////
+
+IfExpr::IfExpr(Expr* test, Expr* then, Expr* else_) {
+    test_part = test;
+    then_part = then;
+    else_part = else_;
+}
+
+bool IfExpr::equals(Expr* rhs) {
+    IfExpr* other = dynamic_cast<IfExpr*>(rhs);
+    if (other == nullptr) {
+        return false;
+    }
+    return test_part->equals(other->test_part) && then_part->equals(other->then_part) && else_part->equals(other->else_part);
+}
+
+Val* IfExpr::interp() {
+    if (test_part->interp()->is_true()) {
+        return then_part->interp();
+    }
+    return else_part->interp();
+}
+
+bool IfExpr::has_variable() {
+    return test_part->has_variable() || then_part->has_variable() || else_part->has_variable();
+}
+
+// TODO not very sure if this is correct
+Expr* IfExpr::subst(std::string s, Expr* expr) {
+    return new IfExpr(test_part->subst(s, expr), then_part->subst(s, expr), else_part->subst(s, expr));
+}
+
+void IfExpr::print(std::ostream& out) {
+    out << "(_if ";
+    test_part->print(out);
+    out << " _then ";
+    then_part->print(out);
+    out << " _else ";
+    else_part->print(out);
+    out << ")";
+}
+
+void IfExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) {
+    if (addParenthesesToLet) {
+        out << "(";
+    }
+    int indentation = out.tellp() - newLinePrevPos;
+    out << "_if ";
+    test_part->pretty_print_at(out, prec_none, newLinePrevPos, false);
+    out << "\n";
+    newLinePrevPos = out.tellp();
+
+    out << std::string(indentation, ' ') << "_then ";
+    then_part->pretty_print_at(out, prec_none, newLinePrevPos, false);
+    out << "\n";
+    newLinePrevPos = out.tellp();
+
+    out << std::string(indentation, ' ') << "_else ";
+    else_part->pretty_print_at(out, prec_none, newLinePrevPos, false);
+
+    if (addParenthesesToLet) {
+        out << ")";
+    }
+}
+
+  ///////////////////////////////////////////
+ //                EqExpr                 //
+///////////////////////////////////////////
+
+EqExpr::EqExpr(Expr* left, Expr* right) {
+    lhs = left;
+    rhs = right;
+}
+
+EqExpr::EqExpr(int left, int right) {
+    lhs = new NumExpr(left);
+    rhs = new NumExpr(right);
+}
+
+bool EqExpr::equals(Expr* rhs_) {
+    EqExpr* other = dynamic_cast<EqExpr*>(rhs_);
+    if (other == nullptr) {
+        return false;
+    }
+    return lhs->equals(other->lhs) && rhs->equals(other->rhs);
+}
+
+Val* EqExpr::interp() {
+    return new BoolVal(lhs->interp()->equals(rhs->interp()));
+}
+
+bool EqExpr::has_variable() {
+    return lhs->has_variable() || rhs->has_variable();
+}
+
+Expr *EqExpr::subst(std::string s, Expr* expr) {
+    return new EqExpr(lhs->subst(s, expr), rhs->subst(s, expr));
+}
+
+void EqExpr::print(std::ostream& out) {
+    out << "(";
+    lhs->print(out);
+    out << "==";
+    rhs->print(out);
+    out << ")";
+}
+
+void EqExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos,
+                             bool addParenthesesToLet) {
+    bool addParentheses = prec_equal <= precedence;
+    if (addParentheses) {
+        out << "(";
+    }
+    // TODO 如果left在左右，是否需要加括号？
+    lhs->pretty_print_at(out, prec_equal, newLinePrevPos, true);
+    out << " == ";
+    rhs->pretty_print_at(out, prec_none, newLinePrevPos, !addParentheses && addParenthesesToLet);
+    if (addParentheses) {
+        out << ")";
+    }
+}
+
+
+
+

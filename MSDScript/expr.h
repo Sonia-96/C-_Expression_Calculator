@@ -13,9 +13,10 @@
 class Val;
 
 enum precedence_t {
-    prec_none, // 0
-    prec_add, // 1
-    prec_mult, // 2
+    prec_none,
+    prec_equal,
+    prec_add,
+    prec_mult
 };
 
 //class Val;
@@ -60,11 +61,13 @@ private:
     Expr* lhs;
     Expr* rhs;
 public:
-    AddExpr(Expr *left, Expr *right);
+    AddExpr(Expr* left, Expr* right);
     AddExpr(int left, int right);
     AddExpr(std::string left, int right);
     AddExpr(int left, std::string right);
     AddExpr(std::string left, std::string right);
+    AddExpr(int left, Expr* right);
+    AddExpr(Expr* left, int right);
     bool equals(Expr* expr);
     Val* interp();
     bool has_variable();
@@ -86,6 +89,8 @@ public:
     MultExpr(std::string left, int right);
     MultExpr(int left, std::string right);
     MultExpr(std::string left, std::string right);
+    MultExpr(int left, Expr* right);
+    MultExpr(Expr* left, int right);
     bool equals(Expr* expr);
     Val* interp();
     bool has_variable();
@@ -135,6 +140,36 @@ private:
 public:
     BoolExpr(bool v);
     bool equals(Expr* rhs) override;
+    Val* interp() override;
+    bool has_variable() override;
+    Expr* subst(std::string s, Expr* expr) override;
+    void print(std::ostream& out) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+};
+
+class IfExpr : public Expr {
+private:
+    Expr* test_part;
+    Expr* then_part;
+    Expr* else_part;
+public:
+    IfExpr(Expr* test, Expr* then, Expr* else_);
+    bool equals(Expr* rhs) override;
+    Val* interp() override;
+    bool has_variable() override;
+    Expr* subst(std::string s, Expr* expr) override;
+    void print(std::ostream& out) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+};
+
+class EqExpr : public Expr {
+private:
+    Expr* lhs;
+    Expr* rhs;
+public:
+    EqExpr(Expr* left, Expr* right);
+    EqExpr(int left, int right);
+    bool equals(Expr* rhs_) override;
     Val* interp() override;
     bool has_variable() override;
     Expr* subst(std::string s, Expr* expr) override;
