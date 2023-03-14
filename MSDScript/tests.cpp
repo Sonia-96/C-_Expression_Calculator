@@ -548,6 +548,10 @@ TEST_CASE("parse") {
         EqExpr eq2(&letBase1, new NumExpr(2));
         CHECK(eq2.to_pretty_string() == "(_let x = 5\n"
                                         " _in  x + 1) == 2");
+        std::string eq3 = "1 + 1 == 2 + 0";
+        Expr* temp = parse_str(eq3);
+        CHECK(parse_str(eq3)->equals(new EqExpr(new AddExpr(1, 1), new AddExpr(2, 0))));
+        CHECK(parse_str(eq3)->interp()->equals(new BoolVal(true)));
     }
 }
 
@@ -778,7 +782,8 @@ TEST_CASE("EqExpr") {
         CHECK(eq17.to_pretty_string() == "(2 == 1 + 1) == _true");
         EqExpr eq18(new BoolExpr(false), &eq4);
         CHECK(eq18.to_pretty_string() == "_false == 2 == 1 + 1");
-
+        EqExpr eq19(new AddExpr(1, 1), new AddExpr(2, 0));
+        CHECK(eq19.interp());
     }
 }
 
