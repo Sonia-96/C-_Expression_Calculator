@@ -50,7 +50,7 @@ public:
     bool has_variable() override;
     Expr* subst(std::string s, Expr* expr) override;
     void print(std::ostream& out) override;
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) override;
 };
 
 /** \brief
@@ -73,7 +73,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen);
 };
 
 /** \brief
@@ -96,7 +96,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen);
 };
 
 /** \brief
@@ -112,7 +112,7 @@ public:
     bool has_variable();
     Expr* subst(std::string s, Expr* expr);
     void print(std::ostream& out);
-    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool addParenthesesToLet);
+    void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool addParen);
     std::string getVal();
 };
 
@@ -131,7 +131,7 @@ public:
     bool has_variable() override;
     Expr* subst(std::string s, Expr* expr) override;
     void print(std::ostream& out) override;
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) override;
 };
 
 class BoolExpr : public Expr {
@@ -144,7 +144,7 @@ public:
     bool has_variable() override;
     Expr* subst(std::string s, Expr* expr) override;
     void print(std::ostream& out) override;
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) override;
 };
 
 class IfExpr : public Expr {
@@ -159,7 +159,7 @@ public:
     bool has_variable() override;
     Expr* subst(std::string s, Expr* expr) override;
     void print(std::ostream& out) override;
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) override;
 };
 
 class EqExpr : public Expr {
@@ -174,7 +174,7 @@ public:
     bool has_variable() override;
     Expr* subst(std::string s, Expr* expr) override;
     void print(std::ostream& out) override;
-    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParenthesesToLet) override;
+    void pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) override;
 };
 
 
