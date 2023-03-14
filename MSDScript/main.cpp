@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
     try {
         run_mode_t mode = use_arguments(argc, argv);
         if (mode != do_nothing) {
-            Expr* expr = parse_expr(std::cin);
+            Expr* expr = parse_comparg(std::cin);
             switch (mode) {
                 case do_interp:
 //                    printf("Value: %d\n", expr->interp());

@@ -4,18 +4,18 @@
 
 #include <iostream>
 #include "exec.h"
-#include "expr_gen.h"
+#include "ExprGen.h"
 
 #define ITERATION 100
 
-void testExecutables();
+void testWithMSDScript();
 void testArgs(int argc, const char* argv[]);
 void printTestResult(const char* name, const char* modes[], double rate[]);
 int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
 
 
 int main(int argc, const char * argv[]) {
-//    testExecutables();
+//    testWithMSDScript();
     testArgs(argc, argv);
 }
 
@@ -25,9 +25,9 @@ void testArgs(int argc, const char* argv[]) {
         for (int i = 0; i < ITERATION; i++) {
             const char* interp_args[] = {argv[1], "--interp"};
             const char* print_args[] = {argv[1], "--print"};
-            Expr* expr = expr_gen::exprGenerator();
+            Expr* expr = ExprGen::exprGenerator();
             std::string in = expr->to_pretty_string();
-            printf("Trying:\n%s \n", in.c_str());
+            printf(">>> Trying:\n%s \n", in.c_str());
             ExecResult interp_result = exec_program(2, interp_args, in);
             ExecResult print_result = exec_program(2, print_args, in);
             ExecResult interp_result_2 = exec_program(2, interp_args, print_result.out);
@@ -46,7 +46,7 @@ void testArgs(int argc, const char* argv[]) {
             expected_args[1] = modes[j];
             actual_args[1] = modes[j];
             for (int i = 0; i < ITERATION; i++) {
-                Expr* expr = expr_gen::exprGenerator();
+                Expr* expr = ExprGen::exprGenerator();
                 std::string in = expr->to_string();
                 printf("Trying:\n%s \n", in.c_str());
                 ExecResult expected_res = exec_program(2, expected_args, in);
@@ -60,7 +60,7 @@ void testArgs(int argc, const char* argv[]) {
 }
 
 
-void testExecutables() {
+void testWithMSDScript() {
     const char* modes[] = {"--interp", "--print", "--pretty-print"};
     const char* args1[2];
     const char* args2[2];
@@ -77,7 +77,7 @@ void testExecutables() {
             args2[1] = modes[j];
             int failCount = 0;
             for (int k = 0; k < ITERATION; k++) {
-                std::string in = expr_gen::random_expr_string();
+                std::string in = ExprGen::random_expr_string();
                 ExecResult res1 = exec_program(2, args1, in);
                 ExecResult res2 = exec_program(2, args2, in);
                 if (res1.out != res2.out) {
@@ -105,13 +105,16 @@ int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, cons
             std::cout << "\n";
             throw std::runtime_error("Different result!\n");
         } else {
-            std::cout << ">>> Test passed!\n";
+            std::cout << "Test passed!\n";
             return 0;
         }
     } else {
-        std::cout << "Failed test!\n";
+        std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> Failed test! >>>>>>>>>>>>>>>>>>>>>>>>>>\n";
         printf("%s: %d, %s\n", name1.c_str(), expectedRes.exit_code, expectedRes.err.c_str());
         printf("%s: %d, %s\n", name2.c_str(), actualRes.exit_code, actualRes.err.c_str());
-        return 1;
+        if (expectedRes.err != actualRes.err) {
+            return 1;
+        }
+        return 0;
     }
 }

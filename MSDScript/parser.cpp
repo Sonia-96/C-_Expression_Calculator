@@ -6,14 +6,27 @@
 #include <vector>
 #include <set>
 
-// <expr> = <addend> | <addend> + <expr>
+// <expr> = <comparg> | <comparg> == <expr>
 Expr* parse_expr(std::istream& in) {
+    Expr* lhs = parse_comparg(in);
+    skip_whitespace(in);
+    int c = in.peek();
+    if (c == '=') {
+        consume(in, "==");
+        Expr* rhs = parse_expr(in);
+        return new EqExpr(lhs, rhs);
+    }
+    return lhs;
+}
+
+// <comparg> = <addend> | <addend> + <comparg>
+Expr* parse_comparg(std::istream& in) {
     Expr* lhs = parse_addend(in);
     skip_whitespace(in); // remove the white spaces after addend
     int c = in.peek();
     if (c == '+') {
         consume(in, '+');
-        Expr* rhs = parse_expr(in);
+        Expr* rhs = parse_comparg(in);
         return new AddExpr(lhs, rhs);
     }
     return lhs;
@@ -46,7 +59,18 @@ Expr* parse_multicand(std::istream& in) {
     } else if (isalpha(c)) {
         return parse_var(in);
     } else if (c == '_') {
-        return parse_let(in);
+        consume(in, c);
+        std::string keyword = parse_keyword(in);
+        if (keyword == "let") {
+            return parse_let(in);
+        } else if (keyword == "false") {
+            return new BoolExpr(false);
+        } else if (keyword == "true") {
+            return new BoolExpr(true);
+        } else if (keyword == "if") {
+            return parse_if(in);
+        }
+        throw std::runtime_error("unknown keyword: " + keyword);
     } else if (c == '(') {
         consume(in, '(');
         Expr* expr = parse_expr(in);
@@ -85,6 +109,29 @@ Expr* parse_num(std::istream& in) {
     return new NumExpr(num);
 }
 
+Expr* parse_let(std::istream& in) {
+    std::string errorMsg = "wrong format for let expression";
+//    consume(in, "_let", errorMsg);
+    VarExpr* var = dynamic_cast<VarExpr*>(parse_var(in));
+    skip_whitespace(in);
+    consume(in, '=', errorMsg);
+    Expr* rhs = parse_expr(in);
+    skip_whitespace(in);
+    consume(in, "_in", errorMsg);
+    Expr* body = parse_expr(in);
+    return new LetExpr(var->getVal(), rhs, body);
+}
+
+Expr* parse_if(std::istream& in) {
+    std::string errorMsg = "wrong format for if expression";
+    Expr* test_part = parse_expr(in);
+    consume(in, "_then", errorMsg);
+    Expr* then_part = parse_expr(in);
+    consume(in, "_else", errorMsg);
+    Expr* else_part = parse_expr(in);
+    return new IfExpr(test_part, then_part, else_part);
+}
+
 Expr* parse_var(std::istream& in) {
     skip_whitespace(in);
     std::vector<char> s;
@@ -100,17 +147,14 @@ Expr* parse_var(std::istream& in) {
     return new VarExpr(std::string(s.begin(), s.end()));
 }
 
-Expr* parse_let(std::istream& in) {
-    std::string errorMsg = "wrong format for let expression";
-    consume(in, "_let", errorMsg);
-    VarExpr* var = dynamic_cast<VarExpr*>(parse_var(in));
-    skip_whitespace(in);
-    consume(in, '=', errorMsg);
-    Expr* rhs = parse_expr(in);
-    skip_whitespace(in);
-    consume(in, "_in", errorMsg);
-    Expr* body = parse_expr(in);
-    return new LetExpr(var->getVal(), rhs, body);
+std::string parse_keyword(std::istream& in) {
+    std::stringstream ss;
+    char c;
+    while (isalpha(c = in.peek())) {
+        consume(in, c);
+        ss << c;
+    }
+    return ss.str();
 }
 
 void consume(std::istream& in, std::string expect, const std::string& message) {

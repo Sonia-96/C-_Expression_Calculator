@@ -16,6 +16,7 @@ public:
     virtual Val* add_to(Val* rhs) = 0;
     virtual Val* mult_with(Val* rhs) = 0;
     virtual std::string to_string() = 0;
+    virtual bool is_true() = 0;
 };
 
 class NumVal : public Val {
@@ -23,11 +24,25 @@ private:
     int val;
 public:
     NumVal(int v);
-    Expr * to_expr();
-    bool equals(Val* rhs);
-    Val* add_to(Val* rhs);
-    Val* mult_with(Val* rhs);
-    std::string to_string();
+    Expr * to_expr() override;
+    bool equals(Val* rhs) override;
+    Val* add_to(Val* rhs) override;
+    Val* mult_with(Val* rhs) override;
+    std::string to_string() override;
+    bool is_true() override;
+};
+
+class BoolVal : public Val {
+private:
+    bool val;
+public:
+    BoolVal(bool v);
+    Expr* to_expr() override;
+    bool equals(Val* rhs) override;
+    Val* add_to(Val* rhs) override;
+    Val* mult_with(Val* rhs) override;
+    std::string to_string() override;
+    bool is_true() override;
 };
 
 #endif //MSDSCRIPT_VAL_H
