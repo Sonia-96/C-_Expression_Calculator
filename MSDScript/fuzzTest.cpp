@@ -5,6 +5,7 @@
 #include <iostream>
 #include "exec.h"
 #include "ExprGen.h"
+#include "val.h"
 
 #define ITERATION 100
 
@@ -34,6 +35,12 @@ void testArgs(int argc, const char* argv[]) {
             if (checkResult(interp_result, interp_result_2, "interp", "print") > 0) {
                 exit(1);
             }
+//            if (expr->interp()->to_string() + "\n" != interp_result.out) {
+//                std::cout << "failed!\n";
+//                std::cout << expr->interp()->to_string() + "\n";
+//                std::cout << interp_result.err;
+//                exit(1);
+//            }
         }
     } else {
         const char* modes[] = {"--interp", "--print", "--pretty-print"};

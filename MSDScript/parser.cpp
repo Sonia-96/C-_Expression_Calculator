@@ -98,11 +98,6 @@ Expr* parse_num(std::istream& in) {
         consume(in, c);
         num = num * 10 + c - '0';
     }
-    // TODO this is not necessary
-//    std::set<char> ops = {'+', '*', '=', ')'};
-//    if (c != -1 && !isspace(c) && ops.find(c) == ops.end()) {
-//        throw std::runtime_error("bad input");
-//    }
     if (negative) {
         num = - num;
     }
