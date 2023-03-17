@@ -621,7 +621,7 @@ bool BoolExpr::has_variable() {
 }
 
 Expr* BoolExpr::subst(std::string s, Expr* expr) {
-    return this; // TODO is this right?
+    return this;
 }
 
 void BoolExpr::print(std::ostream& out) {

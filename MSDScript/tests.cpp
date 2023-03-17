@@ -777,6 +777,7 @@ TEST_CASE("EqExpr") {
         EqExpr eq16(new NumExpr(2), new AddExpr(new NumExpr(3), &letBase));
         CHECK(eq16.to_pretty_string() == "2 == 3 + _let x = 1\n"
                                          "         _in  x + 1");
+        CHECK(eq16.interp()->equals(new BoolVal(false)));
         // consecutive ==
         EqExpr eq17(&eq4, new BoolExpr(true));
         CHECK(eq17.to_pretty_string() == "(2 == 1 + 1) == _true");
@@ -784,6 +785,8 @@ TEST_CASE("EqExpr") {
         CHECK(eq18.to_pretty_string() == "_false == 2 == 1 + 1");
         EqExpr eq19(new AddExpr(1, 1), new AddExpr(2, 0));
         CHECK(eq19.interp());
+        LetExpr eq20("x", new NumExpr(1), new EqExpr(new VarExpr("x"), new NumExpr(1)));
+        CHECK(eq20.interp());
     }
 }
 
