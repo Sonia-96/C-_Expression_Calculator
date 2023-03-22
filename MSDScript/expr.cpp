@@ -77,14 +77,6 @@ Val* NumExpr::interp() {
 }
 
 /**
- * Check if this NumExpr expression object contains a VarExpr object.
- * @return false since a NumExpr object won't have a varibale
- */
-bool NumExpr::has_variable() {
-    return false;
-}
-
-/**
  * Substitute the specified string in this object with a specified expression
  * @param s the specified string to be substituted
  * @param expr the specified expression used to substitute the string
@@ -177,6 +169,16 @@ AddExpr::AddExpr(Expr* left, int right) {
     rhs = new NumExpr(right);
 }
 
+AddExpr::AddExpr(std::string left, Expr* right) {
+    lhs = new VarExpr(left);
+    rhs = right;
+}
+
+AddExpr::AddExpr(Expr* left, std::string right) {
+    lhs = left;
+    rhs = new VarExpr(right);
+}
+
 /**
  * Compared the specified expression with this object for equality.
  * @param expr the expression to be compared for equality with this object
@@ -197,14 +199,6 @@ bool AddExpr::equals(Expr* expr) {
  */
 Val* AddExpr::interp() {
     return lhs->interp()->add_to(rhs->interp());
-}
-
-/**
- * Check if this AddExpr expression object contains a VarExpr object.
- * @return true if either its left or right expression contains a VarExpr object
- */
-bool AddExpr::has_variable() {
-    return lhs->has_variable() || rhs->has_variable();
 }
 
 /**
@@ -325,6 +319,16 @@ MultExpr::MultExpr(Expr* left, int right) {
     rhs = new NumExpr(right);
 }
 
+MultExpr::MultExpr(std::string left, Expr* right) {
+    lhs = new VarExpr(left);
+    rhs = right;
+}
+
+MultExpr::MultExpr(Expr* left, std::string right) {
+    lhs = left;
+    rhs = new VarExpr(right);
+}
+
 /**
  * Compared the specified expression with this object for equality.
  * @param expr the expression to be compared for equality with this object
@@ -345,14 +349,6 @@ bool MultExpr::equals(Expr* expr) {
  */
 Val* MultExpr::interp() {
     return lhs->interp()->mult_with(rhs->interp());
-}
-
-/**
- * Check if this MultExpr expression object contains a VarExpr object.
- * @return true if either its left or right expression contains a VarExpr object
- */
-bool MultExpr::has_variable() {
-    return lhs->has_variable() || rhs->has_variable();
 }
 
 /**
@@ -444,14 +440,6 @@ Val * VarExpr::interp() {
 }
 
 /**
- * Check if this VarExpr expression object contains a VarExpr object.
- * @return true because a VarExpr object always contains a VarExpr object
- */
-bool VarExpr::has_variable() {
-    return true;
-}
-
-/**
  * Substitute the specified string in this object with a specified expression
  * @param s the specified string to be substituted
  * @param expr the specified expression used to substitute the string
@@ -523,15 +511,6 @@ Val * LetExpr::interp() {
     Val* rhs_val = rhs->interp();
     return body->subst(variable, rhs_val->to_expr())->interp();
 //    return body->subst(variable, rhs)->interp(); not correct
-}
-
-/**
- * Check if this LetExpr object contains a VarExpr object.
- * @return true only when its rhs or body has a VarExpr object.
- * Otherwise returns false.
- */
-bool LetExpr::has_variable() {
-    return rhs->has_variable() || body->has_variable();
 }
 
 /**
@@ -615,11 +594,6 @@ Val* BoolExpr::interp() {
     return new BoolVal(val);
 }
 
-
-bool BoolExpr::has_variable() {
-    return false;
-}
-
 Expr* BoolExpr::subst(std::string s, Expr* expr) {
     return this;
 }
@@ -642,6 +616,12 @@ IfExpr::IfExpr(Expr* test, Expr* then, Expr* else_) {
     else_part = else_;
 }
 
+IfExpr::IfExpr(bool test, Expr* then, Expr* else_) {
+    test_part = new BoolExpr(test);
+    then_part = then;
+    else_part = else_;
+}
+
 bool IfExpr::equals(Expr* rhs) {
     IfExpr* other = dynamic_cast<IfExpr*>(rhs);
     if (other == nullptr) {
@@ -655,10 +635,6 @@ Val* IfExpr::interp() {
         return then_part->interp();
     }
     return else_part->interp();
-}
-
-bool IfExpr::has_variable() {
-    return test_part->has_variable() || then_part->has_variable() || else_part->has_variable();
 }
 
 Expr* IfExpr::subst(std::string s, Expr* expr) {
@@ -712,6 +688,11 @@ EqExpr::EqExpr(int left, int right) {
     rhs = new NumExpr(right);
 }
 
+EqExpr::EqExpr(std::string left, int right) {
+    lhs = new VarExpr(left);
+    rhs = new NumExpr(right);
+}
+
 bool EqExpr::equals(Expr* rhs_) {
     EqExpr* other = dynamic_cast<EqExpr*>(rhs_);
     if (other == nullptr) {
@@ -722,10 +703,6 @@ bool EqExpr::equals(Expr* rhs_) {
 
 Val* EqExpr::interp() {
     return new BoolVal(lhs->interp()->equals(rhs->interp()));
-}
-
-bool EqExpr::has_variable() {
-    return lhs->has_variable() || rhs->has_variable();
 }
 
 Expr *EqExpr::subst(std::string s, Expr* expr) {
@@ -754,6 +731,121 @@ void EqExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::st
     }
 }
 
+  ///////////////////////////////////////////
+ //                FunExpr                //
+///////////////////////////////////////////
 
+FunExpr::FunExpr(std::string arg, Expr* expr) {
+    formal_arg = arg;
+    body = expr;
+}
 
+bool FunExpr::equals(Expr *rhs) {
+    FunExpr* other = dynamic_cast<FunExpr*>(rhs);
+    if (other == nullptr) {
+        return false;
+    }
+    return formal_arg == other->formal_arg && body->equals(other->body);
+}
 
+Val* FunExpr::interp() {
+    return new FunVal(formal_arg, body);
+}
+
+Expr* FunExpr::subst(std::string s, Expr* expr) {
+    if (formal_arg == s) {
+        return this;
+    }
+    return new FunExpr(formal_arg, body->subst(s, expr));
+}
+
+void FunExpr::print(std::ostream& out) {
+    out << "(_fun (" << formal_arg << ") ";
+    body->print(out);
+    out << ")";
+}
+
+void FunExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) {
+    if (addParen) {
+        out << "(";
+    }
+    int indent = out.tellp() - newLinePrevPos;
+    out << "_fun (" << formal_arg << ") \n";
+    newLinePrevPos = out.tellp();
+
+    out << std::string(indent + 2, ' ');
+    body->pretty_print_at(out, prec_none, newLinePrevPos, false); // TODO
+    if (addParen) {
+        out << ")";
+    }
+}
+
+///////////////////////////////////////////
+ //                CallExpr               //
+///////////////////////////////////////////
+
+CallExpr::CallExpr(Expr* func, Expr* arg) {
+    to_be_called = func;
+    actual_arg = arg;
+}
+
+CallExpr::CallExpr(Expr* func, int n) {
+    to_be_called = func;
+    actual_arg = new NumExpr(n);
+}
+
+CallExpr::CallExpr(std::string funcName, int n) {
+    to_be_called = new VarExpr(funcName);
+    actual_arg = new NumExpr(n);
+}
+
+CallExpr::CallExpr(std::string funcName, Expr* arg) {
+    to_be_called = new VarExpr(funcName);
+    actual_arg = arg;
+}
+
+CallExpr::CallExpr(std::string funcName1, std::string funcName2) {
+    to_be_called = new VarExpr(funcName1);
+    actual_arg = new VarExpr(funcName2);
+}
+
+bool CallExpr::equals(Expr* rhs) {
+    CallExpr* other = dynamic_cast<CallExpr*>(rhs);
+    if (other == nullptr) {
+        return false;
+    }
+    return to_be_called->equals(other->to_be_called) && actual_arg->equals(other->actual_arg);
+}
+
+Val* CallExpr::interp() {
+    return to_be_called->interp()->call(actual_arg->interp());
+}
+
+Expr* CallExpr::subst(std::string s, Expr* expr) {
+    return new CallExpr(to_be_called->subst(s, expr), actual_arg->subst(s, expr)); // TODO
+}
+
+void CallExpr::print(std::ostream& out) {
+    to_be_called->print(out);
+    out << "(";
+    actual_arg->print(out);
+    out << ")";
+}
+
+void CallExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) {
+    VarExpr* tmp1 = dynamic_cast<VarExpr*>(to_be_called);
+    CallExpr* tmp2 = dynamic_cast<CallExpr*>(to_be_called);
+    /**
+     * var or call expressions don't need parentheses
+     * e.g., f(2), f(2)(3),
+     * other expression need parentheses
+     * e.g. (_fun (x) x + 1)(2)
+     */
+    bool printParen = tmp1 == nullptr && tmp2 == nullptr;
+    if (printParen) out << "(";
+    to_be_called->pretty_print_at(out, prec_none, newLinePrevPos, false); // TODO
+    if (printParen) out << ")";
+    out << "(";
+    actual_arg->pretty_print_at(out, prec_none, newLinePrevPos, false);
+    out << ")";
+}

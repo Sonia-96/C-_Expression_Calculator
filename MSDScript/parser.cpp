@@ -84,7 +84,7 @@ Expr* parse_multicand(std::istream& in) {
 }
 
 Expr* parse_num(std::istream& in) {
-    int num = 0;
+    long num = 0;
     bool negative = false;
     if (in.peek() == '-') {
         negative = true;
@@ -98,10 +98,13 @@ Expr* parse_num(std::istream& in) {
         consume(in, c);
         num = num * 10 + c - '0';
     }
+    if (num > INT_MAX || num < INT_MIN) {
+        throw std::runtime_error("the number is out of the range of integer!");
+    }
     if (negative) {
         num = - num;
     }
-    return new NumExpr(num);
+    return new NumExpr((int) num);
 }
 
 Expr* parse_let(std::istream& in) {
