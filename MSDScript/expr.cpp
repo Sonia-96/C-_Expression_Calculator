@@ -247,7 +247,7 @@ void AddExpr::pretty_print_at(std::ostream &out, precedence_t precedence, std::s
     lhs->pretty_print_at(out, prec_add, newLinePrevPos, true);
     out << " + ";
     // let as right arg in AddExpr never need parentheses
-    rhs->pretty_print_at(out, prec_equal, newLinePrevPos, false);
+    rhs->pretty_print_at(out, prec_equal, newLinePrevPos, addParen && !printParen);
     if (printParen) {
         out << ")";
     }
@@ -836,15 +836,14 @@ void CallExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::
     VarExpr* tmp1 = dynamic_cast<VarExpr*>(to_be_called);
     CallExpr* tmp2 = dynamic_cast<CallExpr*>(to_be_called);
     /**
-     * var or call expressions don't need parentheses
-     * e.g., f(2), f(2)(3),
-     * other expression need parentheses
-     * e.g. (_fun (x) x + 1)(2)
+     * var or call expressions don't need parentheses. e.g., f(2), f(2)(3),
+     * other expressions need parentheses. e.g. (_fun (x) x + 1)(2)
+     * TODO for now I only see var, fun, if as to_be_called
      */
     bool printParen = tmp1 == nullptr && tmp2 == nullptr;
-    if (printParen) out << "(";
-    to_be_called->pretty_print_at(out, prec_none, newLinePrevPos, false); // TODO
-    if (printParen) out << ")";
+//    if (printParen) out << "(";
+    to_be_called->pretty_print_at(out, prec_none, newLinePrevPos, true); // TODO
+//    if (printParen) out << ")";
     out << "(";
     actual_arg->pretty_print_at(out, prec_none, newLinePrevPos, false);
     out << ")";

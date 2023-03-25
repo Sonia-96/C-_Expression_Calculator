@@ -5,8 +5,8 @@
 #include "ExprGenTest.h"
 
 int main(int argc, const char * argv[]) {
-//    testAll();
-    testExpr();
+    testAll();
+//    testExpr();
 }
 
 void testAll() {

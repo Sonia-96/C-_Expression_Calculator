@@ -7,12 +7,13 @@
 #include "ExprGen.h"
 #include "val.h"
 
-#define ITERATION 100
+#define ITERATION 1000
 
 void testWithMSDScript();
 void testArgs(int argc, const char* argv[]);
 void printTestResult(const char* name, const char* modes[], double rate[]);
 int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
+int checkResult(Val* expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
 
 
 int main(int argc, const char * argv[]) {
@@ -25,24 +26,25 @@ void testArgs(int argc, const char* argv[]) {
     if (argc == 2) {
         for (int i = 0; i < ITERATION; i++) {
             const char* interp_args[] = {argv[1], "--interp"};
-            const char* print_args[] = {argv[1], "--print"};
             Expr* expr = ExprGen::exprGenerator();
-            std::string in = expr->to_pretty_string();
-            printf(">>> Trying:\n%s \n", in.c_str());
-            ExecResult interp_result = exec_program(2, interp_args, in);
-            ExecResult print_result = exec_program(2, print_args, in);
-            ExecResult interp_result_2 = exec_program(2, interp_args, print_result.out);
-            if (checkResult(interp_result, interp_result_2, "interp", "print") > 0) {
+            std::string s = expr->to_string();
+            std::string ps = expr->to_pretty_string();
+            printf(">>> Trying:\n%s \n", ps.c_str());
+            ExecResult interp_result_1 = exec_program(2, interp_args, s);
+            ExecResult interp_result_2 = exec_program(2, interp_args, ps);
+            if (checkResult(interp_result_1, interp_result_2, "print", "pretty_print") > 0){
                 exit(1);
             }
-//            if (expr->interp()->to_string() + "\n" != interp_result.out) {
-//                std::cout << "failed!\n";
-//                std::cout << expr->interp()->to_string() + "\n";
-//                std::cout << interp_result.err;
+//            Val* expected_result = expr->interp();
+//            if (checkResult(expected_result, interp_result_1, "expected", "print") > 0){
+//                exit(1);
+//            }
+//            if (checkResult(expected_result, interp_result_2, "expected", "pretty_print") > 0){
 //                exit(1);
 //            }
         }
     } else {
+//        (21*(8*(_if (((_let Pyq=-17 _in -28)+(_let oe=19 _in -7))==24) _then -24 _else -16)))
         const char* modes[] = {"--interp", "--print", "--pretty-print"};
         const char* expected_args[2];
         const char* actual_args[2];
@@ -122,6 +124,25 @@ int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, cons
         if (expectedRes.err != actualRes.err) {
             return 1;
         }
+        return 0;
+    }
+}
+
+int checkResult(Val* expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2) {
+    if (actualRes.exit_code == 0) {
+        if (expectedRes->to_string() + "\n" != actualRes.out) {
+            printf("%s:\n%s\n", name1.c_str(), expectedRes->to_string().c_str());
+            printf("%s:\n%s\n", name2.c_str(), actualRes.out.c_str());
+            std::cout << "\n";
+            throw std::runtime_error("Different result!\n");
+        } else {
+            std::cout << name2 << " Test passed!\n";
+            return 0;
+        }
+    } else {
+        std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> Failed test! >>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+        printf("%s: %s\n", name1.c_str(), expectedRes->to_string().c_str());
+        printf("%s: %s\n", name2.c_str(), actualRes.err.c_str());
         return 0;
     }
 }

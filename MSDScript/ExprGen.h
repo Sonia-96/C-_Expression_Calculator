@@ -22,6 +22,8 @@ public:
     static VarExpr* varExprGenerator();
     static BoolExpr* boolExprGenerator();
     static EqExpr* eqExprGenerator(std::string var);
+    static FunExpr* funExprGenerator();
+    static CallExpr* callExprGenerator();
 };
 
 

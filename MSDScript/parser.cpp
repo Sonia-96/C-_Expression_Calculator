@@ -50,8 +50,20 @@ Expr* parse_addend(std::istream& in) {
     return lhs;
 }
 
-// <multicand> = <num> | (<expr>)
+// <multicand> = <inner> | <multicand>(<expr>)
 Expr* parse_multicand(std::istream& in) {
+    Expr* expr = parse_inner(in);
+    while (in.peek() == '(') {
+        consume(in, '(');
+        Expr* actual_arg = parse_expr(in);
+        consume(in, ')');
+        expr = new CallExpr(expr, actual_arg);
+    }
+    return expr;
+}
+
+// <inner> = <num> | (<expr>) | <var> |_let | _bool | _if | _fun
+Expr* parse_inner(std::istream& in) {
     skip_whitespace(in);
     int c = in.peek();
     if (c == '-' || isdigit(c)) {
@@ -69,6 +81,8 @@ Expr* parse_multicand(std::istream& in) {
             return new BoolExpr(true);
         } else if (keyword == "if") {
             return parse_if(in);
+        } else if (keyword == "fun") {
+            return parse_fun(in);
         }
         throw std::runtime_error("unknown keyword: " + keyword);
     } else if (c == '(') {
@@ -81,6 +95,15 @@ Expr* parse_multicand(std::istream& in) {
         consume(in, c);
         throw std::runtime_error("bad input");
     }
+}
+
+Expr* parse_fun(std::istream& in) {
+    skip_whitespace(in);
+    consume(in, '(');
+    Expr* varExpr = parse_var(in);
+    consume(in, ')');
+    Expr* body = parse_expr(in);
+    return new FunExpr(varExpr->to_string(), body);
 }
 
 Expr* parse_num(std::istream& in) {
@@ -138,7 +161,7 @@ Expr* parse_var(std::istream& in) {
         consume(in, c);
         s.push_back(c);
     }
-    std::set<char> ops = {'+', '*', '=', ')'};
+    std::set<char> ops = {'+', '*', '=', '(', ')'};
     if (c != -1 && !isspace(c) && ops.find(c) == ops.end()) {
         throw std::runtime_error("invalid variable name");
     }
