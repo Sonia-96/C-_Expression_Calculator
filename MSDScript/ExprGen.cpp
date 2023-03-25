@@ -14,22 +14,41 @@ Expr* ExprGen::exprGenerator() {
 }
 
 Expr* ExprGen::exprGenerator(std::string var) {
-    int n = rand() % 10;
-    if (n < 6) { // 50% - numbers
+    int n = rand() % 100;
+    if (n < 60) { // 60% - numbers
         return numExprGenerator();
     }
-    if (n < 8) { // 10% - add, 10% - mult
+    if (n < 80) { // 10% - add, 10% - mult
         return addOrMultExprGenerator(var);
     }
-    if (n < 9) { // 10% - let
+    if (n < 90) { // 10% - let
         return letExprGenerator(var);
     }
-    return ifExprGenerator(var);
+    if (n < 95) {
+        return ifExprGenerator(var);
+    }
+    return callExprGenerator();
 }
 
 Expr* ExprGen::addOrMultExprGenerator(std::string var) {
-    Expr* lhs = exprGenerator(var);
-    Expr* rhs = exprGenerator(var);
+    Expr* expr1;
+    if (rand() & 1) { // 50% - num
+        expr1 = numExprGenerator();
+    } else { // 50% - var
+        if (var.empty()) {
+            expr1 = exprGenerator(var);
+        } else {
+            expr1 = new VarExpr(var);
+        }
+    }
+    Expr* expr2 = exprGenerator(var);
+    Expr* lhs;
+    Expr* rhs;
+    if (rand() & 1) {
+        lhs = expr1, rhs = expr2;
+    } else {
+        lhs = expr2, rhs = expr1;
+    }
     // generate add or mult
     if (rand() & 1) {
         return new AddExpr(lhs, rhs);
@@ -55,9 +74,9 @@ LetExpr* ExprGen::letExprGenerator(std::string var) {
 IfExpr* ExprGen::ifExprGenerator(std::string var) {
     Expr* test_part;
     int n = rand() % 10;
-    if (n < 7) {
+    if (n < 7) { // 70% - EqExpr
         test_part = eqExprGenerator(var);
-    } else {
+    } else { // 30% boolExpr
         test_part = boolExprGenerator();
     }
     Expr* then_part = exprGenerator(var);
@@ -71,6 +90,26 @@ EqExpr* ExprGen::eqExprGenerator(std::string var) {
     return new EqExpr(lhs, rhs);
 }
 
+FunExpr* ExprGen::funExprGenerator() {
+    std::string formal_arg = varExprGenerator()->to_string();
+    int n = rand() % 10;
+    Expr* body;
+    if (n < 6) {
+        body = addOrMultExprGenerator(formal_arg);
+    } else if (n < 8) {
+        body = letExprGenerator(formal_arg);
+    } else {
+        body = ifExprGenerator(formal_arg);
+    }
+    return new FunExpr(formal_arg, body);
+}
+
+CallExpr* ExprGen::callExprGenerator() {
+    Expr* to_be_called = funExprGenerator();
+    Expr* actual_arg = exprGenerator();
+    return new CallExpr(to_be_called, actual_arg);
+}
+
 BoolExpr* ExprGen::boolExprGenerator() {
     if (rand() & 1) {
         return new BoolExpr(true);
@@ -79,7 +118,7 @@ BoolExpr* ExprGen::boolExprGenerator() {
 }
 
 NumExpr* ExprGen::numExprGenerator() {
-    return new NumExpr(rand() % 100000 - 50000);
+    return new NumExpr(rand() % 10000 - 5000);
 }
 
 VarExpr* ExprGen::varExprGenerator() {

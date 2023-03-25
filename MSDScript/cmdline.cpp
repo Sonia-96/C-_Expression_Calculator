@@ -8,7 +8,6 @@
 #include <iostream>
 #include "catch.h"
 #include "cmdline.h"
-#include "parser.h"
 
 run_mode_t use_arguments(int argc, const char* argv[]) {
     run_mode_t task = do_nothing;
