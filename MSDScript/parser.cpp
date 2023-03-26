@@ -140,7 +140,7 @@ PTR(Expr) parse_let(std::istream& in) {
     skip_whitespace(in);
     consume(in, "_in", errorMsg);
     PTR(Expr) body = parse_expr(in);
-    return NEW(LetExpr) (var->getVal(), rhs, body);
+    return NEW(LetExpr) (var->to_string(), rhs, body);
 }
 
 PTR(Expr) parse_if(std::istream& in) {

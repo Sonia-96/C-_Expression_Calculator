@@ -50,7 +50,7 @@ bool NumVal::is_true() {
 }
 
 PTR(Val) NumVal::call(PTR(Val) actual_arg) {
-    throw std::runtime_error("no function to call!"); // TODO
+    throw std::runtime_error("no function to call!");
 }
 
 ///////////////////////////////////////////
@@ -90,7 +90,7 @@ bool BoolVal::is_true() {
 }
 
 PTR(Val) BoolVal::call(PTR(Val) actual_arg) {
-    throw std::runtime_error("no function to call!"); // TODO
+    throw std::runtime_error("no function to call!");
 }
 
   ///////////////////////////////////////////
@@ -131,7 +131,7 @@ bool FunVal::is_true() {
 }
 
 PTR(Val) FunVal::call(PTR(Val) actual_arg) {
-    return body->subst(formal_arg, actual_arg->to_expr())->interp(); // TODO
+    return body->subst(formal_arg, actual_arg->to_expr())->interp();
 }
 
 

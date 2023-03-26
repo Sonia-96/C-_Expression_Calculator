@@ -113,7 +113,6 @@ public:
     PTR(Expr) subst(std::string s, PTR(Expr) expr) override;
     void print(std::ostream& out) override;
     void pretty_print_at(std::ostream& out, precedence_t prec, std::streampos& newLinePrevPos, bool addParen) override;
-    std::string getVal(); // TODO remove this method
 };
 
 /** \brief

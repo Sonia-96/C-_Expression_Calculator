@@ -6,6 +6,7 @@
 //
 
 #include <sstream>
+#include <iostream>
 #include "val.h"
 #include "expr.h"
 
@@ -73,7 +74,7 @@ bool NumExpr::equals(PTR(Expr) expr) {
  * @return the int value of the member variable val
  */
 PTR(Val) NumExpr::interp() {
-    return NEW(NumVal) (val);
+    return NEW(NumVal)(val);
 }
 
 /**
@@ -469,10 +470,6 @@ void VarExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::s
     out << val;
 }
 
-std::string VarExpr::getVal() {
-    return val;
-}
-
 ///////////////////////////////////////////
 //                LetExpr                //
 ///////////////////////////////////////////
@@ -507,7 +504,7 @@ bool LetExpr::equals(PTR(Expr) expr) {
  * Returns the int value of this LetExpr object
  * @return the int value of the its body after substitute the variable with rhs
  */
-PTR(Val)   LetExpr::interp() {
+PTR(Val) LetExpr::interp() {
     PTR(Val) rhs_val = rhs->interp();
     return body->subst(variable, rhs_val->to_expr())->interp();
 //    return body->subst(variable, rhs)->interp(); not correct
@@ -774,7 +771,7 @@ void FunExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::s
     newLinePrevPos = out.tellp();
 
     out << std::string(indent + 2, ' ');
-    body->pretty_print_at(out, prec_none, newLinePrevPos, false); // TODO
+    body->pretty_print_at(out, prec_none, newLinePrevPos, false);
     if (addParen) {
         out << ")";
     }
@@ -833,17 +830,13 @@ void CallExpr::print(std::ostream& out) {
 }
 
 void CallExpr::pretty_print_at(std::ostream& out, precedence_t precedence, std::streampos& newLinePrevPos, bool addParen) {
-    PTR(VarExpr) tmp1 = CAST(VarExpr) (to_be_called);
-    PTR(CallExpr) tmp2 = CAST(CallExpr) (to_be_called);
     /**
+     * Only var, let, if, fun can be to_be_called.
      * var or call expressions don't need parentheses. e.g., f(2), f(2)(3),
-     * other expressions need parentheses. e.g. (_fun (x) x + 1)(2)
-     * TODO for now I only see var, fun, if as to_be_called
+     * other expressions (if and let) need parentheses. e.g. (_fun (x) x + 1)(2), (_if _true _then f(x) _else g(x))(2)
+     * so we just past true to addParen
      */
-    bool printParen = tmp1 == nullptr && tmp2 == nullptr;
-//    if (printParen) out << "(";
-    to_be_called->pretty_print_at(out, prec_none, newLinePrevPos, true); // TODO
-//    if (printParen) out << ")";
+    to_be_called->pretty_print_at(out, prec_none, newLinePrevPos, true);
     out << "(";
     actual_arg->pretty_print_at(out, prec_none, newLinePrevPos, false);
     out << ")";

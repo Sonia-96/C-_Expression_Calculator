@@ -905,6 +905,11 @@ TEST_CASE("FunExpr") {
                                           "  _fun (y) \n"
                                           "    x * x + y * y");
     }
+
+    SECTION("interp") {
+        PTR(LetExpr) func = NEW(LetExpr)("x", NEW(NumExpr)(2), NEW(FunExpr)("x", NEW(AddExpr)("x", 2)));
+        CHECK(func->interp()->equals(NEW(FunVal)("x", NEW(AddExpr)("x", 2))));
+    }
 }
 
 TEST_CASE("CallExpr") {
@@ -1016,7 +1021,7 @@ TEST_CASE("CallExpr") {
         CHECK(call10->to_pretty_string() == ps10);
         CHECK(parse_str(ps10)->equals(call10));
         PTR(LetExpr) call11 = NEW(LetExpr)("f", NEW(FunExpr)("x", NEW(FunExpr)("y", NEW(AddExpr)("x", "y"))), NEW(CallExpr)(NEW(CallExpr)("f", 5), 1));
-        CHECK(call11->interp()->equals(NEW(NumVal) (6))); // TODO how does this work?
+        CHECK(call11->interp()->equals(NEW(NumVal) (6)));
         std::string ps11 = "_let f = _fun (x) \n"
                            "           _fun (y) \n"
                            "             x + y\n"
@@ -1040,7 +1045,7 @@ TEST_CASE("CallExpr") {
         CHECK(call13->to_pretty_string() == ps13);
         CHECK(parse_str(ps13)->equals(call13));
         PTR(LetExpr) call14 = NEW(LetExpr)("f", NEW(FunExpr)("x", NEW(AddExpr)("x", "y")), NEW(LetExpr)("y", NEW(NumExpr)(10), NEW(CallExpr)("f", 1)));
-        CHECK(call14->interp()->equals(NEW(NumVal) (11))); // TODO substitution bug
+        CHECK(call14->interp()->equals(NEW(NumVal) (11)));
         std::string ps14 = "_let f = _fun (x) \n"
                            "           x + y\n"
                            "_in  _let y = 10\n"
