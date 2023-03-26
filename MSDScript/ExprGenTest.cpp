@@ -19,35 +19,35 @@ void testAll() {
 
 void testNum() {
     for (int i = 0; i < ITERATION; i++) {
-        Expr* expr = ExprGen::numExprGenerator();
+        PTR(Expr) expr = ExprGen::numExprGenerator();
         std::cout << expr->to_pretty_string() << std::endl;
     }
 }
 
 void testVar() {
     for (int i = 0; i < ITERATION; i++) {
-        Expr* expr = ExprGen::varExprGenerator();
+        PTR(Expr) expr = ExprGen::varExprGenerator();
         std::cout << expr->to_pretty_string() << std::endl;
     }
 }
 
 void testAddOrMult() {
     for (int i = 0; i < ITERATION; i++) {
-        Expr* expr = ExprGen::addOrMultExprGenerator("");
+        PTR(Expr) expr = ExprGen::addOrMultExprGenerator("");
         std::cout << expr->to_pretty_string() << std::endl;
     }
 }
 
 void testLet() {
     for (int i = 0; i < ITERATION; i++) {
-        Expr* expr = ExprGen::letExprGenerator("");
+        PTR(Expr) expr = ExprGen::letExprGenerator("");
         std::cout << expr->to_pretty_string() << std::endl;
     }
 }
 
 void testExpr() {
     for (int i = 0; i < ITERATION; i++) {
-        Expr* expr = ExprGen::exprGenerator();
+        PTR(Expr) expr = ExprGen::exprGenerator();
         std::cout << expr->to_pretty_string() << std::endl;
     }
 }

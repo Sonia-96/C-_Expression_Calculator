@@ -7,41 +7,41 @@
 #include <set>
 
 // <expr> = <comparg> | <comparg> == <expr>
-Expr* parse_expr(std::istream& in) {
-    Expr* lhs = parse_comparg(in);
+PTR(Expr) parse_expr(std::istream& in) {
+    PTR(Expr) lhs = parse_comparg(in);
     skip_whitespace(in);
     int c = in.peek();
     if (c == '=') {
         consume(in, "==");
-        Expr* rhs = parse_expr(in);
-        return new EqExpr(lhs, rhs);
+        PTR(Expr) rhs = parse_expr(in);
+        return NEW(EqExpr) (lhs, rhs);
     }
     return lhs;
 }
 
 // <comparg> = <addend> | <addend> + <comparg>
-Expr* parse_comparg(std::istream& in) {
-    Expr* lhs = parse_addend(in);
+PTR(Expr) parse_comparg(std::istream& in) {
+    PTR(Expr) lhs = parse_addend(in);
     skip_whitespace(in); // remove the white spaces after addend
     int c = in.peek();
     if (c == '+') {
         consume(in, '+');
-        Expr* rhs = parse_comparg(in);
-        return new AddExpr(lhs, rhs);
+        PTR(Expr) rhs = parse_comparg(in);
+        return NEW(AddExpr) (lhs, rhs);
     }
     return lhs;
 }
 
 // <addend> = <multicand> | <multicand> * <addend>
-Expr* parse_addend(std::istream& in) {
+PTR(Expr) parse_addend(std::istream& in) {
     skip_whitespace(in);
-    Expr* lhs = parse_multicand(in);
+    PTR(Expr) lhs = parse_multicand(in);
     skip_whitespace(in);
     int c = in.peek();
     if (c == '*') {
         consume(in, '*');
-        Expr* rhs = parse_addend(in);
-        return new MultExpr(lhs, rhs);
+        PTR(Expr) rhs = parse_addend(in);
+        return NEW(MultExpr) (lhs, rhs);
     }
     std::set<char> ops = {'+', '*', '=', ')', '_'}; // handle "<expr> <expr>" error
     if (c != -1 && ops.find(c) == ops.end()) {
@@ -51,19 +51,19 @@ Expr* parse_addend(std::istream& in) {
 }
 
 // <multicand> = <inner> | <multicand>(<expr>)
-Expr* parse_multicand(std::istream& in) {
-    Expr* expr = parse_inner(in);
+PTR(Expr) parse_multicand(std::istream& in) {
+    PTR(Expr) expr = parse_inner(in);
     while (in.peek() == '(') {
         consume(in, '(');
-        Expr* actual_arg = parse_expr(in);
+        PTR(Expr) actual_arg = parse_expr(in);
         consume(in, ')');
-        expr = new CallExpr(expr, actual_arg);
+        expr = NEW(CallExpr) (expr, actual_arg);
     }
     return expr;
 }
 
 // <inner> = <num> | (<expr>) | <var> |_let | _bool | _if | _fun
-Expr* parse_inner(std::istream& in) {
+PTR(Expr) parse_inner(std::istream& in) {
     skip_whitespace(in);
     int c = in.peek();
     if (c == '-' || isdigit(c)) {
@@ -76,9 +76,9 @@ Expr* parse_inner(std::istream& in) {
         if (keyword == "let") {
             return parse_let(in);
         } else if (keyword == "false") {
-            return new BoolExpr(false);
+            return NEW(BoolExpr) (false);
         } else if (keyword == "true") {
-            return new BoolExpr(true);
+            return NEW(BoolExpr) (true);
         } else if (keyword == "if") {
             return parse_if(in);
         } else if (keyword == "fun") {
@@ -87,7 +87,7 @@ Expr* parse_inner(std::istream& in) {
         throw std::runtime_error("unknown keyword: " + keyword);
     } else if (c == '(') {
         consume(in, '(');
-        Expr* expr = parse_expr(in);
+        PTR(Expr) expr = parse_expr(in);
         skip_whitespace(in);
         consume(in, ')', "parentheses mismatch");
         return expr;
@@ -97,16 +97,16 @@ Expr* parse_inner(std::istream& in) {
     }
 }
 
-Expr* parse_fun(std::istream& in) {
+PTR(Expr) parse_fun(std::istream& in) {
     skip_whitespace(in);
     consume(in, '(');
-    Expr* varExpr = parse_var(in);
+    PTR(Expr) varExpr = parse_var(in);
     consume(in, ')');
-    Expr* body = parse_expr(in);
-    return new FunExpr(varExpr->to_string(), body);
+    PTR(Expr) body = parse_expr(in);
+    return NEW(FunExpr) (varExpr->to_string(), body);
 }
 
-Expr* parse_num(std::istream& in) {
+PTR(Expr) parse_num(std::istream& in) {
     long num = 0;
     bool negative = false;
     if (in.peek() == '-') {
@@ -127,33 +127,33 @@ Expr* parse_num(std::istream& in) {
     if (negative) {
         num = - num;
     }
-    return new NumExpr((int) num);
+    return NEW(NumExpr) ((int) num);
 }
 
-Expr* parse_let(std::istream& in) {
+PTR(Expr) parse_let(std::istream& in) {
     std::string errorMsg = "wrong format for let expression";
 //    consume(in, "_let", errorMsg);
-    VarExpr* var = dynamic_cast<VarExpr*>(parse_var(in));
+    PTR(VarExpr) var = CAST(VarExpr) (parse_var(in));
     skip_whitespace(in);
     consume(in, '=', errorMsg);
-    Expr* rhs = parse_expr(in);
+    PTR(Expr) rhs = parse_expr(in);
     skip_whitespace(in);
     consume(in, "_in", errorMsg);
-    Expr* body = parse_expr(in);
-    return new LetExpr(var->getVal(), rhs, body);
+    PTR(Expr) body = parse_expr(in);
+    return NEW(LetExpr) (var->getVal(), rhs, body);
 }
 
-Expr* parse_if(std::istream& in) {
+PTR(Expr) parse_if(std::istream& in) {
     std::string errorMsg = "wrong format for if expression";
-    Expr* test_part = parse_expr(in);
+    PTR(Expr) test_part = parse_expr(in);
     consume(in, "_then", errorMsg);
-    Expr* then_part = parse_expr(in);
+    PTR(Expr) then_part = parse_expr(in);
     consume(in, "_else", errorMsg);
-    Expr* else_part = parse_expr(in);
-    return new IfExpr(test_part, then_part, else_part);
+    PTR(Expr) else_part = parse_expr(in);
+    return NEW(IfExpr) (test_part, then_part, else_part);
 }
 
-Expr* parse_var(std::istream& in) {
+PTR(Expr) parse_var(std::istream& in) {
     skip_whitespace(in);
     std::vector<char> s;
     int c;
@@ -165,7 +165,7 @@ Expr* parse_var(std::istream& in) {
     if (c != -1 && !isspace(c) && ops.find(c) == ops.end()) {
         throw std::runtime_error("invalid variable name");
     }
-    return new VarExpr(std::string(s.begin(), s.end()));
+    return NEW(VarExpr) (std::string(s.begin(), s.end()));
 }
 
 std::string parse_keyword(std::istream& in) {
@@ -199,7 +199,7 @@ void skip_whitespace(std::istream& in) {
 }
 
 // used for tests
-Expr* parse_str(std::string s) {
+PTR(Expr) parse_str(std::string s) {
     std::istringstream in(s);
     return parse_expr(in);
 }

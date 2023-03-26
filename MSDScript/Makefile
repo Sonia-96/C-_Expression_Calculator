@@ -6,7 +6,7 @@ CFLAGS = -fsanitize=undefined -fno-sanitize-recover=undefined -std=c++14
 #OBJ=$(patsubst %.cpp, %.o, $(SRC))
 MSD_OBJ = main.o expr.o parser.o tests.o cmdline.o val.o
 TEST_OBJ = fuzzTest.o ExprGen.o exec.o expr.o val.o
-GEN_OBJ = ExprGen.o ExprGenTest.o expr.o
+GEN_OBJ = ExprGen.o ExprGenTest.o expr.o val.o
 
 .PHONY: clean test interp print pretty-print doc open_doc run fuzz_test
 msdscript: $(MSD_OBJ)
@@ -18,8 +18,6 @@ test_generator:$(GEN_OBJ)
 %.o: %.h
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $<
-run:
-	./msdscript
 test:
 	./msdscript --test
 interp:

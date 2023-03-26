@@ -13,7 +13,7 @@ void testWithMSDScript();
 void testArgs(int argc, const char* argv[]);
 void printTestResult(const char* name, const char* modes[], double rate[]);
 int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
-int checkResult(Val* expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
+int checkResult(PTR(Val) expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
 
 
 int main(int argc, const char * argv[]) {
@@ -26,7 +26,7 @@ void testArgs(int argc, const char* argv[]) {
     if (argc == 2) {
         for (int i = 0; i < ITERATION; i++) {
             const char* interp_args[] = {argv[1], "--interp"};
-            Expr* expr = ExprGen::exprGenerator();
+            PTR(Expr) expr = ExprGen::exprGenerator();
             std::string s = expr->to_string();
             std::string ps = expr->to_pretty_string();
             printf(">>> Trying:\n%s \n", ps.c_str());
@@ -35,7 +35,7 @@ void testArgs(int argc, const char* argv[]) {
             if (checkResult(interp_result_1, interp_result_2, "print", "pretty_print") > 0){
                 exit(1);
             }
-//            Val* expected_result = expr->interp();
+//            PTR(Val) expected_result = expr->interp();
 //            if (checkResult(expected_result, interp_result_1, "expected", "print") > 0){
 //                exit(1);
 //            }
@@ -55,7 +55,7 @@ void testArgs(int argc, const char* argv[]) {
             expected_args[1] = modes[j];
             actual_args[1] = modes[j];
             for (int i = 0; i < ITERATION; i++) {
-                Expr* expr = ExprGen::exprGenerator();
+                PTR(Expr) expr = ExprGen::exprGenerator();
                 std::string in = expr->to_string();
                 printf("Trying:\n%s \n", in.c_str());
                 ExecResult expected_res = exec_program(2, expected_args, in);
@@ -128,7 +128,7 @@ int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, cons
     }
 }
 
-int checkResult(Val* expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2) {
+int checkResult(PTR(Val) expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2) {
     if (actualRes.exit_code == 0) {
         if (expectedRes->to_string() + "\n" != actualRes.out) {
             printf("%s:\n%s\n", name1.c_str(), expectedRes->to_string().c_str());

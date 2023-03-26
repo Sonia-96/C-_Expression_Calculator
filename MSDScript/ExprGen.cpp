@@ -9,11 +9,11 @@ std::string ExprGen::random_expr_string()  {
     return exprGenerator()->to_string();
 }
 
-Expr* ExprGen::exprGenerator() {
+PTR(Expr) ExprGen::exprGenerator() {
     return exprGenerator("");
 }
 
-Expr* ExprGen::exprGenerator(std::string var) {
+PTR(Expr) ExprGen::exprGenerator(std::string var) {
     int n = rand() % 100;
     if (n < 60) { // 60% - numbers
         return numExprGenerator();
@@ -30,20 +30,20 @@ Expr* ExprGen::exprGenerator(std::string var) {
     return callExprGenerator();
 }
 
-Expr* ExprGen::addOrMultExprGenerator(std::string var) {
-    Expr* expr1;
+PTR(Expr) ExprGen::addOrMultExprGenerator(std::string var) {
+    PTR(Expr) expr1;
     if (rand() & 1) { // 50% - num
         expr1 = numExprGenerator();
     } else { // 50% - var
         if (var.empty()) {
             expr1 = exprGenerator(var);
         } else {
-            expr1 = new VarExpr(var);
+            expr1 = NEW(VarExpr)(var);
         }
     }
-    Expr* expr2 = exprGenerator(var);
-    Expr* lhs;
-    Expr* rhs;
+    PTR(Expr) expr2 = exprGenerator(var);
+    PTR(Expr) lhs;
+    PTR(Expr) rhs;
     if (rand() & 1) {
         lhs = expr1, rhs = expr2;
     } else {
@@ -51,49 +51,49 @@ Expr* ExprGen::addOrMultExprGenerator(std::string var) {
     }
     // generate add or mult
     if (rand() & 1) {
-        return new AddExpr(lhs, rhs);
+        return NEW(AddExpr)(lhs, rhs);
     }
-    return new MultExpr(lhs, rhs);
+    return NEW(MultExpr)(lhs, rhs);
 }
 
-LetExpr* ExprGen::letExprGenerator(std::string var) {
+PTR(LetExpr) ExprGen::letExprGenerator(std::string var) {
     if (var.empty()) {
         var = varExprGenerator()->getVal();
     }
-    Expr* rhs = exprGenerator(var);
+    PTR(Expr) rhs = exprGenerator(var);
     int n = rand() % 10;
-    Expr* body;
+    PTR(Expr) body;
     if (n < 8) { // 80% - same var name
         body = exprGenerator(var);
     } else { // 20% - new var name (might trigger an error in interp)
         body = exprGenerator(varExprGenerator()->getVal()); // different var name, will trigger an error in interp
     }
-    return new LetExpr(var, rhs, body);
+    return NEW(LetExpr)(var, rhs, body);
 }
 
-IfExpr* ExprGen::ifExprGenerator(std::string var) {
-    Expr* test_part;
+PTR(IfExpr) ExprGen::ifExprGenerator(std::string var) {
+    PTR(Expr) test_part;
     int n = rand() % 10;
     if (n < 7) { // 70% - EqExpr
         test_part = eqExprGenerator(var);
     } else { // 30% boolExpr
         test_part = boolExprGenerator();
     }
-    Expr* then_part = exprGenerator(var);
-    Expr* else_part = exprGenerator(var);
-    return new IfExpr(test_part, then_part, else_part);
+    PTR(Expr) then_part = exprGenerator(var);
+    PTR(Expr) else_part = exprGenerator(var);
+    return NEW(IfExpr)(test_part, then_part, else_part);
 }
 
-EqExpr* ExprGen::eqExprGenerator(std::string var) {
-    Expr* lhs = exprGenerator(var);
-    Expr* rhs = exprGenerator(var);
-    return new EqExpr(lhs, rhs);
+PTR(EqExpr) ExprGen::eqExprGenerator(std::string var) {
+    PTR(Expr) lhs = exprGenerator(var);
+    PTR(Expr) rhs = exprGenerator(var);
+    return NEW(EqExpr)(lhs, rhs);
 }
 
-FunExpr* ExprGen::funExprGenerator() {
+PTR(FunExpr) ExprGen::funExprGenerator() {
     std::string formal_arg = varExprGenerator()->to_string();
     int n = rand() % 10;
-    Expr* body;
+    PTR(Expr) body;
     if (n < 6) {
         body = addOrMultExprGenerator(formal_arg);
     } else if (n < 8) {
@@ -101,33 +101,33 @@ FunExpr* ExprGen::funExprGenerator() {
     } else {
         body = ifExprGenerator(formal_arg);
     }
-    return new FunExpr(formal_arg, body);
+    return NEW(FunExpr)(formal_arg, body);
 }
 
-CallExpr* ExprGen::callExprGenerator() {
-    Expr* to_be_called = funExprGenerator();
-    Expr* actual_arg = exprGenerator();
-    return new CallExpr(to_be_called, actual_arg);
+PTR(CallExpr) ExprGen::callExprGenerator() {
+    PTR(Expr) to_be_called = funExprGenerator();
+    PTR(Expr) actual_arg = exprGenerator();
+    return NEW(CallExpr)(to_be_called, actual_arg);
 }
 
-BoolExpr* ExprGen::boolExprGenerator() {
+PTR(BoolExpr) ExprGen::boolExprGenerator() {
     if (rand() & 1) {
-        return new BoolExpr(true);
+        return NEW(BoolExpr)(true);
     }
-    return new BoolExpr(false);
+    return NEW(BoolExpr)(false);
 }
 
-NumExpr* ExprGen::numExprGenerator() {
-    return new NumExpr(rand() % 10000 - 5000);
+PTR(NumExpr) ExprGen::numExprGenerator() {
+    return NEW(NumExpr)(rand() % 10000 - 5000);
 }
 
-VarExpr* ExprGen::varExprGenerator() {
+PTR(VarExpr) ExprGen::varExprGenerator() {
     std::string res;
     int len = rand() % 5 + 1; //  length 1-5
     for (int i = 0; i < len; i++) {
         res += alphaGenerator();
     }
-    return new VarExpr(res);
+    return NEW(VarExpr)(res);
 }
 
 char ExprGen::alphaGenerator() {
