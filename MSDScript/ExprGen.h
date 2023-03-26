@@ -13,17 +13,17 @@ private:
     static char alphaGenerator();
 public:
     static std::string random_expr_string();
-    static Expr* exprGenerator();
-    static Expr* exprGenerator(std::string var);
-    static Expr* addOrMultExprGenerator(std::string var);
-    static LetExpr* letExprGenerator(std::string var);
-    static IfExpr* ifExprGenerator(std::string var);
-    static NumExpr* numExprGenerator();
-    static VarExpr* varExprGenerator();
-    static BoolExpr* boolExprGenerator();
-    static EqExpr* eqExprGenerator(std::string var);
-    static FunExpr* funExprGenerator();
-    static CallExpr* callExprGenerator();
+    static PTR(Expr) exprGenerator();
+    static PTR(Expr) exprGenerator(std::string var);
+    static PTR(Expr) addOrMultExprGenerator(std::string var);
+    static PTR(LetExpr) letExprGenerator(std::string var);
+    static PTR(IfExpr) ifExprGenerator(std::string var);
+    static PTR(NumExpr) numExprGenerator();
+    static PTR(VarExpr) varExprGenerator();
+    static PTR(BoolExpr) boolExprGenerator();
+    static PTR(EqExpr) eqExprGenerator(std::string var);
+    static PTR(FunExpr) funExprGenerator();
+    static PTR(CallExpr) callExprGenerator();
 };
 
 

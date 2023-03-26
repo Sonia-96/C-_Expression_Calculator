@@ -6,18 +6,19 @@
 #define MSDSCRIPT_VAL_H
 
 #include <string>
+#include "pointer.h"
 
 class Expr;
 
-class Val {
+CLASS(Val) {
 public:
-    virtual Expr* to_expr() = 0;
-    virtual bool equals(Val* rhs) = 0;
-    virtual Val* add_to(Val* rhs) = 0;
-    virtual Val* mult_with(Val* rhs) = 0;
+    virtual PTR(Expr) to_expr() = 0;
+    virtual bool equals(PTR(Val) rhs) = 0;
+    virtual PTR(Val) add_to(PTR(Val) rhs) = 0;
+    virtual PTR(Val) mult_with(PTR(Val) rhs) = 0;
     virtual std::string to_string() = 0;
     virtual bool is_true() = 0;
-    virtual Val* call(Val *actual_arg) = 0; // TODO implementation
+    virtual PTR(Val) call(PTR(Val) actual_arg) = 0;
 };
 
 class NumVal : public Val {
@@ -25,13 +26,13 @@ private:
     int val;
 public:
     NumVal(int v);
-    Expr * to_expr() override;
-    bool equals(Val* rhs) override;
-    Val* add_to(Val* rhs) override;
-    Val* mult_with(Val* rhs) override;
+    PTR(Expr)  to_expr() override;
+    bool equals(PTR(Val) rhs) override;
+    PTR(Val) add_to(PTR(Val) rhs) override;
+    PTR(Val) mult_with(PTR(Val) rhs) override;
     std::string to_string() override;
     bool is_true() override;
-    virtual Val* call(Val *actual_arg) override;
+    virtual PTR(Val) call(PTR(Val) actual_arg) override;
 };
 
 class BoolVal : public Val {
@@ -39,28 +40,28 @@ private:
     bool val;
 public:
     BoolVal(bool v);
-    Expr* to_expr() override;
-    bool equals(Val* rhs) override;
-    Val* add_to(Val* rhs) override;
-    Val* mult_with(Val* rhs) override;
+    PTR(Expr) to_expr() override;
+    bool equals(PTR(Val) rhs) override;
+    PTR(Val) add_to(PTR(Val) rhs) override;
+    PTR(Val) mult_with(PTR(Val) rhs) override;
     std::string to_string() override;
     bool is_true() override;
-    virtual Val* call(Val *actual_arg) override;
+    virtual PTR(Val) call(PTR(Val) actual_arg) override;
 };
 
 class FunVal : public Val {
 private:
     std::string formal_arg;
-    Expr* body;
+    PTR(Expr) body;
 public:
-    FunVal(std::string arg, Expr* expr);
-    Expr* to_expr() override;
-    bool equals(Val* rhs) override;
-    Val* add_to(Val* rhs) override;
-    Val* mult_with(Val* rhs) override;
+    FunVal(std::string arg, PTR(Expr) expr);
+    PTR(Expr) to_expr() override;
+    bool equals(PTR(Val) rhs) override;
+    PTR(Val) add_to(PTR(Val) rhs) override;
+    PTR(Val) mult_with(PTR(Val) rhs) override;
     std::string to_string() override;
     bool is_true() override;
-    virtual Val* call(Val *actual_arg) override;
+    virtual PTR(Val) call(PTR(Val) actual_arg) override;
 };
 
 #endif //MSDSCRIPT_VAL_H
