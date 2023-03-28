@@ -1089,6 +1089,7 @@ TEST_CASE("CallExpr") {
         PTR(CallExpr) call19 = NEW(CallExpr)(NEW(IfExpr)(false, func1, func2), 5);
         CHECK(call19->interp()->equals(NEW(NumVal) (7)));
         std::string ps19 = "(_if _false\n"
+
                            " _then _fun (x) \n"
                            "         x + 1\n"
                            " _else _fun (y) \n"
