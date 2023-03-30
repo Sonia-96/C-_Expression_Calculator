@@ -13,7 +13,6 @@ void testWithMSDScript();
 void testArgs(int argc, const char* argv[]);
 void printTestResult(const char* name, const char* modes[], double rate[]);
 int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
-int checkResult(PTR(Val) expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2);
 
 
 int main(int argc, const char * argv[]) {
@@ -35,16 +34,8 @@ void testArgs(int argc, const char* argv[]) {
             if (checkResult(interp_result_1, interp_result_2, "print", "pretty_print") > 0){
                 exit(1);
             }
-//            PTR(Val) expected_result = expr->interp();
-//            if (checkResult(expected_result, interp_result_1, "expected", "print") > 0){
-//                exit(1);
-//            }
-//            if (checkResult(expected_result, interp_result_2, "expected", "pretty_print") > 0){
-//                exit(1);
-//            }
         }
     } else {
-//        (21*(8*(_if (((_let Pyq=-17 _in -28)+(_let oe=19 _in -7))==24) _then -24 _else -16)))
         const char* modes[] = {"--interp", "--print", "--pretty-print"};
         const char* expected_args[2];
         const char* actual_args[2];
@@ -124,25 +115,6 @@ int checkResult(const ExecResult& expectedRes, const ExecResult& actualRes, cons
         if (expectedRes.err != actualRes.err) {
             return 1;
         }
-        return 0;
-    }
-}
-
-int checkResult(PTR(Val) expectedRes, const ExecResult& actualRes, const std::string& name1, const std::string& name2) {
-    if (actualRes.exit_code == 0) {
-        if (expectedRes->to_string() + "\n" != actualRes.out) {
-            printf("%s:\n%s\n", name1.c_str(), expectedRes->to_string().c_str());
-            printf("%s:\n%s\n", name2.c_str(), actualRes.out.c_str());
-            std::cout << "\n";
-            throw std::runtime_error("Different result!\n");
-        } else {
-            std::cout << name2 << " Test passed!\n";
-            return 0;
-        }
-    } else {
-        std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> Failed test! >>>>>>>>>>>>>>>>>>>>>>>>>>\n";
-        printf("%s: %s\n", name1.c_str(), expectedRes->to_string().c_str());
-        printf("%s: %s\n", name2.c_str(), actualRes.err.c_str());
         return 0;
     }
 }

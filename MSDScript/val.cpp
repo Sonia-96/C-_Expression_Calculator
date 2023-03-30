@@ -4,6 +4,7 @@
 
 #include "val.h"
 #include "expr.h"
+#include "env.h"
 
   ///////////////////////////////////////////
  //                NumVal                 //
@@ -97,9 +98,10 @@ PTR(Val) BoolVal::call(PTR(Val) actual_arg) {
  //                FunVal                 //
 ///////////////////////////////////////////
 
-FunVal::FunVal(std::string arg, PTR(Expr) expr) {
+FunVal::FunVal(std::string arg, PTR(Expr) expr, PTR(Env) env_) {
     formal_arg = arg;
     body = expr;
+    env = env_;
 }
 
 PTR(Expr) FunVal::to_expr() {
@@ -131,7 +133,7 @@ bool FunVal::is_true() {
 }
 
 PTR(Val) FunVal::call(PTR(Val) actual_arg) {
-    return body->subst(formal_arg, actual_arg->to_expr())->interp();
+    return body->interp(NEW(ExtendedEnv) (formal_arg, actual_arg, env));
 }
 
 
