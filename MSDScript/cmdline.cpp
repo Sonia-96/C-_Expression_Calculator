@@ -9,7 +9,7 @@
 #include "catch.h"
 #include "cmdline.h"
 
-run_mode_t use_arguments(int argc, const char* argv[]) {
+run_mode_t use_arguments(int argc, const char* argv[], const char** filename) {
     run_mode_t task = do_nothing;
     bool tested = false;
     for (int i = 1; i < argc; i++) {
@@ -32,8 +32,9 @@ run_mode_t use_arguments(int argc, const char* argv[]) {
             task = do_print;
         } else if (strcmp(argv[i], "--pretty-print") == 0) {
             task = do_pretty_print;
-        }
-        else {
+        } else if (i == 2){
+            *filename = argv[i];
+        } else {
             std::cerr << argv[i] << " is an illegal argument!\n";
             exit(1);
         }
