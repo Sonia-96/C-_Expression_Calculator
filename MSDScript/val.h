@@ -9,6 +9,7 @@
 #include "pointer.h"
 
 class Expr;
+class Env;
 
 CLASS(Val) {
 public:
@@ -32,7 +33,7 @@ public:
     PTR(Val) mult_with(PTR(Val) rhs) override;
     std::string to_string() override;
     bool is_true() override;
-    virtual PTR(Val) call(PTR(Val) actual_arg) override;
+    PTR(Val) call(PTR(Val) actual_arg) override;
 };
 
 class BoolVal : public Val {
@@ -46,22 +47,23 @@ public:
     PTR(Val) mult_with(PTR(Val) rhs) override;
     std::string to_string() override;
     bool is_true() override;
-    virtual PTR(Val) call(PTR(Val) actual_arg) override;
+    PTR(Val) call(PTR(Val) actual_arg) override;
 };
 
 class FunVal : public Val {
 private:
     std::string formal_arg;
     PTR(Expr) body;
+    PTR(Env) env;
 public:
-    FunVal(std::string arg, PTR(Expr) expr);
+    FunVal(std::string arg, PTR(Expr) expr, PTR(Env) env_);
     PTR(Expr) to_expr() override;
     bool equals(PTR(Val) rhs) override;
     PTR(Val) add_to(PTR(Val) rhs) override;
     PTR(Val) mult_with(PTR(Val) rhs) override;
     std::string to_string() override;
     bool is_true() override;
-    virtual PTR(Val) call(PTR(Val) actual_arg) override;
+    PTR(Val) call(PTR(Val) actual_arg) override;
 };
 
 #endif //MSDSCRIPT_VAL_H

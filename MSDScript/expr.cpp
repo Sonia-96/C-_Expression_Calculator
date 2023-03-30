@@ -9,6 +9,7 @@
 #include <iostream>
 #include "val.h"
 #include "expr.h"
+#include "env.h"
 
 ////////////////////////////////////////////
 //                  Expr                  //
@@ -73,7 +74,7 @@ bool NumExpr::equals(PTR(Expr) expr) {
  * Evaluated the expression and returns the int value.
  * @return the int value of the member variable val
  */
-PTR(Val) NumExpr::interp() {
+PTR(Val) NumExpr::interp(PTR(Env) env) {
     return NEW(NumVal)(val);
 }
 
@@ -198,8 +199,8 @@ bool AddExpr::equals(PTR(Expr) expr) {
  * Add the left and right expressions and returns the int value of the result.
  * @return the int value of the addition of the left and right expressions
  */
-PTR(Val) AddExpr::interp() {
-    return lhs->interp()->add_to(rhs->interp());
+PTR(Val) AddExpr::interp(PTR(Env) env) {
+    return lhs->interp(env)->add_to(rhs->interp(env));
 }
 
 /**
@@ -348,8 +349,8 @@ bool MultExpr::equals(PTR(Expr) expr) {
  * Multiply the left and right expressions and returns the int value of the result.
  * @return the int value of the multiplication of the left and right expressions
  */
-PTR(Val) MultExpr::interp() {
-    return lhs->interp()->mult_with(rhs->interp());
+PTR(Val) MultExpr::interp(PTR(Env) env) {
+    return lhs->interp(env)->mult_with(rhs->interp(env));
 }
 
 /**
@@ -436,8 +437,8 @@ bool VarExpr::equals(PTR(Expr) expr) {
  * Returns the int value of this VarExpr object
  * @return throw a runtime error since a variable cannot be evaluated to a int value
  */
-PTR(Val) VarExpr::interp() {
-    throw std::runtime_error("A variable has no value!");
+PTR(Val) VarExpr::interp(PTR(Env) env) {
+    return env->lookup(val);
 }
 
 /**
@@ -504,10 +505,10 @@ bool LetExpr::equals(PTR(Expr) expr) {
  * Returns the int value of this LetExpr object
  * @return the int value of the its body after substitute the variable with rhs
  */
-PTR(Val) LetExpr::interp() {
-    PTR(Val) rhs_val = rhs->interp();
-    return body->subst(variable, rhs_val->to_expr())->interp();
-//    return body->subst(variable, rhs)->interp(); not correct
+PTR(Val) LetExpr::interp(PTR(Env) env) {
+    PTR(Val) rhs_val = rhs->interp(env);
+    PTR(Env) new_env = NEW(ExtendedEnv) (variable, rhs_val, env);
+    return body->interp(new_env);
 }
 
 /**
@@ -587,7 +588,7 @@ bool BoolExpr::equals(PTR(Expr) rhs) {
     return val == other->val;
 }
 
-PTR(Val) BoolExpr::interp() {
+PTR(Val) BoolExpr::interp(PTR(Env) env) {
     return NEW(BoolVal) (val);
 }
 
@@ -627,11 +628,11 @@ bool IfExpr::equals(PTR(Expr) rhs) {
     return test_part->equals(other->test_part) && then_part->equals(other->then_part) && else_part->equals(other->else_part);
 }
 
-PTR(Val) IfExpr::interp() {
-    if (test_part->interp()->is_true()) {
-        return then_part->interp();
+PTR(Val) IfExpr::interp(PTR(Env) env) {
+    if (test_part->interp(env)->is_true()) {
+        return then_part->interp(env);
     }
-    return else_part->interp();
+    return else_part->interp(env);
 }
 
 PTR(Expr) IfExpr::subst(std::string s, PTR(Expr) expr) {
@@ -698,8 +699,8 @@ bool EqExpr::equals(PTR(Expr) rhs_) {
     return lhs->equals(other->lhs) && rhs->equals(other->rhs);
 }
 
-PTR(Val) EqExpr::interp() {
-    return NEW(BoolVal) (lhs->interp()->equals(rhs->interp()));
+PTR(Val) EqExpr::interp(PTR(Env) env) {
+    return NEW(BoolVal) (lhs->interp(env)->equals(rhs->interp(env)));
 }
 
 PTR(Expr) EqExpr::subst(std::string s, PTR(Expr) expr) {
@@ -745,8 +746,8 @@ bool FunExpr::equals(PTR(Expr) rhs) {
     return formal_arg == other->formal_arg && body->equals(other->body);
 }
 
-PTR(Val) FunExpr::interp() {
-    return NEW(FunVal) (formal_arg, body);
+PTR(Val) FunExpr::interp(PTR(Env) env) {
+    return NEW(FunVal) (formal_arg, body, env);
 }
 
 PTR(Expr) FunExpr::subst(std::string s, PTR(Expr) expr) {
@@ -814,8 +815,8 @@ bool CallExpr::equals(PTR(Expr) rhs) {
     return to_be_called->equals(other->to_be_called) && actual_arg->equals(other->actual_arg);
 }
 
-PTR(Val) CallExpr::interp() {
-    return to_be_called->interp()->call(actual_arg->interp());
+PTR(Val) CallExpr::interp(PTR(Env) env) {
+    return to_be_called->interp(env)->call(actual_arg->interp(env));
 }
 
 PTR(Expr) CallExpr::subst(std::string s, PTR(Expr) expr) {

@@ -16,10 +16,11 @@
 #include "expr.h"
 #include "parser.h"
 #include "val.h"
+#include "env.h"
 
 int main(int argc, const char * argv[]) {
     try {
-        const char* filename;
+        const char* filename = nullptr;
         run_mode_t mode = use_arguments(argc, argv, &filename);
         if (mode != do_nothing) {
             PTR(Expr) expr;
@@ -31,15 +32,12 @@ int main(int argc, const char * argv[]) {
             }
             switch (mode) {
                 case do_interp:
-//                    printf("Value: %d\n", expr->interp());
-                    printf("%s\n", expr->interp()->to_string().c_str());
+                    printf("%s\n", expr->interp(Env::empty)->to_string().c_str());
                     break;
                 case do_print:
-//                    printf("Standard Expression (print):\n%s\n", expr->to_string().c_str());
                     printf("%s\n", expr->to_string().c_str());
                     break;
                 default: //pretty_print
-//                    printf("Standard Expression (pretty_print):\n%s\n", expr->to_pretty_string().c_str());
                     printf("%s\n", expr->to_pretty_string().c_str());
             }
         }

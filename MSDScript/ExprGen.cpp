@@ -58,7 +58,7 @@ PTR(Expr) ExprGen::addOrMultExprGenerator(std::string var) {
 
 PTR(LetExpr) ExprGen::letExprGenerator(std::string var) {
     if (var.empty()) {
-        var = varExprGenerator()->getVal();
+        var = varExprGenerator()->to_string();
     }
     PTR(Expr) rhs = exprGenerator(var);
     int n = rand() % 10;
@@ -66,7 +66,7 @@ PTR(LetExpr) ExprGen::letExprGenerator(std::string var) {
     if (n < 8) { // 80% - same var name
         body = exprGenerator(var);
     } else { // 20% - new var name (might trigger an error in interp)
-        body = exprGenerator(varExprGenerator()->getVal()); // different var name, will trigger an error in interp
+        body = exprGenerator(varExprGenerator()->to_string()); // different var name, will trigger an error in interp
     }
     return NEW(LetExpr)(var, rhs, body);
 }
