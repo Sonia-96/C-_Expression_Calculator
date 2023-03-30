@@ -12,6 +12,6 @@ enum run_mode_t {
     do_pretty_print
 };
 
-run_mode_t use_arguments(int argc, const char* argv[]);
+run_mode_t use_arguments(int argc, const char* argv[], const char** filename);
 
 #endif //MSDSCRIPT_CMDLINE_H

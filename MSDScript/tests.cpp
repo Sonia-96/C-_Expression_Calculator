@@ -482,6 +482,10 @@ TEST_CASE("parse") {
 
         std::string let10 = "_let 1 = 2 _in 3";
         CHECK_THROWS_WITH(parse_str(let10), "invalid variable name");
+
+        std::string let11 = "_let x = 1\n"
+                            "                  _in (_let x = 2 _in x) + x";
+        CHECK(parse_str(let11)->interp()->equals(NEW(NumVal)(3)));
     }
 
     SECTION("if + let") {
@@ -1096,6 +1100,15 @@ TEST_CASE("CallExpr") {
                            "         y + 2)(5)";
         CHECK(call19->to_pretty_string() == ps19);
         CHECK(parse_str(ps19)->equals(call19));
+        std::string s = "_let fib = _fun (fib)\n"
+                        "             _fun (x)\n"
+                        "               _if x == 0\n"
+                        "               _then 0\n"
+                        "               _else _if x == 1\n"
+                        "                     _then 1\n"
+                        "                     _else fib(fib)(x + -2) + fib(fib)(x + -1)\n"
+                        "_in  fib(fib)(10)";
+        CHECK( parse_str(s)->interp()->equals(NEW(NumVal)(55)));
     }
 
     SECTION("edge cases for parse") {
