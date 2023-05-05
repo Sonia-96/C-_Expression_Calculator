@@ -25,10 +25,10 @@ A calculator for expressions with predefined grammar, including basic calcualtio
 
 Calculate the result of an expression. For example, the result of Fibonacci(10) is 55.
 
-![image-20230504175113638](/Users/sonia/Documents/MSD/MSDScript/assets/image-20230504175113638.png)
+![image-20230504175113638](../MSDScript/assets/image-20230504175113638.png)
 
 ### Pretty Print
 
 Print an expression in a nicer format. In the following example, the statements will be aligned and the redundant brackets will be removed through `Pretty Print` mode.
 
-![image-20230504180255238](/Users/sonia/Documents/MSD/MSDScript/assets/image-20230504180255238.png)
+![image-20230504180255238](../MSDScript/assets/image-20230504180255238.png)
